@@ -99,6 +99,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_always_pre = AO_GUI_WIDGET(QCheckBox, "always_pre");
   ui_chat_tick_interval = AO_GUI_WIDGET(QSpinBox, "chat_tick_interval");
   ui_chat_ratelimit = AO_GUI_WIDGET(QSpinBox, "chat_ratelimit");
+  ui_message_queue_delay = AO_GUI_WIDGET(QSpinBox, "message_queue_delay");
   ui_emote_preview = AO_GUI_WIDGET(QCheckBox, "emote_preview");
   ui_sticky_sfx = AO_GUI_WIDGET(QCheckBox, "sticky_sfx");
 
@@ -226,6 +227,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   connect(m_config, &AOConfig::searchable_iniswap_changed, ui_searchable_iniswap, &QAbstractButton::setChecked);
   connect(m_config, &AOConfig::always_pre_changed, ui_always_pre, &QAbstractButton::setChecked);
   connect(m_config, &AOConfig::chat_tick_interval_changed, ui_chat_tick_interval, &QSpinBox::setValue);
+  connect(m_config, &AOConfig::message_queue_delay_changed, ui_message_queue_delay, &QSpinBox::setValue);
   connect(m_config, &AOConfig::chat_ratelimit_changed, ui_chat_ratelimit, &QSpinBox::setValue);
   connect(m_config, &AOConfig::emote_preview_changed, ui_emote_preview, &QAbstractButton::setChecked);
   connect(m_config, &AOConfig::sticky_sfx_changed, ui_sticky_sfx, &QAbstractButton::setChecked);
@@ -297,6 +299,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   connect(ui_always_pre, &QAbstractButton::toggled, m_config, &AOConfig::set_always_pre);
   connect(ui_chat_tick_interval, &QSpinBox::valueChanged, m_config, &AOConfig::set_chat_tick_interval);
   connect(ui_chat_ratelimit, &QSpinBox::valueChanged, m_config, &AOConfig::set_chat_ratelimit);
+  connect(ui_message_queue_delay, &QSpinBox::valueChanged, m_config, &AOConfig::set_message_queue_delay);
   connect(ui_emote_preview, &QAbstractButton::toggled, m_config, &AOConfig::set_emote_preview);
   connect(ui_sticky_sfx, &QAbstractButton::toggled, m_config, &AOConfig::set_sticky_sfx);
 
@@ -371,6 +374,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_always_pre->setChecked(m_config->always_pre_enabled());
   ui_chat_tick_interval->setValue(m_config->chat_tick_interval());
   ui_chat_ratelimit->setValue(m_config->chat_ratelimit());
+  ui_message_queue_delay->setValue(m_config->message_queue_delay());
   ui_emote_preview->setChecked(m_config->emote_preview_enabled());
   ui_sticky_sfx->setChecked(m_config->sticky_sfx_enabled());
 

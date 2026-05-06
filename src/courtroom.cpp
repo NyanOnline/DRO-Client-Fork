@@ -1345,6 +1345,12 @@ void Courtroom::process_chatmessage_packet(QStringList p_chatmessage)
   // Check if we should start our queue. Text_state >= 2 means the message is done and a queued message is not pending
   bool process_now = text_state >= 2 && !m_text_queue_timer->isActive();
 
+  // -1 means the message queue system is disabled
+  if (ao_config->message_queue_delay() <= -1)
+  {
+    process_now = true;
+  }
+
   // Test for objection. Objections instantly skip the queue by default!
   if (!ic_message.characterShout.isEmpty())
   {
@@ -2732,7 +2738,7 @@ void Courtroom::post_chatmessage()
 
   // Start the next queue message
   if (!m_text_queue_timer->isActive())
-    m_text_queue_timer->start(500);
+    m_text_queue_timer->start(ao_config->message_queue_delay());
 }
 
 void Courtroom::play_sfx()

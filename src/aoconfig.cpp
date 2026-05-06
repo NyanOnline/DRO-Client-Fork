@@ -81,6 +81,7 @@ private:
   bool always_pre;
   int chat_tick_interval;
   int chat_ratelimit;
+  int message_queue_delay;
   bool emote_preview;
   bool sticky_sfx;
   int message_length_threshold;
@@ -198,6 +199,7 @@ void AOConfigPrivate::load_file()
   always_pre = cfg.value("always_pre", false).toBool();
   chat_tick_interval = cfg.value("chat_tick_interval", 40).toInt();
   chat_ratelimit = cfg.value("chat_ratelimit", 500).toInt();
+  message_queue_delay = cfg.value("message_queue_delay", 500).toInt();
   emote_preview = cfg.value("emote_preview", true).toBool();
   sticky_sfx = cfg.value("sticky_sfx", false).toBool();
   message_length_threshold = cfg.value("message_length_threshold", 70).toInt();
@@ -316,6 +318,7 @@ void AOConfigPrivate::save_file()
   cfg.setValue("searchable_iniswap", searchable_iniswap);
   cfg.setValue("always_pre", always_pre);
   cfg.setValue("chat_tick_interval", chat_tick_interval);
+  cfg.setValue("message_queue_delay", message_queue_delay);
   cfg.setValue("chat_ratelimit", chat_ratelimit);
   cfg.setValue("emote_preview", emote_preview);
   cfg.setValue("sticky_sfx", sticky_sfx);
@@ -618,10 +621,14 @@ int AOConfig::chat_tick_interval() const
 {
   return d->chat_tick_interval;
 }
-
 int AOConfig::chat_ratelimit() const
 {
   return d->chat_ratelimit;
+}
+
+int AOConfig::message_queue_delay() const
+{
+  return d->message_queue_delay;
 }
 
 bool AOConfig::emote_preview_enabled() const
@@ -1053,6 +1060,14 @@ void AOConfig::set_chat_ratelimit(int p_number)
     return;
   d->chat_ratelimit = p_number;
   d->invoke_signal("chat_ratelimit_changed", Q_ARG(int, p_number));
+}
+
+void AOConfig::set_message_queue_delay(int p_number)
+{
+  if (d->message_queue_delay == p_number)
+    return;
+  d->message_queue_delay = p_number;
+  d->invoke_signal("message_queue_delay_changed", Q_ARG(int, p_number));
 }
 
 void AOConfig::set_emote_preview(bool p_enabled)
