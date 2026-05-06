@@ -21,9 +21,16 @@ public:
   void addItem(EvidenceData f_evidence);
   void setInfoWindowData(EvidenceData f_evidence);
   void setEvidenceList(QVector<EvidenceData> *evi_list);
+  void setPresenting(bool toggle);
+  int getCurrentSelection();
+
+  QString getIconPath(QString f_path);
 
   QWidget *info_window;
 
+  int current_index = -1;
+
+  bool presenting = false;
 private:
   AOApplication *m_app;
 
@@ -40,7 +47,6 @@ private:
   QLineEdit *image_path;
   QCheckBox *edit_checkbox;
   QPushButton *image_browse_button;
-  int m_current_index = -1;
   QPushButton *info_close_button;
   QPushButton *info_apply_button;
   QPushButton *info_delete_button;
@@ -48,8 +54,6 @@ private:
   QListWidget *evidence_list_widget;
 
   EvidenceData edited_evidence_data;
-
-  QString getIconPath(QString f_path);
 
   void setInfoDesc(QString f_description);
 

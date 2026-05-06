@@ -122,6 +122,9 @@ void Courtroom::create_widgets()
     ui_vp_objection = new DRShoutMovie(ao_app);
     l_scene->addItem(ui_vp_objection);
 
+    ui_vp_evidence = new DREvidenceMovie(ao_app);
+    l_scene->addItem(ui_vp_evidence);
+
     ui_video = new DRVideoScreen(ao_app);
     l_scene->addItem(ui_video);
 
@@ -141,6 +144,7 @@ void Courtroom::create_widgets()
   ui_vp_effect->setZValue(ViewportLayers_Effect);
   ui_vp_wtce->setZValue(ViewportLayers_WTCE);
   ui_vp_objection->setZValue(ViewportLayers_Objection);
+  ui_vp_evidence->setZValue(ViewportLayers_Objection);
   ui_video->setZValue(ViewportLayers_Video);
 
   w_ViewportOverlay = new ViewportOverlay(ui_viewport);

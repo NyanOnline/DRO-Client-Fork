@@ -300,6 +300,8 @@ add_executable(dro-client
   ${SOURCES}
   ${RESOURCES}
   src/dro/param/actor_repository.h src/dro/param/actor_repository.cpp
+  src/drevidencemovie.cpp
+  src/drevidencemovie.h
 )
 
 target_compile_definitions(dro-client PRIVATE

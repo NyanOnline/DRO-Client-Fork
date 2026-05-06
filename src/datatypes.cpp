@@ -86,6 +86,7 @@ const QMap<SpriteCategory, QString> s_sprite_category_string_map{
     {SpriteShout, "shout"},
     {SpriteSticker, "sticker"},
     {SpriteWeather, "weather"},
+    {SpriteEvidence, "evidence"},
 };
 
 SpriteCategory string_to_sprite_category(QString p_category)

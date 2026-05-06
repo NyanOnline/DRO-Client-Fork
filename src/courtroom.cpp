@@ -237,6 +237,9 @@ void Courtroom::map_viewers()
   {
     m_mapped_viewer_list[SpriteSticker].append(i_sticker->get_player());
   }
+
+  // evidence
+  m_mapped_viewer_list[SpriteEvidence].append(ui_vp_evidence->get_player());
 }
 
 void Courtroom::map_viewport_viewers()
@@ -250,6 +253,7 @@ void Courtroom::map_viewport_viewers()
   m_viewport_viewer_map.insert(ViewportPairCharacterIdle, ui_vp_player_pair->get_player());
   m_viewport_viewer_map.insert(ViewportEffect, ui_vp_effect->get_player());
   m_viewport_viewer_map.insert(ViewportShout, ui_vp_objection->get_player());
+  m_viewport_viewer_map.insert(ViewportEvidence, ui_vp_evidence->get_player());
 }
 
 void Courtroom::map_viewport_readers()
@@ -1200,7 +1204,16 @@ void Courtroom::on_ic_message_return_pressed()
   packet_contents.append(QString::number(m_shout_state));
 
   // evidence
-  packet_contents.append("0");
+  if (ui_evidence_list->presenting)
+  {
+    int m_evi_id = ui_evidence_list->getCurrentSelection() + 1;
+    qInfo() << "CURRENT EVI: " << m_evi_id;
+    packet_contents.append(QString::number(m_evi_id));
+  }
+  else
+  {
+    packet_contents.append("0");
+  }
 
   // flipping
   packet_contents.append(f_flip);
@@ -1294,6 +1307,9 @@ void Courtroom::handle_acknowledged_ms()
   reset_shout_buttons();
   reset_effect_buttons();
   clear_sfx_selection();
+
+  // reset presenting
+  ui_evidence_list->setPresenting(false);
 }
 
 void Courtroom::process_chatmessage_packet(QStringList p_chatmessage)
@@ -1496,6 +1512,7 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
   const QString l_emote = m_pre_chatmessage[CMEmote];
   const QString l_outfit = m_pre_chatmessage[CMOutfitName];
   const QString l_shout_name = m_pre_chatmessage[CMShoutModifier];
+  const int l_evidence_id = m_pre_chatmessage[CMEvidenceId].toInt() - 1;
   const int l_effect_id = m_pre_chatmessage[CMEffectState].toInt();
 
   { // backgrounds
@@ -1513,6 +1530,14 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
 
   // shouts
   l_file_list.insert(ViewportShout, ao_app->get_shout_sprite_path(l_character, l_shout_name, l_outfit));
+
+  // evidence
+  if (l_evidence_id >= 0 && l_evidence_id < global_evidence_list.size())
+  {
+    EvidenceData evi_piece = global_evidence_list.at(l_evidence_id);
+    QString l_evi_path = ui_evidence_list->getIconPath(evi_piece.getImagePath());
+    l_file_list.insert(ViewportEvidence, l_evi_path);
+  }
 
   // effects
   QString effect_name = get_effect_name(l_effect_id);
@@ -1664,6 +1689,10 @@ void Courtroom::handle_chatmessage()
   // reset effect
   ui_vp_effect->stop();
   ui_vp_effect->hide();
+
+  // reset evidence
+  ui_vp_evidence->stop();
+  ui_vp_evidence->hide();
 
   // Objections can't be rendered over the chat box/showname right now so we have to hide them ):
   ui_vp_chatbox->hide();
@@ -2045,6 +2074,19 @@ void Courtroom::handle_chatmessage_3()
         ui_vp_effect->start();
       }
     }
+  }
+
+  // Display evidence
+  const int l_evidence_id = m_chatmessage[CMEvidenceId].toInt() - 1;
+  if (l_evidence_id >= 0 && l_evidence_id < global_evidence_list.size())
+  {
+    audio::effect::Play(ao_app->get_sfx("evidence_present").toStdString());
+    ui_vp_evidence->setPos(96, 96);
+    ui_vp_evidence->setScale(0.25);
+    EvidenceData evi_piece = global_evidence_list.at(l_evidence_id);
+    QString evi_path = evi_piece.getImagePath();
+    qDebug() << evi_path;
+    ui_vp_evidence->play(evi_path);
   }
 
   QString f_message = m_chatmessage[CMMessage];
