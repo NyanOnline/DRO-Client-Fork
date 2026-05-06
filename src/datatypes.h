@@ -315,7 +315,8 @@ enum SpriteCategory
   SpriteEffect,
   SpriteShout,
   SpriteSticker,
-  SpriteWeather
+  SpriteWeather,
+  SpriteEvidence
 };
 
 SpriteCategory string_to_sprite_category(QString p_category);
@@ -333,6 +334,7 @@ enum ViewportSprite
   ViewportEffect,
   ViewportShout,
   ViewportWeather,
+  ViewportEvidence,
 };
 
 SpriteCategory viewport_sprite_to_sprite_category(ViewportSprite p_type);

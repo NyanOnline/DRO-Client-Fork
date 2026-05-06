@@ -2,6 +2,7 @@
 #define COURTROOM_H
 
 #include "datatypes.h"
+#include "drevidencemovie.h"
 #include "drgraphicscene.h"
 #include "dro/interface/menus/area_menu.h"
 #include "dro/interface/menus/bgm_menu.h"
@@ -514,6 +515,7 @@ private:
   DRShoutMovie *ui_vp_objection = nullptr;
   DRStickerViewer *ui_vp_chat_arrow = nullptr;
   DRStickerViewer *ui_vp_loading = nullptr;
+  DREvidenceMovie *ui_vp_evidence = nullptr;
 
   QMap<SpriteCategory, QVector<mk2::SpritePlayer *>> m_mapped_viewer_list;
   QMap<ViewportSprite, mk2::SpritePlayer *> m_viewport_viewer_map;

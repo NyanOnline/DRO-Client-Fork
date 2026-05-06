@@ -24,6 +24,8 @@ public:
   void setPresenting(bool toggle);
   int getCurrentSelection();
 
+  QString getIconPath(QString f_path);
+
   QWidget *info_window;
 
   int current_index = -1;
@@ -52,8 +54,6 @@ private:
   QListWidget *evidence_list_widget;
 
   EvidenceData edited_evidence_data;
-
-  QString getIconPath(QString f_path);
 
   void setInfoDesc(QString f_description);
 

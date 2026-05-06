@@ -374,7 +374,17 @@ void EvidenceList::onInfoImageBrowseRequested()
 
 void EvidenceList::onInfoImageEdited()
 {
-  icon_label->setPixmap(QPixmap(this->getIconPath(image_path->text())));
+  QPixmap pixmap = QPixmap(this->getIconPath(image_path->text()));
+  icon_label->setPixmap(pixmap);
+
+  icon_label->setMinimumHeight(pixmap.height());
+  icon_label->setMinimumWidth(pixmap.width());
+  if (pixmap.height() > 200)
+  {
+    double minw = (static_cast<double>(pixmap.width()) * 200) / pixmap.height();
+    icon_label->setMinimumWidth(minw);
+    icon_label->setMinimumHeight(200);
+  }
   onInfoEdited();
 }
 
