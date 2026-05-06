@@ -123,6 +123,7 @@ namespace dro::network::metadata::message
     s_CurrentMessage.modifiers.Flipped = message[CMFlipState].toInt();
     s_CurrentMessage.effect = dro::system::effects::effectById(message[CMEffectState].toInt());
     s_CurrentMessage.characterShout = message[CMShoutModifier];
+    s_CurrentMessage.characterEvidence = message[CMEvidenceId];
     s_CurrentMessage.characterId = message[CMChrId].toInt();
     s_CurrentMessage.speakerClient = message[CMClientId].toInt();
     s_CurrentMessage.modifiers.DelaySFX = message[CMSoundDelay].toInt();
@@ -135,6 +136,7 @@ namespace dro::network::metadata::message
     s_CurrentMessage.characterFolder = operation.variables["char"];
     s_CurrentMessage.sfxName = operation.variables["sound"];
     s_CurrentMessage.characterShout = operation.variables["shout"];
+    s_CurrentMessage.characterEvidence = operation.variables["evidence"];
     s_CurrentMessage.characterLayers = operation.variables["layers"];
     s_CurrentMessage.characterOutfit = operation.variables["outfit"];
     s_CurrentMessage.characterSequence = operation.variables["sequence"];

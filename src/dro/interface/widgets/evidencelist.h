@@ -21,9 +21,14 @@ public:
   void addItem(EvidenceData f_evidence);
   void setInfoWindowData(EvidenceData f_evidence);
   void setEvidenceList(QVector<EvidenceData> *evi_list);
+  void setPresenting(bool toggle);
+  int getCurrentSelection();
 
   QWidget *info_window;
 
+  int current_index = -1;
+
+  bool presenting = false;
 private:
   AOApplication *m_app;
 
@@ -40,7 +45,6 @@ private:
   QLineEdit *image_path;
   QCheckBox *edit_checkbox;
   QPushButton *image_browse_button;
-  int m_current_index = -1;
   QPushButton *info_close_button;
   QPushButton *info_apply_button;
   QPushButton *info_delete_button;

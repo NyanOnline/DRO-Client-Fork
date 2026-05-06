@@ -45,6 +45,7 @@ struct MessageMetadata
   QString characterLayers = "";
   QString characterVideo = "";
   QString characterShout = "";
+  QString characterEvidence = "";
 
   QString userShowname = "";
   QString textContent = "";

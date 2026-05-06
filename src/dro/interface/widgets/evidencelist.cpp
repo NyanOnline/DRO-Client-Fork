@@ -75,8 +75,7 @@ EvidenceList::EvidenceList(QWidget *parent) : QWidget(parent), m_app(AOApplicati
   connect(evidence_list_widget, &QListWidget::itemDoubleClicked, this, &EvidenceList::onItemDoubleClicked);
   connect(close_button, &QPushButton::clicked, this, &EvidenceList::onCloseClicked);
   connect(create_button, &QPushButton::clicked, this, &EvidenceList::onCreateClicked);
-  // TODO: Presenting Evidence
-  // connect(present_checkbox, &QCheckBox::stateChanged, this, &EvidenceList::onPresentToggled);
+  connect(present_checkbox, &QCheckBox::stateChanged, this, &EvidenceList::onPresentToggled);
 
   // Submission Actions
   connect(info_close_button, &QPushButton::clicked, this, &EvidenceList::onInfoCloseClicked);
@@ -134,19 +133,19 @@ void EvidenceList::setEvidenceList(QVector<EvidenceData> *evi_list)
   int size = current_evi_list->length();
   if (size <= 0)
   {
-    m_current_index = -1;
+    current_index = -1;
     info_window->hide();
     return;
   }
 
-  if (m_current_index >= size)
+  if (current_index >= size)
   {
-    m_current_index = 0;
+    current_index = 0;
   }
 
   if (!info_window->isHidden())
   {
-    EvidenceData current_evidence = current_evi_list->at(m_current_index);
+    EvidenceData current_evidence = current_evi_list->at(current_index);
     bool is_new = name_edit->text() != current_evidence.getName() ||
                   image_path->text() != current_evidence.getImagePath() ||
                   desc->toPlainText() != current_evidence.getDesc();
@@ -183,6 +182,11 @@ void EvidenceList::setEvidenceList(QVector<EvidenceData> *evi_list)
   }
 }
 
+void EvidenceList::setPresenting(bool toggle)
+{
+  present_checkbox->setChecked(toggle);
+}
+
 QString EvidenceList::getIconPath(QString f_path)
 {
   // TODO: cache this!!!
@@ -197,6 +201,18 @@ QString EvidenceList::getIconPath(QString f_path)
     }
   }
   return evidence_image_path;
+}
+
+int EvidenceList::getCurrentSelection()
+{
+  QListWidgetItem *l_item = evidence_list_widget->currentItem();
+  if (l_item != nullptr)
+  {
+    int idx = evidence_list_widget->indexFromItem(l_item).row();
+    qInfo() << idx;
+    return idx;
+  }
+  return -1;
 }
 
 void EvidenceList::addItem(EvidenceData f_evidence)
@@ -258,8 +274,8 @@ void EvidenceList::onItemDoubleClicked(QListWidgetItem *item)
     if (reply == QMessageBox::No)
       return;
   }
-  m_current_index = evidence_list_widget->row(item);
-  EvidenceData f_evidence = current_evi_list->at(m_current_index);
+  current_index = evidence_list_widget->row(item);
+  EvidenceData f_evidence = current_evi_list->at(current_index);
 
   setInfoWindowData(f_evidence);
   info_window->show();
@@ -279,8 +295,7 @@ void EvidenceList::onCreateClicked()
 
 void EvidenceList::onPresentToggled(int state)
 {
-  qInfo() << state;
-  //m_app->
+  presenting = (state == Qt::Checked);
 }
 
 void EvidenceList::onInfoCloseClicked()
@@ -302,7 +317,7 @@ void EvidenceList::onInfoApplyClicked()
 {
   // TODO: move this somewhere else so it can be adjusted for json evidence
   QStringList f_contents;
-  f_contents.append(QString::number(m_current_index));
+  f_contents.append(QString::number(current_index));
   f_contents.append(name_edit->text());
   f_contents.append(desc->toPlainText());
   f_contents.append(image_path->text());
@@ -325,7 +340,7 @@ void EvidenceList::onInfoDeleteClicked()
   }
 
   // TODO: move this somewhere else so it can be adjusted for json evidence
-  m_app->send_server_packet(DRPacket("DE", {QString::number(m_current_index)}));
+  m_app->send_server_packet(DRPacket("DE", {QString::number(current_index)}));
   info_window->hide();
 }
 

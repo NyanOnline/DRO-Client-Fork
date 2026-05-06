@@ -1200,7 +1200,16 @@ void Courtroom::on_ic_message_return_pressed()
   packet_contents.append(QString::number(m_shout_state));
 
   // evidence
-  packet_contents.append("0");
+  if (ui_evidence_list->presenting)
+  {
+    int m_evi_id = ui_evidence_list->getCurrentSelection() + 1;
+    qInfo() << "CURRENT EVI: " << m_evi_id;
+    packet_contents.append(QString::number(m_evi_id));
+  }
+  else
+  {
+    packet_contents.append("0");
+  }
 
   // flipping
   packet_contents.append(f_flip);
@@ -1294,6 +1303,9 @@ void Courtroom::handle_acknowledged_ms()
   reset_shout_buttons();
   reset_effect_buttons();
   clear_sfx_selection();
+
+  // reset presenting
+  ui_evidence_list->setPresenting(false);
 }
 
 void Courtroom::process_chatmessage_packet(QStringList p_chatmessage)
