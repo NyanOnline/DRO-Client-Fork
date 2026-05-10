@@ -1622,7 +1622,6 @@ void Courtroom::start_chatmessage()
 
 void Courtroom::handle_chatmessage()
 {
-  qDebug() << "handle_chatmessage";
   LuaBridge::OnCharacterMessage(m_chatmessage[CMShowName].toStdString(), m_chatmessage[CMChrName].toStdString(), m_chatmessage[CMEmote].toStdString(), m_chatmessage[CMMessage].toStdString(), m_chatmessage[CMMessage].trimmed().isEmpty());
   m_hide_character = m_chatmessage[CMHideCharacter].toInt();
   m_play_pre = false;
@@ -1664,8 +1663,6 @@ void Courtroom::handle_chatmessage()
     // update first person mode status
     m_msg_is_first_person = ao_app->get_first_person_enabled();
   }
-
-  qDebug() << "handle_chatmessage";
 
   // We actually DO wanna fail here if the showname is empty but the system is speaking.
   // Having an empty showname for system is actually what we expect.
@@ -1855,7 +1852,6 @@ void Courtroom::handle_chatmessage_2() // handles IC
 
   ui_vp_player_pair->setVerticalOffset(metadata::message::pair::verticalOffset());
   setup_screenshake_anim(0);
-  qDebug() << "handle_chatmessage_2";
   ui_vp_player_char->stop();
   ui_vp_player_pair->stop();
 
@@ -1934,8 +1930,6 @@ void Courtroom::handle_chatmessage_2() // handles IC
 
 void Courtroom::handle_chatmessage_3()
 {
-  qDebug() << "handle_chatmessage_3";
-
   ui_vp_player_char->set_play_once(false);
 
   if(metadata::message::pair::isActive())
@@ -2550,8 +2544,9 @@ void Courtroom::precalculate_ic_message()
         is_ignore_next_letter = false;
         continue;
       case 'n':
-        ui_vp_message->textCursor().insertText("\n", vp_message_format);
-        message_components.append(DR::CommandData(DR::MidLineCommand::Chara, "\n"));
+        if (!ui_vp_message->legacy_wrap)
+          ui_vp_message->textCursor().insertText("\n", vp_message_format);
+        message_components.append(DR::CommandData(DR::MidLineCommand::Chara, QChar('\n')));
         is_ignore_next_letter = false;
         continue;
       case 'p':
@@ -2623,7 +2618,8 @@ void Courtroom::precalculate_ic_message()
 
     if (render_character)
     {
-      ui_vp_message->textCursor().insertText(f_character, vp_message_blank);
+      if (!ui_vp_message->legacy_wrap)
+        ui_vp_message->textCursor().insertText(f_character, vp_message_blank);
       message_components.append(DR::CommandData(DR::MidLineCommand::Chara, f_character));
     }
     // Punctuation delay goes AFTER the displayed character, not BEFORE like pauses
@@ -2647,12 +2643,19 @@ void Courtroom::next_chat_letter()
   DR::CommandData command_data = message_components.at(m_tick_step);
 
   auto insertChar = [&](QChar ch, const QTextCharFormat &format) {
-    // Reformat the chara at cursor position
-    QTextCursor cursor = ui_vp_message->textCursor();
-    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-    cursor.setCharFormat(format);
-    // Advance the cursor by one character
-    ui_vp_message->moveCursor(QTextCursor::NextCharacter);
+    if (!ui_vp_message->legacy_wrap)
+    {
+      // Reformat the chara at cursor position
+      QTextCursor cursor = ui_vp_message->textCursor();
+      cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+      cursor.setCharFormat(format);
+      // Advance the cursor by one character
+      ui_vp_message->moveCursor(QTextCursor::NextCharacter);
+    }
+    else
+    {
+      ui_vp_message->textCursor().insertText(ch, format);
+    }
     LuaBridge::LuaEventCall("OnMessageTick", QString(ch).toStdString());
   };
 
