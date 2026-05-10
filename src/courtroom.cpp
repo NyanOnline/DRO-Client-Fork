@@ -1603,8 +1603,11 @@ void Courtroom::start_chatmessage()
 
   if(m_appendMessage)
   {
-    QString appendPrefix = ui_vp_message->toPlainText().right(1) == " " ? "" : " ";
-    m_chatmessage[CMMessage] = appendPrefix + m_chatmessage[CMMessage].mid(3);
+    QString appendText = m_chatmessage[CMMessage].mid(3);
+    bool previous_is_newline_or_blankpost = ui_vp_message->toPlainText().right(1) == " " || ui_vp_message->toPlainText().right(1) == "\n";
+    bool next_is_newline_or_blankpost = appendText.left(1) == " " || appendText.left(1) == "\n" || appendText.left(2) == "\\n";
+    QString appendPrefix = previous_is_newline_or_blankpost || next_is_newline_or_blankpost ? "" : " ";
+    m_chatmessage[CMMessage] = appendPrefix + appendText;
   }
 
 
@@ -2502,6 +2505,8 @@ int Courtroom::calculate_chat_tick_interval(int p_tick_speed)
 // Precalculates the IC message and strips unrendered characters while preserving their intended commands
 void Courtroom::precalculate_ic_message()
 {
+  int previous_cursor_position = ui_vp_message->textCursor().position();
+
   const QString &f_message = m_chatmessage[CMMessage];
 
   static const QList<QChar> punctuationCharacters = { '.', '!', '?', ',' };
@@ -2633,8 +2638,11 @@ void Courtroom::precalculate_ic_message()
     }
     is_ignore_next_letter = false;
   }
-  // Move the cursor to the very start of the text
-  ui_vp_message->moveCursor(QTextCursor::Start);
+
+  // Move the cursor back to where it was
+  QTextCursor cursor = ui_vp_message->textCursor();
+  cursor.setPosition(previous_cursor_position);
+  ui_vp_message->setTextCursor(cursor);
 }
 
 void Courtroom::next_chat_letter()
