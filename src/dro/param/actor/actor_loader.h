@@ -64,6 +64,7 @@ public:
     {
       {"width_smooth", mk2::SpritePlayer::WidthSmoothScaling},
       {"width_pixels", mk2::SpritePlayer::WidthPixelScaling},
+      {"pixels", mk2::SpritePlayer::PixelScaling},
     };
 
     if(scalingModeMap.contains(m_ScalingMode.toLower())) return scalingModeMap[m_ScalingMode.toLower()];
