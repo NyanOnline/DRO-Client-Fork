@@ -1106,6 +1106,7 @@ void Courtroom::set_widgets()
   ui_vp_chatbox->set_theme_image("chatmed");
   ui_vp_chatbox->hide();
 
+  ui_vp_message->legacy_wrap = ao_app->current_theme->get_widget_settings_bool("message", "courtroom", "legacy_wrap");
 
   set_size_and_pos(ui_music_list, "music_list", COURTROOM_DESIGN_INI, ao_app);
   set_stylesheet(ui_music_list, "[music_list]", COURTROOM_STYLESHEETS_CSS, ao_app);

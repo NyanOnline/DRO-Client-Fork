@@ -15,6 +15,8 @@ public:
   void resetTransform();
   void hideScrollbars();
 
+  bool legacy_wrap = false;
+
   Qt::Alignment get_text_alignment() const;
 
 public slots:
