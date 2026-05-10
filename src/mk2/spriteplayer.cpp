@@ -276,6 +276,13 @@ void SpritePlayer::resolve_scaling_mode(ScalingMode scalingMode, double scale)
       scale_current_frame();
       return;
     }
+    if(scalingMode == PixelScaling)
+    {
+      m_transform = Qt::FastTransformation;
+      m_resolved_scaling_mode = PixelScaling;
+      scale_current_frame();
+      return;
+    }
   }
   m_resolved_scaling_mode = m_scaling_mode;
 
@@ -438,7 +445,7 @@ void SpritePlayer::scale_current_frame()
     composed = composed.scaledToHeight(m_size.height() * m_scale, m_transform);
     break;
 
-    case WidthPixelScaling:
+  case WidthPixelScaling:
     {
       const int originalWidth = composed.width();
       if (originalWidth > 0)
@@ -452,6 +459,10 @@ void SpritePlayer::scale_current_frame()
         composed = composed.scaled(finalWidth, finalHeight, Qt::IgnoreAspectRatio, Qt::FastTransformation);
       }
     }
+
+  case PixelScaling:
+    composed = composed.scaledToHeight(m_size.height() * m_scale, Qt::FastTransformation);
+    break;
   }
 
   m_overallScale = static_cast<double>(composed.width()) / originalSize.width();

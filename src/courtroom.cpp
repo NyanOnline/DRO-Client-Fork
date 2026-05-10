@@ -2454,7 +2454,7 @@ void Courtroom::setup_chat()
   m_chatbox_message_highlight_colors = ao_app->get_highlight_colors();
 
   QString f_gender = "male";
-  QString l_jsonPath = AOApplication::getInstance()->get_character_path(m_chatmessage[CMChrName], "char.json");
+  QString l_jsonPath = AOApplication::getInstance()->get_character_path(m_chatmessage[CMChrName], CHARACTER_CHAR_JSON);
   if(FS::Checks::FileExists(l_jsonPath))
   {
     ActorData *speakerActor = new ActorDataReader();

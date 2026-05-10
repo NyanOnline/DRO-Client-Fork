@@ -23,7 +23,7 @@ ActorData *CharacterManager::ReadCharacter(QString t_folder)
 {
   static QMap<QString, QPair<QDateTime, ActorData*>> s_cache;
 
-  QString l_jsonPath = AOApplication::getInstance()->get_character_path(t_folder, "char.json");
+  QString l_jsonPath = AOApplication::getInstance()->get_character_path(t_folder, CHARACTER_CHAR_JSON);
 
   if(FS::Checks::FileExists(l_jsonPath))
   {

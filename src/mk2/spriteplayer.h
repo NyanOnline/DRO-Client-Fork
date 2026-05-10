@@ -45,6 +45,7 @@ public:
     DynamicScaling,
     WidthSmoothScaling,
     WidthPixelScaling,
+    PixelScaling,
     AutomaticScaling
   };
   Q_ENUM(ScalingMode)

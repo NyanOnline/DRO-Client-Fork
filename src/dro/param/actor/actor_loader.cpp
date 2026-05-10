@@ -15,7 +15,7 @@ ActorData *ActorLoader::GetCharacter(const QString& folder)
 {
   if(!s_CachedCharacters.contains(folder))
   {
-    QString charaConfigPath = AOApplication::getInstance()->get_character_path(folder, "char.json");
+    QString charaConfigPath = AOApplication::getInstance()->get_character_path(folder, CHARACTER_CHAR_JSON);
     ActorData *characterData;
     if(FS::Checks::FileExists(charaConfigPath))
     {
@@ -68,7 +68,7 @@ void ActorData::SwitchOutfit(const QString& t_outfit)
 void ActorDataReader::LoadActor(const QString& folder)
 {
   SetFolder(folder);
-  ReadFromFile(AOApplication::getInstance()->get_character_path(folder, "char.json"));
+  ReadFromFile(AOApplication::getInstance()->get_character_path(folder, CHARACTER_CHAR_JSON));
 
   SetShowname(getStringValue("showname"));
   SetGender(getStringValue("gender"));
@@ -249,6 +249,11 @@ void LegacyActorReader::LoadActor(const QString& folder)
   SetShowname(app->read_char_ini(folder, "options", "showname", folder).toString());
   SetSide(app->read_char_ini(folder, "options", "side", "wit").toString());
   SetGender("male");
+  QString scalingMode = app->read_char_ini(folder, "options", "scaling", "").toString();
+  if (scalingMode.startsWith("pixel"))
+  {
+    SetScalingMode("pixels");
+  }
 }
 
 QString LegacyActorReader::DRLookupKey(const QStringList &keys, const QString &target)

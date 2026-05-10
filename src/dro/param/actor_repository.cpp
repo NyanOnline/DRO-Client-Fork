@@ -2,6 +2,7 @@
 #include <QMap>
 #include <QString>
 #include "aoapplication.h"
+#include "commondefs.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/param/actor/actor_loader.h"
 
@@ -30,7 +31,7 @@ ActorData *dro::actor::user::load(QString folder)
   }
 
   s_currentFolder = folder;
-  QString l_jsonPath = AOApplication::getInstance()->get_character_path(folder, "char.json");
+  QString l_jsonPath = AOApplication::getInstance()->get_character_path(folder, CHARACTER_CHAR_JSON);
 
   if(FS::Checks::FileExists(l_jsonPath))
   {

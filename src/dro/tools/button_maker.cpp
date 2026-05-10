@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include "aoapplication.h"
+#include "commondefs.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/interface/courtroom_layout.h"
 #include "dro/param/actor_repository.h"
@@ -150,7 +151,7 @@ void ButtonMaker::SetCharacter(QString character)
   m_EmoteIndex = 0;
   m_Emotes.clear();
 
-  m_Path = AOApplication::getInstance()->get_character_path(character, "char.json");
+  m_Path = AOApplication::getInstance()->get_character_path(character, CHARACTER_CHAR_JSON);
   if(FS::Checks::FileExists(m_Path))
   {
     m_IsJson = true;
