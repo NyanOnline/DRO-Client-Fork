@@ -110,7 +110,7 @@ jobs:
         working-directory: ${{github.workspace}}/bin/
         shell: bash
         run: |
-          windeployqt --no-quick-import --no-translations --no-compiler-runtime --no-opengl-sw ./dro-client.exe
+          windeployqt --no-quick-import --no-translations --no-compiler-runtime --no-opengl-sw ./DanganronpaOnline.exe
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
