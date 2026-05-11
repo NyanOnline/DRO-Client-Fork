@@ -2,11 +2,14 @@ name: Build
 
 on: [workflow_dispatch, push]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
 
@@ -38,7 +41,7 @@ jobs:
 
       - name: Cache third-party dependencies
         id: cache-3rd
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ./3rd/discord-rpc
@@ -111,14 +114,14 @@ jobs:
 
       - name: Cache QtApng
         id: cache-qtapng
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ./qtapng
           key: ${{ runner.os }}-qtapng-v1
 
       - name: Clone Apng plugin
         if: steps.cache-qtapng.outputs.cache-hit != 'true'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: jurplel/QtApng
           path: ./qtapng
@@ -147,7 +150,7 @@ jobs:
           windeployqt --no-quick-import --no-translations --no-compiler-runtime --no-opengl-sw ./DanganronpaOnline.exe
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: DRO-Client-Windows
           path: ${{github.workspace}}/bin
