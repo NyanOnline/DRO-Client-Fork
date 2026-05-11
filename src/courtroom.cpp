@@ -1980,6 +1980,9 @@ void Courtroom::handle_chatmessage_3()
     {
       ui_vp_showname_image->set_image(l_showname_image);
       ui_vp_showname_image->show();
+      // If enabled, the text also shows when the showname image is displayed
+      if (ao_app->current_theme->read_config_bool("enable_showname_text_always"))
+        ui_vp_showname->show();
     }
     else
     {
