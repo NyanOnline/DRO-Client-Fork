@@ -104,7 +104,7 @@ jobs:
         run: |
           cmake . -D CMAKE_BUILD_TYPE=Release
           cmake --build . --config Release
-          cp ./bin/dro-client.exe ./bin/DanganronpaOnline.exe
+          rm ./bin/dro-client.exe ./bin/DanganronpaOnline.exe
 
       - name: Deploy Windows
         working-directory: ${{github.workspace}}/bin/
