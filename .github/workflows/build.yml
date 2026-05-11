@@ -34,9 +34,27 @@ jobs:
 
       - name: Create binary folder
         shell: bash
-        run: mkdir ./bin/
+        run: mkdir -p ./bin/
+
+      - name: Cache third-party dependencies
+        id: cache-3rd
+        uses: actions/cache@v4
+        with:
+          path: |
+            ./3rd/discord-rpc
+            ./3rd/bass
+            ./3rd/sol
+            ./3rd/lua
+            ./3rd/stb_image_resize2.h
+            ./bin/discord-rpc.dll
+            ./bin/bass.dll
+            ./bin/bassopus.dll
+            ./bin/bass_fx.dll
+            ./bin/lua54.dll
+          key: ${{ runner.os }}-3rd-v1
 
       - name: Install Windows Discord RPC
+        if: steps.cache-3rd.outputs.cache-hit != 'true'
         shell: bash
         run: |
           curl -L https://github.com/discordapp/discord-rpc/releases/download/v3.4.0/discord-rpc-win.zip -o discord_rpc.zip
@@ -46,6 +64,7 @@ jobs:
           cp ./discord-rpc/win64-dynamic/bin/discord-rpc.dll ./bin/
           
       - name: Install Windows BASS
+        if: steps.cache-3rd.outputs.cache-hit != 'true'
         shell: bash
         run: |
           curl http://www.un4seen.com/files/bass24.zip -o bass.zip
@@ -67,6 +86,7 @@ jobs:
           cp ./bass/x64/bass_fx.dll ./bin/
 
       - name: Install sol2
+        if: steps.cache-3rd.outputs.cache-hit != 'true'
         shell: bash
         run: |
           curl -L https://github.com/ThePhD/sol2/releases/download/v3.3.0/config.hpp -o ./3rd/sol/config.hpp
@@ -74,21 +94,30 @@ jobs:
           curl -L https://github.com/ThePhD/sol2/releases/download/v3.3.0/sol.hpp -o ./3rd/sol/sol.hpp
 
       - name: Install LUA 5.4
+        if: steps.cache-3rd.outputs.cache-hit != 'true'
         shell: bash
         run: |
           curl https://master.dl.sourceforge.net/project/luabinaries/5.4.2/Windows%20Libraries/Dynamic/lua-5.4.2_Win64_dll16_lib.zip?viasf=1 -o lua.zip
           unzip -d lua -o lua.zip
-
           cp ./lua/lua54.dll ./bin/
           cp ./lua/lua54.lib ./3rd/lua
           cp ./lua/include/* ./3rd/lua 
 
       - name: Install stb_image_resize
+        if: steps.cache-3rd.outputs.cache-hit != 'true'
         shell: bash
         run: |
           curl https://raw.githubusercontent.com/nothings/stb/refs/heads/master/stb_image_resize2.h -o ./3rd/stb_image_resize2.h
 
+      - name: Cache QtApng
+        id: cache-qtapng
+        uses: actions/cache@v4
+        with:
+          path: ./qtapng
+          key: ${{ runner.os }}-qtapng-v1
+
       - name: Clone Apng plugin
+        if: steps.cache-qtapng.outputs.cache-hit != 'true'
         uses: actions/checkout@v4
         with:
           repository: jurplel/QtApng
@@ -99,6 +128,11 @@ jobs:
           cd ./qtapng
           cmake . -DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE="${{ github.workspace }}/bin/imageformats/" -DAPNG_QT6=ON
           cmake --build . --config Release
+
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: ${{ runner.os }}
 
       - name: Build
         run: |
