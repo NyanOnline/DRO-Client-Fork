@@ -88,7 +88,6 @@ jobs:
         run: |
           curl https://raw.githubusercontent.com/nothings/stb/refs/heads/master/stb_image_resize2.h -o ./3rd/stb_image_resize2.h
 
-
       - name: Clone Apng plugin
         uses: actions/checkout@v4
         with:
@@ -105,6 +104,7 @@ jobs:
         run: |
           cmake . -D CMAKE_BUILD_TYPE=Release
           cmake --build . --config Release
+          cp ./Release/dro-client.exe ./bin/DanganronpaOnline.exe
 
       - name: Deploy Windows
         working-directory: ${{github.workspace}}/bin/
