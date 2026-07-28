@@ -13,6 +13,7 @@ Bug Fixes
 
 Bug Investigation:
 BGs are black upon entering a room until someone speaks and if someone sends a long message, the beginning parts are cut off in the main view.
+
 Flash  effects not appearing visual
 
 Not a replacement for DRO client, just a fork intended to clean-up some legacy crust and fix some issues.
