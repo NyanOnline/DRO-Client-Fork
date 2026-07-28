@@ -4,7 +4,9 @@ This is the a forked version of the offical DRO client last updated by Crystal W
 ## TO DO LIST
 
 Remove all calls from BASS.DLL and replace it with a more open source dependency instead of properiety.
+
 Project Cleanup
+
 Bug Fixes
 
 ## Qt
@@ -17,4 +19,3 @@ This project uses [BASS shared library](http://www.un4seen.com/).
 
 Copyright (c) 1999-2026 Un4seen Developments Ltd. All rights reserved.
 
-## TO DO LIST
