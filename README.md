@@ -24,6 +24,8 @@ Text cutting off issues, probably related to the new queue implementation in 1.8
 
 Flash  effects not appearing visual
 
+Fix Additive. DRO's implementation is borked. Just port over AO2's for now the text rolls over itself.
+
 Not a replacement for DRO client, just a fork intended to clean-up some legacy crust and fix some issues.
 
 ## Qt
