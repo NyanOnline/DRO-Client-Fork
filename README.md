@@ -3,7 +3,9 @@ This is the a forked version of the offical DRO client last updated by Crystal W
 
 ## TO DO LIST
 
-Remove all calls from BASS.DLL and replace it with a more open source dependency instead of properiety.
+Remove all calls from BASS.DLL and replace it with a more open source dependency instead of properiety. 
+
+Replace BASS.DLL with miniaudio https://miniaud.io/
 
 Project Cleanup
 
