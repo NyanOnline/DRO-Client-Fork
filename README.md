@@ -11,6 +11,7 @@ Project Cleanup
 
 Feature list
 A toggle to disable blankposts so if you press ENTER, nothing sends. 
+
 Softer toggle called soft blankpost option where u have to press ENTER at least three times on an empty message to send a BLANKPOST. Purpose is to prevent accidental blankposts.
 
 Bug Fixes
