@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(dro-client VERSION 1.8.3 LANGUAGES CXX)
+project(dro-client VERSION 1.8.3 LANGUAGES C CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -205,6 +205,8 @@ set(SOURCES
   src/dro/system/audio/ambience_player.cpp
   src/dro/system/audio/audio_backend.cpp
   src/dro/system/audio/miniaudio_impl.cpp
+  3rd/miniaudio/extras/decoders/libvorbis/miniaudio_libvorbis.c
+  3rd/miniaudio/extras/decoders/libopus/miniaudio_libopus.c
   src/dro/system/audio/network_stream.cpp
   src/dro/system/audio/blip_player.cpp
   src/dro/system/audio/music_player.cpp
@@ -321,6 +323,7 @@ target_include_directories(dro-client PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/lua
   ${OPUSFILE_INCLUDE_DIR}
+  ${OPUSFILE_INCLUDE_DIR}/opus
   ${VORBIS_INCLUDE_DIR}
 )
 
