@@ -303,6 +303,24 @@ set(RESOURCES
   res.qrc
 )
 
+if(NOT DRO_VCPKG_DIR AND DEFINED ENV{VCPKG_INSTALLATION_ROOT})
+  set(DRO_VCPKG_DIR "$ENV{VCPKG_INSTALLATION_ROOT}/installed/x64-windows")
+endif()
+
+find_path(OPUSFILE_INCLUDE_DIR opus/opusfile.h HINTS "${DRO_VCPKG_DIR}/include")
+find_path(VORBIS_INCLUDE_DIR vorbis/vorbisfile.h HINTS "${DRO_VCPKG_DIR}/include")
+find_library(OGG_LIBRARY NAMES ogg libogg HINTS "${DRO_VCPKG_DIR}/lib")
+find_library(VORBIS_LIBRARY NAMES vorbis libvorbis HINTS "${DRO_VCPKG_DIR}/lib")
+find_library(VORBISFILE_LIBRARY NAMES vorbisfile libvorbisfile HINTS "${DRO_VCPKG_DIR}/lib")
+find_library(OPUS_LIBRARY NAMES opus libopus HINTS "${DRO_VCPKG_DIR}/lib")
+find_library(OPUSFILE_LIBRARY NAMES opusfile libopusfile HINTS "${DRO_VCPKG_DIR}/lib")
+
+foreach(dep OPUSFILE_INCLUDE_DIR VORBIS_INCLUDE_DIR OGG_LIBRARY VORBIS_LIBRARY VORBISFILE_LIBRARY OPUS_LIBRARY OPUSFILE_LIBRARY)
+  if(NOT ${dep})
+    message(FATAL_ERROR "Audio codec dependency not found: ${dep}. Set DRO_VCPKG_DIR to your vcpkg installed triplet directory.")
+  endif()
+endforeach()
+
 add_executable(dro-client
   ${HEADERS}
   ${SOURCES}
@@ -336,14 +354,6 @@ target_link_directories(dro-client PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/discord-rpc
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/lua
 )
-
-find_path(OPUSFILE_INCLUDE_DIR opus/opusfile.h)
-find_path(VORBIS_INCLUDE_DIR vorbis/vorbisfile.h)
-find_library(OGG_LIBRARY NAMES ogg libogg)
-find_library(VORBIS_LIBRARY NAMES vorbis libvorbis)
-find_library(VORBISFILE_LIBRARY NAMES vorbisfile libvorbisfile)
-find_library(OPUS_LIBRARY NAMES opus libopus)
-find_library(OPUSFILE_LIBRARY NAMES opusfile libopusfile)
 
 target_link_libraries(dro-client
   Qt6::Core
