@@ -1,23 +1,62 @@
 #include "draudiostream.h"
 
+#include "dro/system/audio/audio_backend.h"
+#include "dro/system/audio/miniaudio_config.h"
+#include "dro/system/audio/network_stream.h"
+
 #include <QDebug>
 #include <QFileInfo>
+#include <QTimer>
 #include <QUrl>
 #include <QtMath>
 
-#include <bass/bass.h>
-
-#include <bass/bassopus.h>
-#include <bass/bass_fx.h>
+#include <cmath>
 
 #include "draudioengine.h"
+
+class DRAudioStreamPrivate
+{
+public:
+  ma_decoder decoder;
+  ma_sound sound;
+  ma_node *reverb_node = nullptr;
+  bool decoder_ready = false;
+  bool sound_ready = false;
+  NetworkStream *network = nullptr;
+};
+
+namespace
+{
+void sound_end_proc(void *pUserData, ma_sound *pSound)
+{
+  Q_UNUSED(pSound);
+  DRAudioStream *l_stream = static_cast<DRAudioStream *>(pUserData);
+  QMetaObject::invokeMethod(l_stream, "handle_end", Qt::QueuedConnection);
+}
+
+float semitones_to_ratio(float p_semitones)
+{
+  return std::pow(2.0f, p_semitones / 12.0f);
+}
+
+float percent_to_ratio(float p_percent)
+{
+  const float l_ratio = 1.0f + (p_percent * 0.01f);
+  return l_ratio <= 0.0f ? 0.01f : l_ratio;
+}
+} // namespace
 
 DRAudioStream::DRAudioStream(DRAudio::Family p_family)
     : m_engine(new DRAudioEngine(this))
     , m_family(p_family)
     , m_fade(NoFade)
+    , d(new DRAudioStreamPrivate)
 {
   registerMetatypes();
+
+  m_fade_timer = new QTimer(this);
+  m_fade_timer->setSingleShot(true);
+  connect(m_fade_timer, &QTimer::timeout, this, &DRAudioStream::handle_fade_finished);
 
   connect(m_engine, &DRAudioEngine::current_device_changed, this, &DRAudioStream::update_device);
 }
@@ -29,9 +68,30 @@ void DRAudioStream::registerMetatypes()
 
 DRAudioStream::~DRAudioStream()
 {
-  if (m_hstream)
+  release_sound();
+}
+
+void DRAudioStream::release_sound()
+{
+  if (d->sound_ready)
   {
-    BASS_StreamFree(m_hstream);
+    ma_sound_uninit(&d->sound);
+    d->sound_ready = false;
+  }
+  if (d->reverb_node != nullptr)
+  {
+    audio_backend::reverb_node_uninit(d->reverb_node);
+    d->reverb_node = nullptr;
+  }
+  if (d->decoder_ready)
+  {
+    ma_decoder_uninit(&d->decoder);
+    d->decoder_ready = false;
+  }
+  if (d->network != nullptr)
+  {
+    delete d->network;
+    d->network = nullptr;
   }
 }
 
@@ -45,11 +105,16 @@ QString DRAudioStream::get_file_name() const
   return m_filename;
 }
 
+DRAudioStream::Fade DRAudioStream::get_fade() const
+{
+  return m_fade;
+}
+
 bool DRAudioStream::is_playing() const
 {
   if (!ensure_init())
     return false;
-  return BASS_ChannelIsActive(m_hstream) == BASS_ACTIVE_PLAYING;
+  return ma_sound_is_playing(&d->sound) != 0;
 }
 
 bool DRAudioStream::is_repeatable() const
@@ -61,9 +126,11 @@ void DRAudioStream::play()
 {
   if (!ensure_init())
     return;
-  if (!BASS_ChannelPlay(m_hstream, FALSE))
+  const ma_result l_result = ma_sound_start(&d->sound);
+  if (l_result != MA_SUCCESS)
   {
-    qWarning() << QString("error: failed to play file: %1 (file: \"%1\")").arg(DRAudio::get_last_bass_error(), m_filename);
+    qWarning() << QString("error: failed to play file: %1 (file: \"%2\")")
+                      .arg(audio_backend::error_string(l_result), m_filename);
     Q_EMIT finished();
   }
 }
@@ -75,15 +142,18 @@ void DRAudioStream::playSynced(const DRAudioStream *reference)
     play();
     return;
   }
-  QWORD refPosition = BASS_ChannelGetPosition(reference->m_hstream, BASS_POS_BYTE);
 
-  if (!BASS_ChannelSetPosition(m_hstream, refPosition, BASS_POS_BYTE))
+  ma_uint64 l_cursor = 0;
+  if (ma_sound_get_cursor_in_pcm_frames(&reference->d->sound, &l_cursor) == MA_SUCCESS)
   {
-    qWarning() << "error: failed to sync position with reference stream:" << DRAudio::get_last_bass_error();
+    ma_sound_seek_to_pcm_frame(&d->sound, l_cursor);
   }
 
-  if (!BASS_ChannelPlay(m_hstream, FALSE)) {
-    qWarning() << QString("error: failed to play synced stream: %1 (file: \"%2\")").arg(DRAudio::get_last_bass_error(), m_filename);
+  const ma_result l_result = ma_sound_start(&d->sound);
+  if (l_result != MA_SUCCESS)
+  {
+    qWarning() << QString("error: failed to play synced stream: %1 (file: \"%2\")")
+                      .arg(audio_backend::error_string(l_result), m_filename);
     Q_EMIT finished();
   }
 }
@@ -92,20 +162,33 @@ void DRAudioStream::stop()
 {
   if (!ensure_init())
     return;
-  BASS_ChannelStop(m_hstream);
+  ma_sound_stop(&d->sound);
   Q_EMIT finished();
+}
+
+void DRAudioStream::handle_end()
+{
+  if (!m_repeatable)
+  {
+    Q_EMIT finished();
+  }
+  else
+  {
+    Q_EMIT looped();
+  }
 }
 
 std::optional<DRAudioError> DRAudioStream::set_file_name(QString p_file_name)
 {
   m_url.clear();
   m_filename = p_file_name;
+  release_sound();
   m_init_state = InitNotDone;
   if (!ensure_init())
   {
     return DRAudioError("failed to set file: " + p_file_name);
   }
-  emit file_name_changed(m_filename);
+  Q_EMIT file_name_changed(m_filename);
   return std::nullopt;
 }
 
@@ -113,36 +196,45 @@ std::optional<DRAudioError> DRAudioStream::SetWebAddress(QString t_url)
 {
   m_url = t_url;
   m_filename.clear();
+  release_sound();
   m_init_state = InitNotDone;
   if (!ensure_init())
   {
     return DRAudioError("failed to set url: " + t_url);
   }
-  emit file_name_changed(m_filename);
+  Q_EMIT file_name_changed(m_filename);
   return std::nullopt;
 }
 
 void DRAudioStream::set_pitch(float pitch)
 {
+  m_pitch = pitch;
   if (!ensure_init())
     return;
-  m_pitch = pitch;
-  BASS_ChannelSetAttribute(m_hstream, BASS_ATTRIB_TEMPO_PITCH, pitch);
+  apply_rate();
 }
 
 void DRAudioStream::set_speed(float speed)
 {
+  m_speed = speed;
   if (!ensure_init())
     return;
-  m_speed = speed;
-  BASS_ChannelSetAttribute(m_hstream, BASS_ATTRIB_TEMPO, speed);
+  apply_rate();
+}
+
+void DRAudioStream::apply_rate()
+{
+  if (!d->sound_ready)
+    return;
+  ma_sound_set_pitch(&d->sound, semitones_to_ratio(m_pitch) * percent_to_ratio(m_speed));
 }
 
 void DRAudioStream::set_volume(float p_volume)
 {
+  m_volume = p_volume;
   if (!ensure_init())
     return;
-  m_volume = p_volume;
+
   if (m_fade_running)
   {
     const Fade l_prev_fade = m_fade;
@@ -165,9 +257,6 @@ void DRAudioStream::set_repeatable(bool p_enabled)
 
 void DRAudioStream::set_loop(quint64 p_start, quint64 p_end)
 {
-  if (!ensure_init())
-    return;
-
   if (m_loop_start == p_start && m_loop_end == p_end)
     return;
   m_loop_start = p_start;
@@ -182,15 +271,17 @@ void DRAudioStream::fade(Fade p_fade, int p_duration)
     return;
   }
 
-  float l_volume = m_volume * 0.01f;
-  if (m_fade == NoFade)
-  {
-    BASS_ChannelSetAttribute(m_hstream, BASS_ATTRIB_VOL, (p_fade == FadeOut ? l_volume : 0));
-  }
+  const float l_volume = m_volume * 0.01f;
+  const float l_begin = (p_fade == FadeOut) ? l_volume : 0.0f;
+  const float l_end = (p_fade == FadeOut) ? 0.0f : l_volume;
+
   m_fade = p_fade;
-  m_fade_duration = p_duration;
+  m_fade_duration = qMax(0, p_duration);
   m_fade_running = true;
-  BASS_ChannelSlideAttribute(m_hstream, BASS_ATTRIB_VOL, (p_fade == FadeOut ? 0 : l_volume), qMax(0, p_duration));
+
+  ma_sound_set_fade_in_milliseconds(&d->sound, l_begin, l_end, ma_uint64(m_fade_duration));
+
+  m_fade_timer->start(m_fade_duration);
 }
 
 void DRAudioStream::fadeIn(int p_duration)
@@ -203,45 +294,15 @@ void DRAudioStream::fadeOut(int p_duration)
   fade(FadeOut, p_duration);
 }
 
-void DRAudioStream::end_sync(HSYNC hsync, DWORD ch, DWORD data, void *userdata)
+void DRAudioStream::handle_fade_finished()
 {
-  Q_UNUSED(hsync);
-  Q_UNUSED(ch);
-  Q_UNUSED(data);
+  m_fade_running = false;
+  Q_EMIT faded(m_fade);
 
-  DRAudioStream *l_stream = static_cast<DRAudioStream *>(userdata);
-  if (!l_stream->is_repeatable())
+  if (m_fade == FadeOut)
   {
-    emit l_stream->finished();
+    stop();
   }
-}
-
-void DRAudioStream::loop_sync(HSYNC hsync, DWORD ch, DWORD data, void *userdata)
-{
-  Q_UNUSED(hsync);
-  Q_UNUSED(data);
-
-  // move the position to the loopStart
-  DRAudioStream *l_stream = static_cast<DRAudioStream *>(userdata);
-  if (l_stream->is_repeatable())
-  {
-    BASS_ChannelSetPosition(ch, l_stream->m_loop_start_pos, BASS_POS_BYTE);
-    emit l_stream->looped();
-  }
-}
-
-void DRAudioStream::fade_sync(HSYNC hsync, DWORD ch, DWORD data, void *userdata)
-{
-  Q_UNUSED(hsync);
-  Q_UNUSED(ch);
-  Q_UNUSED(data);
-
-  DRAudioStream *l_stream = static_cast<DRAudioStream *>(userdata);
-  l_stream->m_fade_running = false;
-  emit l_stream->faded(l_stream->m_fade);
-
-  if (l_stream->m_fade == FadeOut)
-    l_stream->stop();
 }
 
 bool DRAudioStream::ensure_init()
@@ -250,50 +311,68 @@ bool DRAudioStream::ensure_init()
     return m_init_state == InitFinished;
   m_init_state = InitError;
 
-  HSTREAM stream;
-
-  if(!m_url.isEmpty())
+  ma_engine *l_engine = audio_backend::engine();
+  if (l_engine == nullptr)
   {
-    QByteArray l_encoded = QUrl(m_url).toEncoded();
-    if (l_encoded.isEmpty()) {
-      qWarning() << "error:" << m_url << "was not a valid URL for streaming.";
-      stream = 0;
-    } else {
-      stream = BASS_StreamCreateURL(l_encoded.constData(), 0, 0, nullptr, nullptr);
-    }
-  }
-  else if (m_filename.isEmpty())  return false;
-  else if (m_filename.endsWith("opus", Qt::CaseInsensitive))
-  {
-    stream = BASS_OPUS_StreamCreateFile(FALSE, m_filename.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE);
-  }
-  else
-  {
-    stream = BASS_StreamCreateFile(FALSE, m_filename.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE | BASS_STREAM_PRESCAN);
-  }
-
-  if (!stream) {
-    qWarning() << "error: failed to create decode stream:" << DRAudio::get_last_bass_error();
     return false;
   }
 
-  BASS_SetConfig(BASS_CONFIG_FLOATDSP, TRUE);
-  m_hstream = BASS_FX_TempoCreate(stream, BASS_FX_FREESOURCE);
+  ma_decoder_config l_config = ma_decoder_config_init(ma_format_f32, 0, 0);
+  l_config.ppCustomBackendVTables = audio_backend::custom_backends();
+  l_config.customBackendCount = audio_backend::custom_backend_count();
 
-  if (!m_hstream) {
-    qWarning() << "error: failed to create tempo stream:" << DRAudio::get_last_bass_error();
-    m_hstream = stream;
+  ma_result l_result = MA_ERROR;
+  if (!m_url.isEmpty())
+  {
+    d->network = new NetworkStream(QUrl(m_url));
+    if (!d->network->wait_for_header())
+    {
+      qWarning() << "error: failed to open URL for streaming:" << m_url;
+      delete d->network;
+      d->network = nullptr;
+      return false;
+    }
+
+    l_result = ma_decoder_init(&NetworkStream::on_read, &NetworkStream::on_seek, d->network, &l_config, &d->decoder);
+  }
+  else if (m_filename.isEmpty())
+  {
+    return false;
+  }
+  else
+  {
+    l_result = ma_decoder_init_file_w(reinterpret_cast<const wchar_t *>(m_filename.utf16()), &l_config, &d->decoder);
   }
 
-  BASS_ChannelSetSync(m_hstream, BASS_SYNC_END, 0, &end_sync, this);
-  BASS_ChannelSetSync(m_hstream, BASS_SYNC_SLIDE, 0, &fade_sync, this);
+  if (l_result != MA_SUCCESS)
+  {
+    qWarning() << "error: failed to create decoder:" << audio_backend::error_string(l_result);
+    if (d->network != nullptr)
+    {
+      delete d->network;
+      d->network = nullptr;
+    }
+    return false;
+  }
+  d->decoder_ready = true;
+
+  l_result = ma_sound_init_from_data_source(l_engine, &d->decoder, MA_SOUND_FLAG_NO_SPATIALIZATION, nullptr, &d->sound);
+  if (l_result != MA_SUCCESS)
+  {
+    qWarning() << "error: failed to create sound:" << audio_backend::error_string(l_result);
+    ma_decoder_uninit(&d->decoder);
+    d->decoder_ready = false;
+    return false;
+  }
+  d->sound_ready = true;
+
+  ma_sound_set_end_callback(&d->sound, sound_end_proc, this);
 
   m_init_state = InitFinished;
   init_loop();
   toggle_reverb(m_reverb);
   update_volume();
-  update_pitch();
-  update_speed();
+  apply_rate();
   return true;
 }
 
@@ -304,82 +383,121 @@ bool DRAudioStream::ensure_init() const
 
 void DRAudioStream::init_loop()
 {
-  if (m_loop_sync)
+  if (!d->decoder_ready)
+    return;
+
+  ma_data_source *l_source = &d->decoder;
+  ma_data_source_set_looping(l_source, m_repeatable ? MA_TRUE : MA_FALSE);
+
+  if (!m_repeatable)
   {
-    BASS_ChannelRemoveSync(m_hstream, m_loop_sync);
-    m_loop_sync = 0;
+    return;
   }
 
-  if (m_repeatable)
+  ma_uint64 l_length = 0;
+  ma_data_source_get_length_in_pcm_frames(l_source, &l_length);
+
+  ma_uint64 l_begin = m_loop_start;
+  ma_uint64 l_end = m_loop_end;
+
+  if (l_length > 0 && l_begin >= l_length)
   {
-    float l_sample_rate;
-    BASS_ChannelGetAttribute(m_hstream, BASS_ATTRIB_FREQ, &l_sample_rate);
-
-    const QWORD l_length = BASS_ChannelGetLength(m_hstream, BASS_POS_BYTE);
-    m_loop_start_pos = BASS_ChannelSeconds2Bytes(m_hstream, m_loop_start / double(l_sample_rate));
-    if (m_loop_start_pos >= l_length)
-    {
-      m_loop_start_pos = 0;
-    }
-
-    m_loop_end_pos = BASS_ChannelSeconds2Bytes(m_hstream, m_loop_end / double(l_sample_rate));
-    if (m_loop_end_pos <= m_loop_start_pos || m_loop_end_pos > l_length)
-    {
-      m_loop_end_pos = l_length;
-    }
-
-    m_loop_sync = BASS_ChannelSetSync(m_hstream, BASS_SYNC_POS | BASS_SYNC_MIXTIME, m_loop_end_pos, &loop_sync, this);
+    l_begin = 0;
   }
+  if (l_end <= l_begin || (l_length > 0 && l_end > l_length))
+  {
+    l_end = l_length;
+  }
+
+  ma_data_source_set_loop_point_in_pcm_frames(l_source, l_begin, l_end);
 }
 
 void DRAudioStream::toggle_reverb(bool reverb)
 {
   m_reverb = reverb;
-  if(reverb)
-  {
-    m_reverb_effect = BASS_ChannelSetFX(m_hstream, BASS_FX_DX8_REVERB, 0);BASS_DX8_REVERB reverb = {};
-    reverb.fInGain = 0.0f;
-    reverb.fReverbMix = -5.0f;
-    reverb.fReverbTime = 1000.0f;
-    reverb.fHighFreqRTRatio = 0.001f;
+  if (!d->sound_ready)
+    return;
 
-    BASS_FXSetParameters(m_reverb_effect, &reverb);
+  ma_engine *l_engine = audio_backend::engine();
+  if (l_engine == nullptr)
+    return;
+
+  ma_node_graph *l_graph = ma_engine_get_node_graph(l_engine);
+
+  if (reverb)
+  {
+    if (d->reverb_node != nullptr)
+      return;
+
+    const ma_uint32 l_channels = ma_engine_get_channels(l_engine);
+    const ma_uint32 l_sample_rate = ma_engine_get_sample_rate(l_engine);
+
+    if (audio_backend::reverb_node_init(l_graph, l_channels, l_sample_rate, &d->reverb_node) != MA_SUCCESS)
+    {
+      d->reverb_node = nullptr;
+      return;
+    }
+
+    ma_node_attach_output_bus(d->reverb_node, 0, ma_node_graph_get_endpoint(l_graph), 0);
+    ma_node_attach_output_bus(&d->sound, 0, d->reverb_node, 0);
   }
   else
   {
-    BASS_ChannelRemoveFX(m_hstream, m_reverb_effect);
+    if (d->reverb_node == nullptr)
+      return;
+
+    ma_node_attach_output_bus(&d->sound, 0, ma_node_graph_get_endpoint(l_graph), 0);
+    audio_backend::reverb_node_uninit(d->reverb_node);
+    d->reverb_node = nullptr;
   }
 }
 
 void DRAudioStream::update_device(DRAudioDevice p_device)
 {
-  if (!ensure_init())
+  Q_UNUSED(p_device);
+
+  if (m_init_state != InitFinished)
     return;
-  if (BASS_ChannelGetDevice(m_hstream) != p_device.get_id())
+
+  ma_uint64 l_cursor = 0;
+  const bool l_was_playing = is_playing();
+  if (d->sound_ready)
   {
-    if (!BASS_ChannelSetDevice(m_hstream, p_device.get_id()))
-    {
-      qDebug() << "error: failed to switch stream device;" << DRAudio::get_last_bass_error() << p_device.get_name();
-    }
+    ma_sound_get_cursor_in_pcm_frames(&d->sound, &l_cursor);
+  }
+
+  release_sound();
+  m_init_state = InitNotDone;
+
+  if (!ensure_init())
+  {
+    Q_EMIT device_error(QPrivateSignal());
+    return;
+  }
+
+  if (l_cursor > 0)
+  {
+    ma_sound_seek_to_pcm_frame(&d->sound, l_cursor);
+  }
+  if (l_was_playing)
+  {
+    ma_sound_start(&d->sound);
   }
 }
 
 void DRAudioStream::update_volume()
 {
-  float l_volume = m_volume * 0.01f;
-  if (m_fade_running)
-  {
-    BASS_ChannelGetAttribute(m_hstream, BASS_ATTRIB_VOL, &l_volume);
-  }
-  BASS_ChannelSetAttribute(m_hstream, BASS_ATTRIB_VOL, l_volume);
+  if (!d->sound_ready)
+    return;
+  ma_sound_set_volume(&d->sound, m_volume * 0.01f);
 }
 
 void DRAudioStream::update_pitch()
 {
-  BASS_ChannelSetAttribute(m_hstream, BASS_ATTRIB_TEMPO_PITCH, m_pitch);
+  apply_rate();
 }
 
 void DRAudioStream::update_speed()
 {
-  BASS_ChannelSetAttribute(m_hstream, BASS_ATTRIB_TEMPO, m_speed);
+  apply_rate();
 }

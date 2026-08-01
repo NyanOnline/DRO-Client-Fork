@@ -45,16 +45,13 @@ jobs:
         with:
           path: |
             ./3rd/discord-rpc
-            ./3rd/bass
             ./3rd/sol
             ./3rd/lua
             ./3rd/stb_image_resize2.h
+            ./3rd/miniaudio
             ./bin/discord-rpc.dll
-            ./bin/bass.dll
-            ./bin/bassopus.dll
-            ./bin/bass_fx.dll
             ./bin/lua54.dll
-          key: ${{ runner.os }}-3rd-v1
+          key: ${{ runner.os }}-3rd-v3
 
       - name: Install Windows Discord RPC
         if: steps.cache-3rd.outputs.cache-hit != 'true'
@@ -66,27 +63,12 @@ jobs:
           cp ./discord-rpc/win64-dynamic/include/discord*.h ./3rd/discord-rpc/
           cp ./discord-rpc/win64-dynamic/bin/discord-rpc.dll ./bin/
           
-      - name: Install Windows BASS
+      - name: Install audio codecs
         if: steps.cache-3rd.outputs.cache-hit != 'true'
         shell: bash
         run: |
-          curl http://www.un4seen.com/files/bass24.zip -o bass.zip
-          unzip -d bass -o bass.zip
-          cp ./bass/c/bass.h ./3rd/bass
-          cp ./bass/c/x64/bass.lib ./3rd/bass
-          cp ./bass/x64/bass.dll ./bin/
-
-          curl http://www.un4seen.com/files/bassopus24.zip -o bassopus.zip
-          unzip -d bass -o bassopus.zip
-          cp ./bass/c/bassopus.h ./3rd/bass
-          cp ./bass/c/x64/bassopus.lib ./3rd/bass
-          cp ./bass/x64/bassopus.dll ./bin/
-
-          curl https://www.un4seen.com/files/z/0/bass_fx24.zip -o bassfx.zip
-          unzip -d bass -o bassfx.zip
-          cp ./bass/c/bass_fx.h ./3rd/bass
-          cp ./bass/c/x64/bass_fx.lib ./3rd/bass
-          cp ./bass/x64/bass_fx.dll ./bin/
+          vcpkg install libogg:x64-windows libvorbis:x64-windows opus:x64-windows opusfile:x64-windows
+          cp "$VCPKG_INSTALLATION_ROOT/installed/x64-windows/bin/"*.dll ./bin/
 
       - name: Install sol2
         if: steps.cache-3rd.outputs.cache-hit != 'true'
@@ -111,6 +93,17 @@ jobs:
         shell: bash
         run: |
           curl https://raw.githubusercontent.com/nothings/stb/refs/heads/master/stb_image_resize2.h -o ./3rd/stb_image_resize2.h
+
+      - name: Install miniaudio
+        if: steps.cache-3rd.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          mkdir -p ./3rd/miniaudio/extras/decoders/libvorbis
+          mkdir -p ./3rd/miniaudio/extras/decoders/libopus
+          BASE=https://raw.githubusercontent.com/mackron/miniaudio/master
+          curl -L $BASE/miniaudio.h -o ./3rd/miniaudio/miniaudio.h
+          curl -L $BASE/extras/decoders/libvorbis/miniaudio_libvorbis.h -o ./3rd/miniaudio/extras/decoders/libvorbis/miniaudio_libvorbis.h
+          curl -L $BASE/extras/decoders/libopus/miniaudio_libopus.h -o ./3rd/miniaudio/extras/decoders/libopus/miniaudio_libopus.h
 
       - name: Cache QtApng
         id: cache-qtapng
@@ -139,7 +132,7 @@ jobs:
 
       - name: Build
         run: |
-          cmake . -D CMAKE_BUILD_TYPE=Release
+          cmake . -D CMAKE_BUILD_TYPE=Release -D CMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" -D VCPKG_TARGET_TRIPLET=x64-windows
           cmake --build . --config Release
           mv ./bin/dro-client.exe ./bin/DanganronpaOnline.exe
 

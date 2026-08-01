@@ -9,6 +9,8 @@
 */
 #include "draudioengine.h"
 
+#include "dro/system/audio/audio_backend.h"
+
 #include <QDebug>
 #include <QGuiApplication>
 #include <QTimer>
@@ -16,15 +18,13 @@
 DRAudioEnginePrivate::DRAudioEnginePrivate()
     : QObject(nullptr)
     , update_timer(new QTimer(this))
-{
-  BASS_SetConfig(BASS_CONFIG_DEV_DEFAULT, FALSE);
-}
+{}
 
 DRAudioEnginePrivate::~DRAudioEnginePrivate()
 {
   update_timer->stop();
 
-  BASS_Free();
+  audio_backend::shutdown();
 }
 
 void DRAudioEnginePrivate::update_current_device()
@@ -60,31 +60,21 @@ void DRAudioEnginePrivate::update_current_device()
   const std::optional<DRAudioDevice> l_prev_device = device;
   device = l_target_device;
 
-  if (l_prev_device.has_value() && l_prev_device->get_id() == device->get_id())
+  if (l_prev_device.has_value() && l_prev_device->get_native_id() == device->get_native_id())
     return;
-
-  if (!BASS_IsStarted())
-    BASS_Start();
 
   if (!device->is_init())
   {
-    if (!BASS_Init(device->get_id(), 44100, 0, 0, NULL))
+    if (!audio_backend::select_device(device->get_native_id()))
     {
-      qWarning() << "Error: failed to initialize audio device:" << DRAudio::get_last_bass_error()
-                 << "(device:" << device->get_name() << ")";
+      qWarning() << "Error: failed to initialize audio device: (device:" << device->get_name() << ")";
       return;
     }
+    device->set_init(true);
   }
+
   qInfo() << "Audio device changed to" << device->get_name();
   invoke_signal("current_device_changed", Q_ARG(DRAudioDevice, device.value()));
-
-  if (l_prev_device.has_value())
-  {
-    if (BASS_SetDevice(l_prev_device->get_id()))
-    {
-      BASS_Free();
-    }
-  }
 }
 
 void DRAudioEnginePrivate::update_device_list()

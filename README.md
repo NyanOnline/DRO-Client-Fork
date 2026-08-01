@@ -3,10 +3,6 @@ This is the a forked version of the offical DRO client last updated by Crystal W
 
 ## TO DO LIST
 
-Remove all calls from BASS.DLL and replace it with a more open source dependency instead of properiety. 
-
-Replace BASS.DLL with miniaudio https://miniaud.io/
-
 Project Cleanup
 
 Feature list
@@ -33,8 +29,6 @@ This project uses Qt6.8.3, which is licensed under the [GNU Lesser General Publi
 
 Copyright (C) 2026 The Qt Company Ltd.
 
-## BASS
-This project uses [BASS shared library](http://www.un4seen.com/). 
-
-Copyright (c) 1999-2026 Un4seen Developments Ltd. All rights reserved.
+## miniaudio
+This client runs on [miniaudio](https://miniaud.io/). It is released into the public domain, or MIT-0 at your option.
 

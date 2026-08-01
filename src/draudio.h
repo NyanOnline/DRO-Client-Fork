@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QMetaType>
+#include <QString>
 
 namespace DRAudio
 {
@@ -27,7 +28,6 @@ enum Option
 };
 Q_DECLARE_FLAGS(Options, Option)
 
-QString get_bass_error(const int32_t p_error_code);
-QString get_last_bass_error();
+QString get_audio_error(const int32_t p_error_code);
 } // namespace DRAudio
 Q_DECLARE_METATYPE(DRAudio::Options)

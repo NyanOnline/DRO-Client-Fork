@@ -4,7 +4,7 @@
 #include <QImageReader>
 #include <QString>
 #include <qprocess.h>
-#include <bass/bass.h>
+#include <miniaudio/miniaudio.h>
 #include "datatypes.h"
 
 int get_release_version()
@@ -19,7 +19,7 @@ int get_major_version()
 
 int get_minor_version()
 {
-  return 2;
+  return 3;
 }
 
 VersionNumber get_version_number(int baseVersion)
@@ -80,12 +80,12 @@ QString build_about_message()
                         "<p>Based on Attorney Online 2:<br>"
                         "<a href='https://github.com/AttorneyOnline/AO2-Client'>"
                         "https://github.com/AttorneyOnline/AO2-Client</a>"
-                        "<p>Running on Qt version %2 with the BASS %3 audio engine.<br>"
+                        "<p>Running on Qt version %2 with the miniaudio %3 audio engine.<br>"
                         "APNG plugin loaded: %4"
                         "<p>Built on %5 %6<br>")
                     .arg(get_version_string())
                     .arg(QLatin1String(QT_VERSION_STR))
-                    .arg(QLatin1String(BASSVERSIONTEXT))
+                    .arg(QLatin1String(MA_VERSION_STRING))
                     .arg(hasApng ? "Yes" : "No")
                     .arg(QLatin1String(__DATE__))
                     .arg(QLatin1String(__TIME__));

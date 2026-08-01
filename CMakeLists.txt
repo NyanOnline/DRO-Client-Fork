@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(dro-client VERSION 1.8.2 LANGUAGES CXX)
+project(dro-client VERSION 1.8.3 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -65,6 +65,9 @@ set(HEADERS
   src/dro/system/animation.h
   src/dro/system/audio.h
   src/dro/system/audio/ambience_player.h
+  src/dro/system/audio/audio_backend.h
+  src/dro/system/audio/miniaudio_config.h
+  src/dro/system/audio/network_stream.h
   src/dro/system/audio/blip_player.h
   src/dro/system/audio/music_player.h
   src/dro/system/audio/sfx_player.h
@@ -200,6 +203,9 @@ set(SOURCES
   src/dro/system/animation.cpp
   src/dro/system/audio.cpp
   src/dro/system/audio/ambience_player.cpp
+  src/dro/system/audio/audio_backend.cpp
+  src/dro/system/audio/miniaudio_impl.cpp
+  src/dro/system/audio/network_stream.cpp
   src/dro/system/audio/blip_player.cpp
   src/dro/system/audio/music_player.cpp
   src/dro/system/audio/sfx_player.cpp
@@ -314,6 +320,8 @@ target_include_directories(dro-client PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/lua
+  ${OPUSFILE_INCLUDE_DIR}
+  ${VORBIS_INCLUDE_DIR}
 )
 
 set_target_properties(dro-client PROPERTIES
@@ -322,10 +330,18 @@ set_target_properties(dro-client PROPERTIES
 )
 
 target_link_directories(dro-client PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/3rd/bass
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/discord-rpc
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/lua
 )
+
+find_path(OPUSFILE_INCLUDE_DIR opus/opusfile.h)
+find_path(VORBIS_INCLUDE_DIR vorbis/vorbisfile.h)
+find_library(OGG_LIBRARY NAMES ogg libogg)
+find_library(VORBIS_LIBRARY NAMES vorbis libvorbis)
+find_library(VORBISFILE_LIBRARY NAMES vorbisfile libvorbisfile)
+find_library(OPUS_LIBRARY NAMES opus libopus)
+find_library(OPUSFILE_LIBRARY NAMES opusfile libopusfile)
+
 target_link_libraries(dro-client
   Qt6::Core
   Qt6::Gui
@@ -335,9 +351,11 @@ target_link_libraries(dro-client
   Qt6::WebSockets
   Qt6::Multimedia
   Qt6::MultimediaWidgets
-  bass
-  bassopus
-  bass_fx
+  ${OGG_LIBRARY}
+  ${VORBIS_LIBRARY}
+  ${VORBISFILE_LIBRARY}
+  ${OPUS_LIBRARY}
+  ${OPUSFILE_LIBRARY}
   discord-rpc
   lua54
 )

@@ -575,11 +575,13 @@ void Courtroom::update_background_scene()
   {
     const QString l_file_name = SceneManager::get().getBackgroundPath(l_position_id);
     ui_vp_background->set_file_name(l_file_name);
+    m_reader_cache[ViewportStageBack] = ui_vp_background->get_reader();
   }
 
   {
     const QString l_file_name = SceneManager::get().getForegroundPath(l_position_id);
     ui_vp_desk->set_file_name(l_file_name);
+    m_reader_cache[ViewportStageFront] = ui_vp_desk->get_reader();
   }
 
   BackgroundData *bg = SceneManager::get().getCurrentBackground();
@@ -2678,7 +2680,7 @@ void Courtroom::next_chat_letter()
   switch (command_data.type) {
   case DR::MidLineCommand::Chara:
     insertChar(command_data.chara, vp_message_format);
-    scroll->setValue(scroll->maximum());
+    scroll->setValue(scroll->minimum());
     // Play blip sound
     if ((command_data.chara != ' ' || ao_config->blank_blips_enabled()))
     {

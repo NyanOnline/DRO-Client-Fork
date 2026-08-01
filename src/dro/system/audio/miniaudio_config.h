@@ -1,0 +1,14 @@
+#pragma once
+
+#define MA_NO_ENCODING
+
+#include <miniaudio/miniaudio.h>
+
+namespace audio_backend
+{
+ma_decoding_backend_vtable **custom_backends();
+ma_uint32 custom_backend_count();
+
+ma_result reverb_node_init(ma_node_graph *p_graph, ma_uint32 p_channels, ma_uint32 p_sample_rate, ma_node **p_node);
+void reverb_node_uninit(ma_node *p_node);
+} // namespace audio_backend
