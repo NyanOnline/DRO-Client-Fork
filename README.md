@@ -16,8 +16,6 @@ Bug Fixes
 Bug Investigation:
 BGs are black upon entering a room until someone speaks and if someone sends a long message, the beginning parts are cut off in the main view.
 
-Text cutting off issues, probably related to the new queue implementation in 1.8.2. Scrap it back to 1.8.0's way of doing it for better parity for the time being.
-
 Flash  effects not appearing visual
 
 Fix Additive. DRO's implementation is borked. Just port over AO2's for now the text rolls over itself.
