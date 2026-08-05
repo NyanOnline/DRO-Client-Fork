@@ -124,10 +124,10 @@ void RPTextEdit::refresh_vertical_alignment()
   switch (m_text_align & (Qt::AlignVCenter | Qt::AlignBottom))
   {
   case Qt::AlignVCenter:
-    top_margin = (height() - new_document_height) / 2;
+    top_margin = qMax(0, (height() - new_document_height) / 2);
     break;
   case Qt::AlignBottom:
-    top_margin = (height() - new_document_height);
+    top_margin = qMax(0, height() - new_document_height);
     break;
   default:
     break;

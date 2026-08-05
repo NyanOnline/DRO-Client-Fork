@@ -2672,15 +2672,13 @@ void Courtroom::next_chat_letter()
     LuaBridge::LuaEventCall("OnMessageTick", QString(ch).toStdString());
   };
 
-  QScrollBar *scroll = ui_vp_message->verticalScrollBar();
-
   QTextCharFormat vp_message_format = ui_vp_message->currentCharFormat();
   vp_message_format.setTextOutline(m_chatbox_message_outline ? QPen(m_messageOutlineColor, m_messageOutlineSize) : Qt::NoPen);
 
   switch (command_data.type) {
   case DR::MidLineCommand::Chara:
     insertChar(command_data.chara, vp_message_format);
-    scroll->setValue(scroll->minimum());
+    ui_vp_message->ensureCursorVisible();
     // Play blip sound
     if ((command_data.chara != ' ' || ao_config->blank_blips_enabled()))
     {

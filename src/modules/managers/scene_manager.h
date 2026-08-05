@@ -41,6 +41,8 @@ private:
   SceneManager() {}
   static SceneManager s_Instance;
 
+  QString resolvePosition(QString t_position);
+
   int mFadeDuration = 200;
   RPLabel *pUiTransition = nullptr;
   DRGraphicsView *pViewport = nullptr;

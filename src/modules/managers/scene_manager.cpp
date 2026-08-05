@@ -26,18 +26,36 @@ void SceneManager::execLoadPlayerBackground(QString t_backgroundName)
   pCurrentBackground->execLoadBackground(t_backgroundName);
 }
 
+QString SceneManager::resolvePosition(QString t_position)
+{
+  if(pCurrentBackground == nullptr) return "";
+  if(!pCurrentBackground->getBackgroundFilename(t_position).isEmpty()) return t_position;
+  if(!pCurrentBackground->getBackgroundFilename(t_position.toLower()).isEmpty()) return t_position.toLower();
+  if(!pCurrentBackground->getBackgroundFilename("wit").isEmpty()) return "wit";
+  const QMap<QString, DRBackgroundPosition> l_positions = pCurrentBackground->getPositions();
+  for(auto it = l_positions.constBegin(); it != l_positions.constEnd(); ++it)
+  {
+    if(!it.value().mBackground.isEmpty()) return it.key();
+  }
+  return "";
+}
+
 QString SceneManager::getBackgroundPath(QString t_position)
 {
   if(pCurrentBackground == nullptr) return "";
-  QString l_filename = pCurrentBackground->getBackgroundFilename(t_position);
-  return AOApplication::getInstance()->get_background_sprite_path(mBackgroundName, l_filename);
+  const QString l_position = resolvePosition(t_position);
+  const QString l_filename = pCurrentBackground->getBackgroundFilename(l_position);
+  if(l_filename.isEmpty()) return "";
+  return AOApplication::getInstance()->find_asset_path(AOApplication::getInstance()->get_background_path(mBackgroundName) + "/" + l_filename, QStringList{""} + FS::Formats::SupportedImages());
 }
 
 QString SceneManager::getForegroundPath(QString t_position)
 {
   if(pCurrentBackground == nullptr) return "";
-  QString l_filename = pCurrentBackground->getForegroundFilename(t_position);
-  return AOApplication::getInstance()->get_background_sprite_path(mBackgroundName, l_filename);
+  const QString l_position = resolvePosition(t_position);
+  const QString l_filename = pCurrentBackground->getForegroundFilename(l_position);
+  if(l_filename.isEmpty()) return "";
+  return AOApplication::getInstance()->find_asset_path(AOApplication::getInstance()->get_background_path(mBackgroundName) + "/" + l_filename, QStringList{""} + FS::Formats::SupportedImages());
 }
 
 DRBackgroundSettings SceneManager::getBackgroundSettings()

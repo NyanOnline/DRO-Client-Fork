@@ -19,7 +19,7 @@ int get_major_version()
 
 int get_minor_version()
 {
-  return 3;
+  return 4;
 }
 
 VersionNumber get_version_number(int baseVersion)
