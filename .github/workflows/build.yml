@@ -72,7 +72,6 @@ jobs:
           cp ./discord-rpc/win64-dynamic/bin/discord-rpc.dll ./bin/
           
       - name: Install audio codecs
-        if: steps.cache-3rd.outputs.cache-hit != 'true'
         shell: bash
         run: |
           vcpkg install libogg:x64-windows libvorbis:x64-windows opus:x64-windows opusfile:x64-windows
