@@ -13,10 +13,11 @@ Softer toggle called soft blankpost option where u have to press ENTER at least 
 
 Bug Fixes
 
-Bug Investigation:
-BGs are black upon entering a room until someone speaks and if someone sends a long message, the beginning parts are cut off in the main view. (this SHOULD BE FIXED IN V1.84.0 PRE RELEASE NEEDS TESTING)
+Viewport appearing black on entering an area. Fixed!
 
-Flash  effects not appearing visual
+Long strings of text disappearing entirely and not wrapping properly. Fixed!
+
+Flash  effects not appearing visual - To do
 
 Fix Additive. DRO's implementation is borked. Just port over AO2's for now the text rolls over itself.
 
