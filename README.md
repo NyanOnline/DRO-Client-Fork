@@ -14,7 +14,7 @@ Softer toggle called soft blankpost option where u have to press ENTER at least 
 Bug Fixes
 
 Bug Investigation:
-BGs are black upon entering a room until someone speaks and if someone sends a long message, the beginning parts are cut off in the main view. (this SHOULD BE FIXED IN V1.8.3 NEEDS TESTING)
+BGs are black upon entering a room until someone speaks and if someone sends a long message, the beginning parts are cut off in the main view. (this SHOULD BE FIXED IN V1.84.0 PRE RELEASE NEEDS TESTING)
 
 Flash  effects not appearing visual
 
