@@ -166,12 +166,8 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          name: V1.8.4 First Stable Release
+          name: V1.85.0 test-1
           files: DRO-Client-Windows.zip
-          prerelease: false
+          prerelease: true
           body: |
-            Audio Engine now mini audio for AGPLv3.
-            Viewport appearing with the current background instead of being blank.
-            Texts finally don't scroll past and wrap properly.
-            This release aims to fix v1.82.0 bugs and v1.83.0.
-            First stable release thank you everyone for testing!
+            Fix for additive text rolling over maybe, needs testing to be sure.

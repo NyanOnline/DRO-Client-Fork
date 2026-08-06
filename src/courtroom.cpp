@@ -1606,7 +1606,8 @@ void Courtroom::start_chatmessage()
   if(m_appendMessage)
   {
     QString appendText = m_chatmessage[CMMessage].mid(3);
-    bool previous_is_newline_or_blankpost = ui_vp_message->toPlainText().right(1) == " " || ui_vp_message->toPlainText().right(1) == "\n";
+    QString previousTail = m_additive_previous.toPlainText().right(1);
+    bool previous_is_newline_or_blankpost = previousTail == " " || previousTail == "\n";
     bool next_is_newline_or_blankpost = appendText.left(1) == " " || appendText.left(1) == "\n" || appendText.left(2) == "\\n";
     QString appendPrefix = previous_is_newline_or_blankpost || next_is_newline_or_blankpost ? "" : " ";
     m_chatmessage[CMMessage] = appendPrefix + appendText;
@@ -1860,8 +1861,19 @@ void Courtroom::handle_chatmessage_2() // handles IC
   ui_vp_player_char->stop();
   ui_vp_player_pair->stop();
 
-  if(!m_appendMessage)
-    ui_vp_message->clear();
+  ui_vp_message->clear();
+  if(m_appendMessage)
+  {
+    QTextCursor l_additive_cursor = ui_vp_message->textCursor();
+    l_additive_cursor.insertFragment(m_additive_previous);
+    m_additive_base_position = l_additive_cursor.position();
+    ui_vp_message->setTextCursor(l_additive_cursor);
+  }
+  else
+  {
+    m_additive_previous = QTextDocumentFragment();
+    m_additive_base_position = 0;
+  }
 
   ui_vp_showname->setText(m_speaker_showname);
   if(ao_app->current_theme->m_jsonLoaded)
@@ -2505,6 +2517,13 @@ int Courtroom::calculate_chat_tick_interval(int p_tick_speed)
 void Courtroom::precalculate_ic_message()
 {
   int previous_cursor_position = ui_vp_message->textCursor().position();
+  if (m_appendMessage)
+  {
+    previous_cursor_position = qMin(m_additive_base_position, ui_vp_message->document()->characterCount() - 1);
+    QTextCursor l_boundary_cursor = ui_vp_message->textCursor();
+    l_boundary_cursor.setPosition(previous_cursor_position);
+    ui_vp_message->setTextCursor(l_boundary_cursor);
+  }
 
   const QString &f_message = m_chatmessage[CMMessage];
 
@@ -2743,6 +2762,13 @@ void Courtroom::post_chatmessage()
 
   m_message_color_name = "";
   m_message_color_stack.clear();
+
+  if (m_tick_step >= message_components.length() && !message_components.isEmpty() && !chatmessage_is_empty)
+  {
+    QTextCursor l_commit_cursor = ui_vp_message->textCursor();
+    l_commit_cursor.select(QTextCursor::Document);
+    m_additive_previous = l_commit_cursor.selection();
+  }
 
   if (ui_vp_chatbox->isVisible())
   {

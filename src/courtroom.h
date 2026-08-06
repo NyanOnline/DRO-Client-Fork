@@ -57,6 +57,7 @@ class RPTextEdit;
 #include <QSlider>
 #include <QStack>
 #include <QTextCharFormat>
+#include <QTextDocumentFragment>
 #include <QTreeWidget>
 #include <QRandomGenerator>
 
@@ -665,6 +666,8 @@ private:
   QVector<bool> free_blocks_enabled;
 
   QVector<DR::CommandData> message_components;
+  QTextDocumentFragment m_additive_previous;
+  int m_additive_base_position = 0;
 
   CharMenu *p_CharacterContextMenu;
   RPButton *ui_change_character = nullptr;
