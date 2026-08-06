@@ -8,8 +8,9 @@ Main goal get people upgrade from 1.8.0 to 1.8.4 by addressing bugs so crystal w
 
 Currently fixed
 ---------------------
-Backgrounds no longer are blank in the view port upon entering areas. :tick: 
-Text no longer cuts off at all. It always follows the text wraps perfectly and doesn't go off screen. :tick: 
+Backgrounds no longer are blank in the view port upon entering areas.  
+
+Text no longer cuts off at all. It always follows the text wraps perfectly and doesn't go off screen.
 
 Current Bug reports so far that I will work on in the future
 -----------------------------
