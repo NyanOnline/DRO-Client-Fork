@@ -1,24 +1,33 @@
 # Danganronpa-Online-Client
 This is the a forked version of the offical DRO client last updated by Crystal Warrior. it is a derivative of [Attorney-Online-Client-Remake](https://github.com/AttorneyOnline/AO2-Client). Created by SyntaxNyah not a replacement all credits to the upstream forks from each interation for laying the ground work.
 
-## TO DO LIST
+## Roadmap
 
-Project Cleanup
+Main goal get people upgrade from 1.8.0 to 1.8.4 by addressing bugs so crystal warriors work doesn't go to waste. 
 
-Feature list
 
-A toggle to disable blankposts so if you press ENTER, nothing sends. 
+Currently fixed
+---------------------
+Backgrounds no longer are blank in the view port upon entering areas.  
 
-Softer toggle called soft blankpost option where u have to press ENTER at least three times on an empty message to send a BLANKPOST. Purpose is to prevent accidental blankposts.
+Text no longer cuts off at all. It always follows the text wraps perfectly and doesn't go off screen.
 
-Bug Fixes
+Current Bug reports so far that I will work on in the future
+-----------------------------
 
-Bug Investigation:
-BGs are black upon entering a room until someone speaks and if someone sends a long message, the beginning parts are cut off in the main view. (this SHOULD BE FIXED IN V1.84.0 PRE RELEASE NEEDS TESTING)
+Fix Additive. DRO's implementation is borked. Just port over AO2's for now the text rolls over itself. - To Do 🚧 
 
-Flash  effects not appearing visual
+Feature requests or quality of life improvement requests
+----------------------------------------------------------------------
+A toggle to disable blankposts so if you press ENTER, nothing sends. :construction:
 
-Fix Additive. DRO's implementation is borked. Just port over AO2's for now the text rolls over itself.
+Softer toggle called soft blankpost option where u have to press ENTER at least three times on an empty message to send a BLANKPOST. Purpose is to prevent accidental blankposts. :construction:
+
+Add Asset streaming capabilities and add a compatibility mode of sorts so DRO client can connect to modern servers just like AO2 client. This includes base and asset streaming. AO2 compat mode so modern servers like akashi can accept DRO client without issue, and if it shows no files should ask you for an option to stream the assets. :construction:
+
+Add HTTPS/WSS support for DRO client and TsuserverDR so server owners can have the OPTION utilize TLS and modern https if they so want to to protect against snooping MITM attacks(this is funny to write but yeah you get the point, https is just more secure and faster) and even cloudflare caching. This will mainly benefit servers that use websockets though and have a web server, for most DRO users this won't really change much. 🚧 
+
+Write prooject documentation with detailed easy to understand guides such as building the project with qt 6 maybe cross platform etc 🚧 
 
 Not a replacement for DRO client, just a fork intended to clean-up some legacy crust and fix some issues.
 
