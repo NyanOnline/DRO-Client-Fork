@@ -1,25 +1,26 @@
 # Danganronpa-Online-Client
 This is the a forked version of the offical DRO client last updated by Crystal Warrior. it is a derivative of [Attorney-Online-Client-Remake](https://github.com/AttorneyOnline/AO2-Client). Created by SyntaxNyah not a replacement all credits to the upstream forks from each interation for laying the ground work.
 
-## TO DO LIST
+## Roadmap
 
-Project Cleanup
+Main goal get people upgrade from 1.8.0 to 1.8.4 by addressing bugs so crystal warriors work doesn't go to waste. 
+ROADMAP so far 
+Currently fixed
+---------------------
+Backgrounds no longer are blank in the view port upon entering areas. :tick: 
+Text no longer cuts off at all. It always follows the text wraps perfectly and doesn't go off screen. :tick: 
 
-Feature list
+Current Bug reports so far that I will work on in the future
+-----------------------------
+Flash effects not appearing visual - To do. 🚧 
 
-A toggle to disable blankposts so if you press ENTER, nothing sends. 
+Fix Additive. DRO's implementation is borked. Just port over AO2's for now the text rolls over itself. - To Do 🚧 
 
-Softer toggle called soft blankpost option where u have to press ENTER at least three times on an empty message to send a BLANKPOST. Purpose is to prevent accidental blankposts.
+Feature requests or quality of life improvement requests
+----------------------------------------------------------------------
+A toggle to disable blankposts so if you press ENTER, nothing sends. 🚧 
 
-Bug Fixes
-
-Viewport appearing black on entering an area. Fixed!
-
-Long strings of text disappearing entirely and not wrapping properly. Fixed!
-
-Flash  effects not appearing visual - To do
-
-Fix Additive. DRO's implementation is borked. Just port over AO2's for now the text rolls over itself.
+Softer toggle called soft blankpost option where u have to press ENTER at least three times on an empty message to send a BLANKPOST. Purpose is to prevent accidental blankposts. 🚧 
 
 Not a replacement for DRO client, just a fork intended to clean-up some legacy crust and fix some issues.
 
