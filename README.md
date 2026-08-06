@@ -14,7 +14,6 @@ Text no longer cuts off at all. It always follows the text wraps perfectly and d
 
 Current Bug reports so far that I will work on in the future
 -----------------------------
-Flash effects not appearing visual - To do. 🚧 
 
 Fix Additive. DRO's implementation is borked. Just port over AO2's for now the text rolls over itself. - To Do 🚧 
 
