@@ -28,6 +28,8 @@ Add Asset streaming capabilities and add a compatibility mode of sorts so DRO cl
 
 Add HTTPS/WSS support for DRO client and TsuserverDR so server owners can have the OPTION utilize TLS and modern https if they so want to to protect against snooping MITM attacks(this is funny to write but yeah you get the point, https is just more secure and faster) and even cloudflare caching. This will mainly benefit servers that use websockets though and have a web server, for most DRO users this won't really change much. 🚧 
 
+Write prooject documentation with detailed easy to understand guides such as building the project with qt 6 maybe cross platform etc 🚧 
+
 Not a replacement for DRO client, just a fork intended to clean-up some legacy crust and fix some issues.
 
 ## Qt
