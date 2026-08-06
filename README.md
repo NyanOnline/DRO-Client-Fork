@@ -20,9 +20,11 @@ Fix Additive. DRO's implementation is borked. Just port over AO2's for now the t
 
 Feature requests or quality of life improvement requests
 ----------------------------------------------------------------------
-A toggle to disable blankposts so if you press ENTER, nothing sends. 🚧 
+A toggle to disable blankposts so if you press ENTER, nothing sends. 🚧
 
-Softer toggle called soft blankpost option where u have to press ENTER at least three times on an empty message to send a BLANKPOST. Purpose is to prevent accidental blankposts. 🚧 
+Softer toggle called soft blankpost option where u have to press ENTER at least three times on an empty message to send a BLANKPOST. Purpose is to prevent accidental blankposts. 🚧
+
+Add Asset streaming capabilities and add a compatibility mode of sorts so DRO client can connect to modern servers just like AO2 client. This includes base and asset streaming. AO2 compat mode so modern servers like akashi can accept DRO client without issue, and if it shows no files should ask you for an option to stream the assets. 🚧
 
 Not a replacement for DRO client, just a fork intended to clean-up some legacy crust and fix some issues.
 
