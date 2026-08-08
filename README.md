@@ -18,7 +18,7 @@ Text no longer cuts off at all. It always follows the text wraps perfectly and d
 Current Bug reports so far that I will work on in the future
 -----------------------------
 
-Fix Additive. DRO's implementation is borked. Just port over AO2's for now the text rolls over itself. - To Do 🚧 
+Fix Additive. DRO's implementation is borked. Just port over AO2's for now the text rolls over itself. - FIXED IN 1.85.0 TEST BUILD!
 
 Feature requests or quality of life improvement requests
 ----------------------------------------------------------------------
@@ -26,7 +26,7 @@ A toggle to disable blankposts so if you press ENTER, nothing sends. :constructi
 
 Softer toggle called soft blankpost option where u have to press ENTER at least three times on an empty message to send a BLANKPOST. Purpose is to prevent accidental blankposts. :construction:
 
-Make the additive text function a UI element a check box of sorts :construction:
+Make the additive text function a UI element a check box of sorts a tiny check box, so people dont have to type <a> everytime they want to use additive, its one tiny check box then all messages are treated as additive. A clean option just like how AO2 client does it. 🚧
 
 Add Asset streaming capabilities and add a compatibility mode of sorts so DRO client can connect to modern servers just like AO2 client. This includes base and asset streaming. AO2 compat mode so modern servers like akashi can accept DRO client without issue, and if it shows no files should ask you for an option to stream the assets. :construction::construction: :construction:
 
