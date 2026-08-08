@@ -23,9 +23,7 @@ Fix Additive. DRO's implementation is borked. Just port over AO2's for now the t
 Feature requests or quality of life improvement requests
 ----------------------------------------------------------------------
 
-Voting GUI
-
-Server-side voting system with a client-side GUI popup. Polling options for group decisions. Results display at conclusion :construction:
+Voting GUI Server-side voting system with a client-side GUI popup. Polling options for group decisions. Results display at conclusion :construction:
 
 A toggle to disable blankposts so if you press ENTER, nothing sends. :construction:
 
