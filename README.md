@@ -6,7 +6,7 @@ This is the a forked version of the offical DRO client last updated by Crystal W
 Main goal get people upgrade from 1.8.0 to 1.8.4 by addressing bugs so crystal warriors work doesn't go to waste. 
 
 
-Currently fixed, changed or Added!
+Currently fixed, changed or Added since V1.82.0.
 ---------------------
 
 Audio engine Bass.DLL removed and changed to miniaudio. Replaced a propriety audio engine with an AGPLv3 compatible one.
