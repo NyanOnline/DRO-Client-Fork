@@ -26,11 +26,13 @@ A toggle to disable blankposts so if you press ENTER, nothing sends. :constructi
 
 Softer toggle called soft blankpost option where u have to press ENTER at least three times on an empty message to send a BLANKPOST. Purpose is to prevent accidental blankposts. :construction:
 
-Add Asset streaming capabilities and add a compatibility mode of sorts so DRO client can connect to modern servers just like AO2 client. This includes base and asset streaming. AO2 compat mode so modern servers like akashi can accept DRO client without issue, and if it shows no files should ask you for an option to stream the assets. :construction:
+Make the additive text function a UI element a check box of sorts
 
-Add HTTPS/WSS support for DRO client and TsuserverDR so server owners can have the OPTION utilize TLS and modern https if they so want to to protect against snooping MITM attacks(this is funny to write but yeah you get the point, https is just more secure and faster) and even cloudflare caching. This will mainly benefit servers that use websockets though and have a web server, for most DRO users this won't really change much. 🚧 
+Add Asset streaming capabilities and add a compatibility mode of sorts so DRO client can connect to modern servers just like AO2 client. This includes base and asset streaming. AO2 compat mode so modern servers like akashi can accept DRO client without issue, and if it shows no files should ask you for an option to stream the assets. :construction::construction: :construction:
 
-Write prooject documentation with detailed easy to understand guides such as building the project with qt 6 maybe cross platform etc 🚧 
+Add HTTPS/WSS support for DRO client and TsuserverDR so server owners can have the OPTION utilize TLS and modern https if they so want to to protect against snooping MITM attacks(this is funny to write but yeah you get the point, https is just more secure and faster) and even cloudflare caching. This will mainly benefit servers that use websockets though and have a web server, for most DRO users this won't really change much. :construction: :construction:
+
+Write prooject documentation with detailed easy to understand guides such as building the project with qt 6 maybe cross platform etc :construction:
 
 Not a replacement for DRO client, just a fork intended to clean-up some legacy crust and fix some issues.
 
