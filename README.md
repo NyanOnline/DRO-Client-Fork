@@ -9,7 +9,7 @@ Main goal get people upgrade from 1.8.0 to 1.8.4 by addressing bugs so crystal w
 Currently fixed, changed or Added!
 ---------------------
 
-Audio engine Bass.DLL removed and changed to miniaudio. Replaced a propriety engine with an AGPLv3 compatible one.
+Audio engine Bass.DLL removed and changed to miniaudio. Replaced a propriety audio engine with an AGPLv3 compatible one.
 
 Backgrounds no longer are blank in the view port upon entering areas.  
 
