@@ -402,6 +402,9 @@ private:
 
   ChatTypes m_current_chat_type = ChatTypes::Talk;
 
+  int m_blankpost_enter_count = 0;
+  qint64 m_blankpost_enter_time = 0;
+
   QTimer *m_loading_timer;
   mk2::SpriteReaderSynchronizer *m_preloader_sync;
   QStringList m_chatmessage;

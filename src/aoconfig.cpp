@@ -84,6 +84,8 @@ private:
   int message_queue_delay;
   bool emote_preview;
   bool sticky_sfx;
+  bool disable_blankpost;
+  bool soft_blankpost;
   int message_length_threshold;
   int log_max_lines;
   bool log_display_timestamp;
@@ -202,6 +204,8 @@ void AOConfigPrivate::load_file()
   message_queue_delay = cfg.value("message_queue_delay", 500).toInt();
   emote_preview = cfg.value("emote_preview", true).toBool();
   sticky_sfx = cfg.value("sticky_sfx", false).toBool();
+  disable_blankpost = cfg.value("disable_blankpost", false).toBool();
+  soft_blankpost = cfg.value("soft_blankpost", false).toBool();
   message_length_threshold = cfg.value("message_length_threshold", 70).toInt();
   log_max_lines = cfg.value("chatlog_limit", 100).toInt();
   log_is_topdown = cfg.value("chatlog_scrolldown", true).toBool();
@@ -322,6 +326,8 @@ void AOConfigPrivate::save_file()
   cfg.setValue("chat_ratelimit", chat_ratelimit);
   cfg.setValue("emote_preview", emote_preview);
   cfg.setValue("sticky_sfx", sticky_sfx);
+  cfg.setValue("disable_blankpost", disable_blankpost);
+  cfg.setValue("soft_blankpost", soft_blankpost);
   cfg.setValue("message_length_threshold", message_length_threshold);
   cfg.setValue("chatlog_limit", log_max_lines);
   cfg.setValue("chatlog_display_timestamp", log_display_timestamp);
@@ -639,6 +645,16 @@ bool AOConfig::emote_preview_enabled() const
 bool AOConfig::sticky_sfx_enabled() const
 {
   return d->sticky_sfx;
+}
+
+bool AOConfig::disable_blankpost_enabled() const
+{
+  return d->disable_blankpost;
+}
+
+bool AOConfig::soft_blankpost_enabled() const
+{
+  return d->soft_blankpost;
 }
 
 int AOConfig::message_length_threshold() const
@@ -1084,6 +1100,22 @@ void AOConfig::set_sticky_sfx(bool p_enabled)
     return;
   d->sticky_sfx = p_enabled;
   d->invoke_signal("sticky_sfx_changed", Q_ARG(bool, p_enabled));
+}
+
+void AOConfig::set_disable_blankpost(bool p_enabled)
+{
+  if (d->disable_blankpost == p_enabled)
+    return;
+  d->disable_blankpost = p_enabled;
+  d->invoke_signal("disable_blankpost_changed", Q_ARG(bool, p_enabled));
+}
+
+void AOConfig::set_soft_blankpost(bool p_enabled)
+{
+  if (d->soft_blankpost == p_enabled)
+    return;
+  d->soft_blankpost = p_enabled;
+  d->invoke_signal("soft_blankpost_changed", Q_ARG(bool, p_enabled));
 }
 
 void AOConfig::set_message_length_threshold(int p_number)

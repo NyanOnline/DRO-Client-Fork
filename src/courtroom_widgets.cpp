@@ -481,6 +481,7 @@ void Courtroom::connect_widgets()
 
   connect(ao_config, &AOConfig::message_length_threshold_changed, this, &Courtroom::handle_ic_message_length);
   connect(ui_ic_chat_message_field, &QLineEdit::textChanged, this, &Courtroom::handle_ic_message_length);
+  connect(ui_ic_chat_message_field, &QLineEdit::textChanged, this, [this] { m_blankpost_enter_count = 0; });
   connect(ui_ic_chatlog->verticalScrollBar(), &QScrollBar::valueChanged, this, &Courtroom::on_ic_chatlog_scroll_changed);
   connect(ui_ic_chatlog_scroll_topdown, &RPButton::clicked, this, &Courtroom::on_ic_chatlog_scroll_topdown_clicked);
   connect(ui_ic_chatlog_scroll_bottomup, &RPButton::clicked, this, &Courtroom::on_ic_chatlog_scroll_bottomup_clicked);

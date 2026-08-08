@@ -102,6 +102,8 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_message_queue_delay = AO_GUI_WIDGET(QSpinBox, "message_queue_delay");
   ui_emote_preview = AO_GUI_WIDGET(QCheckBox, "emote_preview");
   ui_sticky_sfx = AO_GUI_WIDGET(QCheckBox, "sticky_sfx");
+  ui_disable_blankpost = AO_GUI_WIDGET(QCheckBox, "disable_blankpost");
+  ui_soft_blankpost = AO_GUI_WIDGET(QCheckBox, "soft_blankpost");
 
 
   // IC message
@@ -231,6 +233,8 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   connect(m_config, &AOConfig::chat_ratelimit_changed, ui_chat_ratelimit, &QSpinBox::setValue);
   connect(m_config, &AOConfig::emote_preview_changed, ui_emote_preview, &QAbstractButton::setChecked);
   connect(m_config, &AOConfig::sticky_sfx_changed, ui_sticky_sfx, &QAbstractButton::setChecked);
+  connect(m_config, &AOConfig::disable_blankpost_changed, ui_disable_blankpost, &QAbstractButton::setChecked);
+  connect(m_config, &AOConfig::soft_blankpost_changed, ui_soft_blankpost, &QAbstractButton::setChecked);
 
   // log
   connect(m_config, &AOConfig::log_max_lines_changed, ui_log_max_lines, &QSpinBox::setValue);
@@ -302,6 +306,8 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   connect(ui_message_queue_delay, &QSpinBox::valueChanged, m_config, &AOConfig::set_message_queue_delay);
   connect(ui_emote_preview, &QAbstractButton::toggled, m_config, &AOConfig::set_emote_preview);
   connect(ui_sticky_sfx, &QAbstractButton::toggled, m_config, &AOConfig::set_sticky_sfx);
+  connect(ui_disable_blankpost, &QAbstractButton::toggled, m_config, &AOConfig::set_disable_blankpost);
+  connect(ui_soft_blankpost, &QAbstractButton::toggled, m_config, &AOConfig::set_soft_blankpost);
 
   //packages
   connect(ui_load_new_packages, &QPushButton::clicked, this, &AOConfigPanel::on_load_packages_clicked);
@@ -377,6 +383,8 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_message_queue_delay->setValue(m_config->message_queue_delay());
   ui_emote_preview->setChecked(m_config->emote_preview_enabled());
   ui_sticky_sfx->setChecked(m_config->sticky_sfx_enabled());
+  ui_disable_blankpost->setChecked(m_config->disable_blankpost_enabled());
+  ui_soft_blankpost->setChecked(m_config->soft_blankpost_enabled());
 
   // ic message
   ui_length_threshold->setValue(m_config->message_length_threshold());

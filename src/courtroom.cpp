@@ -1058,6 +1058,23 @@ void Courtroom::on_character_ini_changed()
 
 void Courtroom::on_ic_message_return_pressed()
 {
+  if (ui_ic_chat_message_field->text().trimmed().isEmpty())
+  {
+    if (ao_config->disable_blankpost_enabled())
+      return;
+    if (ao_config->soft_blankpost_enabled())
+    {
+      const qint64 l_now = QDateTime::currentMSecsSinceEpoch();
+      if (l_now - m_blankpost_enter_time > 3000)
+        m_blankpost_enter_count = 0;
+      m_blankpost_enter_time = l_now;
+      ++m_blankpost_enter_count;
+      if (m_blankpost_enter_count < 3)
+        return;
+    }
+  }
+  m_blankpost_enter_count = 0;
+
   ui_ic_chat_message_filter->blockSignals(true);
   QTimer::singleShot(ao_config->chat_ratelimit(), this,
                      [this] { ui_ic_chat_message_filter->blockSignals(false); });

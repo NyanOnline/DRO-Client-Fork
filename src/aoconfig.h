@@ -52,6 +52,8 @@ public:
   int message_queue_delay() const;
   bool emote_preview_enabled() const;
   bool sticky_sfx_enabled() const;
+  bool disable_blankpost_enabled() const;
+  bool soft_blankpost_enabled() const;
   int message_length_threshold() const;
   int log_max_lines() const;
   bool log_display_timestamp_enabled() const;
@@ -131,6 +133,8 @@ public slots:
   void set_message_queue_delay(int p_number);
   void set_emote_preview(bool p_enabled);
   void set_sticky_sfx(bool p_enabled);
+  void set_disable_blankpost(bool p_enabled);
+  void set_soft_blankpost(bool p_enabled);
   void set_message_length_threshold(int percent);
   void set_log_max_lines(int p_number);
   void set_log_display_timestamp(bool p_enabled);
@@ -194,6 +198,8 @@ signals:
   void message_queue_delay_changed(int);
   void emote_preview_changed(bool);
   void sticky_sfx_changed(bool);
+  void disable_blankpost_changed(bool);
+  void soft_blankpost_changed(bool);
 
   // theme
   void language_changed(QString);
