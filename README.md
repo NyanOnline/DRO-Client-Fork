@@ -6,8 +6,11 @@ This is the a forked version of the offical DRO client last updated by Crystal W
 Main goal get people upgrade from 1.8.0 to 1.8.4 by addressing bugs so crystal warriors work doesn't go to waste. 
 
 
-Currently fixed
+Currently fixed or added
 ---------------------
+
+Audio engine Bass.DLL removed and changed to miniaudio. Replaced a propriety engine with an AGPLv3 compatible one 
+
 Backgrounds no longer are blank in the view port upon entering areas.  
 
 Text no longer cuts off at all. It always follows the text wraps perfectly and doesn't go off screen.
