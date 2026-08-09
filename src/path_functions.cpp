@@ -30,8 +30,7 @@ void AOApplication::reload_packages()
 {
   CharacterManager::get().ResetPackages();
   dro::system::replays::io::resetCache();
-  QVector<QString> packageNames = FS::Packages::Scan();
-  QString packagesPath = FS::Paths::ApplicationPath() + "/packages/";
+  FS::Packages::Scan();
 
   QDir baseCharactersDir (FS::Paths::BasePath() + "/characters");
   if (baseCharactersDir.exists())
@@ -47,9 +46,10 @@ void AOApplication::reload_packages()
     CharacterManager::get().SetCharList("base", baseCharacters);
   }
 
-  for(QString packageName : packageNames)
+  for(QString packageName : FS::Packages::CachedNames())
   {
-    QDir charactersPath (packagesPath + packageName + "/characters");
+    QString packageRoot = FS::Paths::Package(packageName);
+    QDir charactersPath (packageRoot + "characters");
     if (charactersPath.exists())
     {
       QVector<char_type> packageCharacters;
@@ -63,7 +63,7 @@ void AOApplication::reload_packages()
       CharacterManager::get().SetCharList(packageName, packageCharacters);
     }
 
-    QDir replaysDirectory(packagesPath + packageName + "/replays");
+    QDir replaysDirectory(packageRoot + "replays");
     if (replaysDirectory.exists())
     {
       QVector<QString> l_replayGroups;

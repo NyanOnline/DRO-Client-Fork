@@ -166,9 +166,10 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          name: 1.8.5-Test4
+          name: V1.8.5-Test5
           files: DRO-Client-Windows.zip
           prerelease: true
           body: |
-            Additive text now has a checkbox so you dont have to type <a> to take advantage of additive.
-            fix position for additive checkbox
+            All pre release features inherited.
+            You can now set custom asset/base paths.
+            Changed the reload button to "change theme" to be more clear and user friendly.

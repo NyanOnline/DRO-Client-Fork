@@ -75,6 +75,8 @@ QString BasePath()
 
 QString Package(const QString& packageName)
 {
+  QString mountRoot = Packages::RootFor(packageName);
+  if(!mountRoot.isEmpty()) return mountRoot;
   return FS::Paths::ApplicationPath() + "/packages/" + packageName + "/";
 }
 
@@ -145,7 +147,7 @@ QStringList GetFileList(const QString &directoryPath, bool includePackages, cons
 {
   QStringList returnValues = {};
 
-  QDir targetDirectory("base/" + directoryPath);
+  QDir targetDirectory(Paths::BasePath() + directoryPath);
   QStringList fileList = targetDirectory.entryList(QStringList() << "*." + extensionFilter, QDir::Files);
 
   for (const QString &fileName : fileList)
@@ -161,7 +163,7 @@ QStringList GetFileList(const QString &directoryPath, bool includePackages, cons
     QVector<QString> searchArchives = Packages::CachedNames();
     for(const QString& packageName : searchArchives)
     {
-      QDir targetDirectory("packages/" + packageName + "/" + directoryPath);
+      QDir targetDirectory(Paths::Package(packageName) + directoryPath);
       QStringList fileList = targetDirectory.entryList(QStringList() << "*." + extensionFilter, QDir::Files);
       for (const QString &fileName : fileList)
       {
@@ -180,7 +182,7 @@ QStringList GetDirectoryList(const QString &directoryPath, bool includePackages)
 {
   QStringList returnValues = {};
 
-  QDir targetDirectory("base/" + directoryPath);
+  QDir targetDirectory(Paths::BasePath() + directoryPath);
   QStringList subDirectories = targetDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
   for (const QString &directoryName : subDirectories)
   {
@@ -199,7 +201,7 @@ QStringList GetFileList(const QString &directoryPath, const QString &packageName
 {
   QStringList returnValues = {};
 
-  QDir targetDirectory("packages/" + packageName + "/" + directoryPath);
+  QDir targetDirectory(Paths::Package(packageName) + directoryPath);
   QStringList fileList = targetDirectory.entryList(QStringList() << "*." + extensionFilter, QDir::Files);
 
   for (const QString &fileName : fileList)

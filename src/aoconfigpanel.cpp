@@ -12,6 +12,7 @@
 #include <QComboBox>
 #include <QDebug>
 #include <QDir>
+#include <QFileDialog>
 #include <QGroupBox>
 #include <QLabel>
 #include <QLineEdit>
@@ -28,6 +29,7 @@
 
 #include "dro/system/localization.h"
 #include "dro/fs/fs_mounting.h"
+#include "dro/fs/fs_reading.h"
 
 using namespace dro::system;
 
@@ -190,6 +192,8 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   // packages
   ui_packages_list = AO_GUI_WIDGET(QListWidget, "packages_list");
   ui_load_new_packages = AO_GUI_WIDGET(QPushButton, "load_new_packages");
+  ui_add_package_path = AO_GUI_WIDGET(QPushButton, "add_package_path");
+  ui_remove_package_path = AO_GUI_WIDGET(QPushButton, "remove_package_path");
   refresh_packages_list();
 
   // themes
@@ -311,6 +315,8 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
 
   //packages
   connect(ui_load_new_packages, &QPushButton::clicked, this, &AOConfigPanel::on_load_packages_clicked);
+  connect(ui_add_package_path, &QPushButton::clicked, this, &AOConfigPanel::on_add_package_path_clicked);
+  connect(ui_remove_package_path, &QPushButton::clicked, this, &AOConfigPanel::on_remove_package_path_clicked);
 
   // ic message
   connect(m_config, &AOConfig::message_length_threshold_changed, ui_length_threshold, &QSlider::setValue);
@@ -508,6 +514,16 @@ void AOConfigPanel::refresh_packages_list()
     item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
     item->setCheckState(disabledPackages.contains(package) ? Qt::Unchecked : Qt::Checked);
   }
+
+  //Custom folders whose directory is currently missing
+  for (const QString &mount : FS::Packages::MountPaths())
+  {
+    if (packageNames.contains(mount))
+      continue;
+    QListWidgetItem* item = new QListWidgetItem(mount, ui_packages_list);
+    item->setForeground(Qt::darkGray);
+    item->setToolTip("Folder not found. Select it and press Remove Folder to forget it.");
+  }
 }
 
 void AOConfigPanel::refresh_theme_list()
@@ -667,12 +683,34 @@ void AOConfigPanel::on_load_packages_clicked()
   for(int i = 0; i < ui_packages_list->count(); ++i)
   {
     QListWidgetItem* item = ui_packages_list->item(i);
-    if(item->checkState() == Qt::Unchecked)
+    if((item->flags() & Qt::ItemIsUserCheckable) && item->checkState() == Qt::Unchecked)
     {
       disabledList.append(item->text());
     }
   }
   FS::Packages::SetDisabled(disabledList);
+  ao_app->reload_packages();
+  refresh_packages_list();
+}
+
+void AOConfigPanel::on_add_package_path_clicked()
+{
+  QString path = QFileDialog::getExistingDirectory(this, tr("Select Asset Folder"), FS::Paths::ApplicationPath());
+  if (path.isEmpty())
+    return;
+  FS::Packages::AddMountPath(path);
+  ao_app->reload_packages();
+  refresh_packages_list();
+}
+
+void AOConfigPanel::on_remove_package_path_clicked()
+{
+  QListWidgetItem *item = ui_packages_list->currentItem();
+  if (!item)
+    return;
+  if (!FS::Packages::MountPaths().contains(item->text()))
+    return;
+  FS::Packages::RemoveMountPath(item->text());
   ao_app->reload_packages();
   refresh_packages_list();
 }

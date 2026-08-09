@@ -303,7 +303,7 @@ namespace dro::system::replays
 
     void load(const QString &name, const QString &package, const QString &category)
     {
-      QString filePath = package.isEmpty() ? "logs/" : "packages/" + package + "/replays/";
+      QString filePath = package.isEmpty() ? "logs/" : FS::Paths::Package(package) + "replays/";
 
       if(!category.isEmpty()) filePath += category + "/";
 

@@ -766,6 +766,30 @@
           </widget>
          </item>
          <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_12">
+           <item>
+            <widget class="QPushButton" name="add_package_path">
+             <property name="toolTip">
+              <string>Add a custom folder to load assets from. Pick a folder that contains characters, themes, sounds, and so on.</string>
+             </property>
+             <property name="text">
+              <string>Add Folder...</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="remove_package_path">
+             <property name="toolTip">
+              <string>Remove the selected custom folder.</string>
+             </property>
+             <property name="text">
+              <string>Remove Folder</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
           <widget class="QPushButton" name="load_new_packages">
            <property name="text">
             <string>Save and Refresh Packages</string>
@@ -888,8 +912,11 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="toolTip">
+                <string>Pressing this changes your theme.</string>
+               </property>
                <property name="text">
-                <string>Switch</string>
+                <string>Change theme</string>
                </property>
               </widget>
              </item>
@@ -901,8 +928,11 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="toolTip">
+                <string>Pressing this changes your theme.</string>
+               </property>
                <property name="text">
-                <string>Reload</string>
+                <string>Change theme</string>
                </property>
               </widget>
              </item>
