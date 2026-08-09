@@ -1202,7 +1202,10 @@ void Courtroom::on_ic_message_return_pressed()
   packet_contents.append(idle_anim);
 
   // the text we're sending
-  packet_contents.append(ui_ic_chat_message_field->text());
+  QString l_message_text = ui_ic_chat_message_field->text();
+  if (ui_additive->isChecked() && !l_message_text.trimmed().isEmpty() && !l_message_text.startsWith("<a>"))
+    l_message_text.prepend("<a>");
+  packet_contents.append(l_message_text);
 
   // our current position on the background
   packet_contents.append(get_current_position());

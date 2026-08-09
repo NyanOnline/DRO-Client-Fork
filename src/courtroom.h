@@ -595,6 +595,7 @@ private:
   QLineEdit *ui_ic_chat_message_field = nullptr;
   RPLineEditFilter *ui_ic_chat_message_filter = nullptr;
   QLabel *ui_ic_chat_message_counter = nullptr;
+  QCheckBox *ui_additive = nullptr;
   int m_lastTypingPacket = 0;
 
 

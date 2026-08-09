@@ -275,12 +275,17 @@ void Courtroom::create_widgets()
   ui_ic_chat_message_counter->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
   ui_ic_chat_message_counter->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
 
+  ui_additive = new QCheckBox(ui_ic_chat_message);
+  ui_additive->setToolTip(localization::getText("TOOLTIP_ADDITIVE"));
+  ui_additive->setChecked(ao_config->additive_enabled());
+
   {
     auto l_layout = new QHBoxLayout(ui_ic_chat_message);
     ui_ic_chat_message_counter->setIndent(l_layout->contentsMargins().right());
     l_layout->setContentsMargins(0, 0, 0, 0);
     l_layout->addWidget(ui_ic_chat_message_field);
     l_layout->addWidget(ui_ic_chat_message_counter);
+    l_layout->addWidget(ui_additive);
   }
 
   ui_ic_chat_message_counter->hide();
@@ -553,6 +558,10 @@ void Courtroom::connect_widgets()
   connect(ui_pre, &QCheckBox::clicked, this, &Courtroom::on_pre_clicked);
   connect(ui_flip, &QCheckBox::clicked, this, &Courtroom::on_flip_clicked);
   connect(ui_hide_character, &QCheckBox::clicked, this, &Courtroom::on_hidden_clicked);
+
+  connect(ui_additive, &QCheckBox::toggled, ao_config, &AOConfig::set_additive);
+  connect(ui_additive, &QCheckBox::clicked, this, [this] { ui_ic_chat_message_field->setFocus(); });
+  connect(ao_config, &AOConfig::additive_changed, ui_additive, &QCheckBox::setChecked);
 
   connect(ui_sfx_list, &QListWidget::currentItemChanged, this, &Courtroom::on_sfx_list_current_item_changed);
   connect(ui_sfx_list, &QWidget::customContextMenuRequested, this, &Courtroom::on_sfx_list_context_menu_requested);

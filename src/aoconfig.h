@@ -54,6 +54,7 @@ public:
   bool sticky_sfx_enabled() const;
   bool disable_blankpost_enabled() const;
   bool soft_blankpost_enabled() const;
+  bool additive_enabled() const;
   int message_length_threshold() const;
   int log_max_lines() const;
   bool log_display_timestamp_enabled() const;
@@ -135,6 +136,7 @@ public slots:
   void set_sticky_sfx(bool p_enabled);
   void set_disable_blankpost(bool p_enabled);
   void set_soft_blankpost(bool p_enabled);
+  void set_additive(bool p_enabled);
   void set_message_length_threshold(int percent);
   void set_log_max_lines(int p_number);
   void set_log_display_timestamp(bool p_enabled);
@@ -200,6 +202,7 @@ signals:
   void sticky_sfx_changed(bool);
   void disable_blankpost_changed(bool);
   void soft_blankpost_changed(bool);
+  void additive_changed(bool);
 
   // theme
   void language_changed(QString);

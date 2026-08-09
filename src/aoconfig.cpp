@@ -86,6 +86,7 @@ private:
   bool sticky_sfx;
   bool disable_blankpost;
   bool soft_blankpost;
+  bool additive;
   int message_length_threshold;
   int log_max_lines;
   bool log_display_timestamp;
@@ -206,6 +207,7 @@ void AOConfigPrivate::load_file()
   sticky_sfx = cfg.value("sticky_sfx", false).toBool();
   disable_blankpost = cfg.value("disable_blankpost", false).toBool();
   soft_blankpost = cfg.value("soft_blankpost", false).toBool();
+  additive = cfg.value("additive", false).toBool();
   message_length_threshold = cfg.value("message_length_threshold", 70).toInt();
   log_max_lines = cfg.value("chatlog_limit", 100).toInt();
   log_is_topdown = cfg.value("chatlog_scrolldown", true).toBool();
@@ -328,6 +330,7 @@ void AOConfigPrivate::save_file()
   cfg.setValue("sticky_sfx", sticky_sfx);
   cfg.setValue("disable_blankpost", disable_blankpost);
   cfg.setValue("soft_blankpost", soft_blankpost);
+  cfg.setValue("additive", additive);
   cfg.setValue("message_length_threshold", message_length_threshold);
   cfg.setValue("chatlog_limit", log_max_lines);
   cfg.setValue("chatlog_display_timestamp", log_display_timestamp);
@@ -655,6 +658,11 @@ bool AOConfig::disable_blankpost_enabled() const
 bool AOConfig::soft_blankpost_enabled() const
 {
   return d->soft_blankpost;
+}
+
+bool AOConfig::additive_enabled() const
+{
+  return d->additive;
 }
 
 int AOConfig::message_length_threshold() const
@@ -1116,6 +1124,14 @@ void AOConfig::set_soft_blankpost(bool p_enabled)
     return;
   d->soft_blankpost = p_enabled;
   d->invoke_signal("soft_blankpost_changed", Q_ARG(bool, p_enabled));
+}
+
+void AOConfig::set_additive(bool p_enabled)
+{
+  if (d->additive == p_enabled)
+    return;
+  d->additive = p_enabled;
+  d->invoke_signal("additive_changed", Q_ARG(bool, p_enabled));
 }
 
 void AOConfig::set_message_length_threshold(int p_number)

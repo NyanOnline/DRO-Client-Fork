@@ -166,10 +166,8 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          name: V1.85.0-Test 2
+          name: 1.8.5-Test3
           files: DRO-Client-Windows.zip
           prerelease: true
           body: |
-            Added a blankpost toggle
-            Added a softblank poster toggle if u press 3 times it will trigger a blankpost
-            all off by default
+            Additive text now has a checkbox so you dont have to type <a> to take advantage of additive.
