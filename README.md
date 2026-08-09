@@ -23,19 +23,17 @@ Fix Additive. DRO's implementation is borked. Just port over AO2's for now the t
 Feature requests or quality of life improvement requests
 ----------------------------------------------------------------------
 
-Voting GUI Server-side voting system with a client-side GUI popup. Polling options for group decisions. Results display at conclusion :construction:
+Voting GUI Server-side voting system with a client-side GUI popup. Polling options for group decisions. Results display at conclusion 🚧
 
 Add a secondary message/mini message system called react messages. It's bassically when someone sends a message they somehow have a way of adding a mini message on top of it. So main message would be like, "I like danganronpa", the react message would be a tiny message somewhere else maybe the side of the port or it just flys across the viewport, that says me too, so it feels more like a danganronpa game. Also for server side, maybe make it a toggle if reacts can be used, and displayed. And for the GM they can customize how much reacts can be used per area. Use the DR 1 asset to display these 🚧🚧
 
-Add Asset streaming capabilities and add a compatibility mode of sorts so DRO client can connect to modern servers just like AO2 client. This includes base and asset streaming. AO2 compat mode so modern servers like akashi can accept DRO client without issue, and if it shows no files should ask you for an option to stream the assets. :construction::construction: :construction:
+Add Asset streaming capabilities and add a compatibility mode of sorts so DRO client can connect to modern servers just like AO2 client. This includes base and asset streaming. AO2 compat mode so modern servers like akashi can accept DRO client without issue, and if it shows no files should ask you for an option to stream the assets. 🚧🚧 🚧
 
 Multi-viewport interface: Follow multiple players simultaneously in separate viewports within one client; viewports display real-time chat activity. Main viewport: Click any viewport to make it the active/chat-focused one. GM ping system: Players can ping the GM triggering a red flashing border on that player's viewport for instant attention. Performance optimization: Skip animations on non-dominant viewports to save battery/performance; careful attention needed to avoid excessive redrawing and performance bugs. 🚧🚧🚧
 
-Performance optimization Skip animations on non-dominant viewports to save battery/performance. Careful attention needed to avoid excessive redrawing and performance bugs.  :construction::construction: :construction:
+Add HTTPS/WSS support for DRO client and TsuserverDR so server owners can have the OPTION utilize TLS and modern https if they so want to to protect against snooping MITM attacks(this is funny to write but yeah you get the point, https is just more secure and faster) and even cloudflare caching. This will mainly benefit servers that use websockets though and have a web server, for most DRO users this won't really change much. 🚧 🚧
 
-Add HTTPS/WSS support for DRO client and TsuserverDR so server owners can have the OPTION utilize TLS and modern https if they so want to to protect against snooping MITM attacks(this is funny to write but yeah you get the point, https is just more secure and faster) and even cloudflare caching. This will mainly benefit servers that use websockets though and have a web server, for most DRO users this won't really change much. :construction: :construction:
-
-Write prooject documentation with detailed easy to understand guides such as building the project with qt 6 maybe cross platform etc :construction:
+Write prooject documentation with detailed easy to understand guides such as building the project with qt 6 maybe cross platform etc 🚧
 
 Add Linux Builds back make DRO linux compatible again 🚧 🚧
 
