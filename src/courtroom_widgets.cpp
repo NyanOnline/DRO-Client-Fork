@@ -281,8 +281,10 @@ void Courtroom::create_widgets()
 
   {
     auto l_layout = new QHBoxLayout(ui_ic_chat_message);
-    ui_ic_chat_message_counter->setIndent(l_layout->contentsMargins().right());
-    l_layout->setContentsMargins(0, 0, 0, 0);
+    const int l_edge = l_layout->contentsMargins().right();
+    ui_ic_chat_message_counter->setIndent(l_edge);
+    // keep the additive box tucked inside the bar's right edge
+    l_layout->setContentsMargins(0, 0, l_edge, 0);
     l_layout->addWidget(ui_ic_chat_message_field);
     l_layout->addWidget(ui_ic_chat_message_counter);
     l_layout->addWidget(ui_additive);
