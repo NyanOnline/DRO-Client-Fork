@@ -39,6 +39,8 @@ Add HTTPS/WSS support for DRO client and TsuserverDR so server owners can have t
 
 Write prooject documentation with detailed easy to understand guides such as building the project with qt 6 maybe cross platform etc :construction:
 
+Add Linux Builds back make DRO linux compatible again 🚧 🚧
+
 1.8.5 BETA BUILD FEATURES CURRENTLY IMPLEMENTED
 -------------------------------
 Cleaned and fixed additive text!
