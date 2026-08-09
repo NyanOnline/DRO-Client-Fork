@@ -20,6 +20,8 @@ Current Bug reports so far that I will work on in the future
 
 Fix Additive. DRO's implementation is borked. Just port over AO2's for now the text rolls over itself. - FIXED IN 1.85.0 TEST BUILD!
 
+Fix \f flash effects was broken in 1.8.2
+
 Feature requests or quality of life improvement requests
 ----------------------------------------------------------------------
 
