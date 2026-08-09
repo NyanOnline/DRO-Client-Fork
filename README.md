@@ -50,6 +50,10 @@ Cleaned and fixed additive text!
 
 Make the additive text function a UI element a check box of sorts a tiny check box, so people dont have to type <a> everytime they want to use additive, its one tiny check box then all messages are treated as additive. A clean option just like how AO2 client does it. This basically allows you to use additive without constantly typing <a> everytime like a checkbox.
 
+You can now set custom asset/base paths.
+
+Changed the reload button to "change theme" to be more clear and user friendly.
+
 Not a replacement for DRO client, just a fork intended to clean-up some legacy crust and fix some issues.
 
 ## Qt
