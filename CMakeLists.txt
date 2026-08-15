@@ -9,8 +9,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS core gui widgets uitools network websockets multimedia multimediawidgets)
-find_package(Qt6 REQUIRED COMPONENTS core gui widgets uitools network websockets multimedia multimediawidgets)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Gui Widgets UiTools Network WebSockets Multimedia MultimediaWidgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets UiTools Network WebSockets Multimedia MultimediaWidgets)
 
 set(HEADERS
   src/dro/animation/keyframe_channel.h
