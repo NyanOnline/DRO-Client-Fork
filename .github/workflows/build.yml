@@ -194,7 +194,7 @@ jobs:
         with:
           version: 6.8.3
           target: desktop
-          arch: gcc_64
+          arch: linux_gcc_64
           modules: 'qtimageformats qtwebsockets qtmultimedia'
 
       - name: Install sol2
@@ -259,13 +259,13 @@ jobs:
         shell: bash
         run: |
           cd ./qtapng
-          cmake . -DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE="${{ github.workspace }}/bin/imageformats/" -DAPNG_QT6=ON -DCMAKE_PREFIX_PATH="$Qt6_DIR"
+          cmake . -DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE="${{ github.workspace }}/bin/imageformats/" -DAPNG_QT6=ON -DCMAKE_PREFIX_PATH="$QT_ROOT_DIR"
           cmake --build . --config Release
 
       - name: Build
         shell: bash
         run: |
-          cmake . -D CMAKE_BUILD_TYPE=Release -D CMAKE_PREFIX_PATH="$Qt6_DIR"
+          cmake . -D CMAKE_BUILD_TYPE=Release -D CMAKE_PREFIX_PATH="$QT_ROOT_DIR"
           cmake --build . --config Release
 
       - name: Package Linux
@@ -315,7 +315,7 @@ jobs:
         with:
           version: 6.8.3
           target: desktop
-          arch: clang_arm64
+          arch: clang_64
           modules: 'qtimageformats qtwebsockets qtmultimedia'
 
       - name: Install sol2
@@ -380,13 +380,13 @@ jobs:
         shell: bash
         run: |
           cd ./qtapng
-          cmake . -DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE="${{ github.workspace }}/bin/imageformats/" -DAPNG_QT6=ON -DCMAKE_PREFIX_PATH="$Qt6_DIR"
+          cmake . -DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE="${{ github.workspace }}/bin/imageformats/" -DAPNG_QT6=ON -DCMAKE_PREFIX_PATH="$QT_ROOT_DIR;$(brew --prefix)"
           cmake --build . --config Release
 
       - name: Build
         shell: bash
         run: |
-          cmake . -D CMAKE_BUILD_TYPE=Release -D CMAKE_PREFIX_PATH="$Qt6_DIR"
+          cmake . -D CMAKE_BUILD_TYPE=Release -D CMAKE_PREFIX_PATH="$QT_ROOT_DIR;$(brew --prefix)"
           cmake --build . --config Release
 
       - name: Deploy macOS
