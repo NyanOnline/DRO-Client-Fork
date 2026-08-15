@@ -119,6 +119,7 @@ jobs:
         if: steps.cache-3rd.outputs.cache-hit != 'true'
         shell: bash
         run: |
+          rm -rf ./3rd/soundtouch
           git clone --depth 1 --branch 2.3.3 https://codeberg.org/soundtouch/soundtouch.git ./3rd/soundtouch
           rm -rf ./3rd/soundtouch/.git
 
