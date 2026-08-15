@@ -81,7 +81,6 @@ private slots:
   void on_pitch_value_changed(int p_num);
   void on_tempo_value_changed(int p_num);
   void on_reset_pitch_tempo_clicked();
-+++++++ REPLACE</parameter>
 
   void on_length_threshold_value_changed(int p_number);
 
