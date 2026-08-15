@@ -218,12 +218,11 @@ jobs:
       - name: Install Discord RPC
         shell: bash
         run: |
-          git clone --depth 1 --recursive https://github.com/discord/discord-rpc.git discord-rpc-src
-          cmake -S discord-rpc-src -B discord-rpc-src/build -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release
-          cmake --build discord-rpc-src/build --config Release
           mkdir -p ./3rd/discord-rpc
-          cp discord-rpc-src/include/discord_rpc.h discord-rpc-src/include/discord_register.h ./3rd/discord-rpc/
-          cp discord-rpc-src/build/src/libdiscord-rpc.a ./3rd/discord-rpc/libdiscord-rpc.a
+          curl -L https://github.com/discordapp/discord-rpc/releases/download/v3.4.0/discord-rpc-linux.zip -o discord-rpc.zip
+          unzip -q discord-rpc.zip
+          cp discord-rpc/linux-static/include/discord_rpc.h discord-rpc/linux-static/include/discord_register.h ./3rd/discord-rpc/
+          cp discord-rpc/linux-static/lib/libdiscord-rpc.a ./3rd/discord-rpc/libdiscord-rpc.a
 
       - name: Install stb_image_resize
         shell: bash
@@ -339,12 +338,11 @@ jobs:
       - name: Install Discord RPC
         shell: bash
         run: |
-          git clone --depth 1 --recursive https://github.com/discord/discord-rpc.git discord-rpc-src
-          cmake -S discord-rpc-src -B discord-rpc-src/build -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release
-          cmake --build discord-rpc-src/build --config Release
           mkdir -p ./3rd/discord-rpc
-          cp discord-rpc-src/include/discord_rpc.h discord-rpc-src/include/discord_register.h ./3rd/discord-rpc/
-          cp discord-rpc-src/build/src/libdiscord-rpc.a ./3rd/discord-rpc/libdiscord-rpc.a
+          curl -L https://github.com/discordapp/discord-rpc/releases/download/v3.4.0/discord-rpc-osx.zip -o discord-rpc.zip
+          unzip -q discord-rpc.zip
+          cp discord-rpc/osx-static/include/discord_rpc.h discord-rpc/osx-static/include/discord_register.h ./3rd/discord-rpc/
+          cp discord-rpc/osx-static/lib/libdiscord-rpc.a ./3rd/discord-rpc/libdiscord-rpc.a
 
       - name: Install stb_image_resize
         shell: bash
