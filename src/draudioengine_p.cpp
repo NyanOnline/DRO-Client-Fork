@@ -90,10 +90,24 @@ void DRAudioEnginePrivate::update_device_list()
 void DRAudioEnginePrivate::update_options()
 {
   update_volume();
+  for (auto &i_group : family_map.values())
+    i_group->update_rate_mode();
 }
 
 void DRAudioEnginePrivate::update_volume()
 {
   for (auto &i_group : family_map.values())
     i_group->update_volume();
+}
+
+void DRAudioEnginePrivate::update_pitch()
+{
+  for (auto &i_group : family_map.values())
+    i_group->update_pitch();
+}
+
+void DRAudioEnginePrivate::update_speed()
+{
+  for (auto &i_group : family_map.values())
+    i_group->update_speed();
 }

@@ -4,9 +4,12 @@
 #include <miniaudio/extras/decoders/libvorbis/miniaudio_libvorbis.h>
 #include <miniaudio/extras/decoders/libopus/miniaudio_libopus.h>
 
+#include <atomic>
 #include <cmath>
 #include <cstring>
 #include <vector>
+
+#include <SoundTouch.h>
 
 namespace
 {
@@ -200,4 +203,162 @@ void audio_backend::reverb_node_uninit(ma_node *p_node)
   ReverbNode *l_node = reinterpret_cast<ReverbNode *>(p_node);
   ma_node_uninit(&l_node->base, nullptr);
   delete l_node;
+}
+
+namespace
+{
+struct SoundTouchNode
+{
+  ma_node_base base;
+  ma_uint32 channels = 0;
+  soundtouch::SoundTouch processor;
+  std::atomic<float> pitch_semitones{0.0f};
+  std::atomic<float> tempo{1.0f};
+  std::atomic<ma_uint32> remaining_frames{0};
+  std::atomic<bool> flushed{false};
+};
+
+void soundtouch_process(ma_node *pNode, const float **ppFramesIn, ma_uint32 *pFrameCountIn, float **ppFramesOut,
+                        ma_uint32 *pFrameCountOut)
+{
+  SoundTouchNode *l_node = reinterpret_cast<SoundTouchNode *>(pNode);
+  const ma_uint32 l_cap_frames = *pFrameCountOut;
+  const ma_uint32 l_frames_in = *pFrameCountIn;
+
+  l_node->processor.setTempo(l_node->tempo.load());
+  l_node->processor.setPitchSemiTones(static_cast<double>(l_node->pitch_semitones.load()));
+
+  if (l_frames_in > 0)
+  {
+    l_node->processor.putSamples(ppFramesIn[0], l_frames_in);
+  }
+  else if (!l_node->flushed.load())
+  {
+    l_node->processor.flush();
+    l_node->flushed.store(true);
+  }
+
+  const ma_uint32 l_avail = l_node->processor.numSamples();
+  const ma_uint32 l_to_receive = l_avail < l_cap_frames ? l_avail : l_cap_frames;
+
+  if (l_to_receive > 0)
+  {
+    const ma_uint32 l_got = l_node->processor.receiveSamples(ppFramesOut[0], l_to_receive);
+    *pFrameCountOut = l_got;
+    l_node->remaining_frames.store(l_avail - l_got);
+  }
+  else
+  {
+    *pFrameCountOut = 0;
+    l_node->remaining_frames.store(l_avail);
+  }
+
+  *pFrameCountIn = l_frames_in;
+}
+
+ma_result soundtouch_get_required_input_frames(ma_node *pNode, ma_uint32 outputFrameCount, ma_uint32 *pInputFrameCount)
+{
+  SoundTouchNode *l_node = reinterpret_cast<SoundTouchNode *>(pNode);
+  const double l_ratio = l_node->processor.getInputOutputSampleRatio();
+  double l_needed = static_cast<double>(outputFrameCount);
+  if (l_ratio > 0.0)
+  {
+    l_needed = static_cast<double>(outputFrameCount) / l_ratio;
+  }
+  if (l_needed < 1.0)
+  {
+    l_needed = 1.0;
+  }
+  *pInputFrameCount = static_cast<ma_uint32>(l_needed + 0.999999);
+  return MA_SUCCESS;
+}
+
+ma_node_vtable g_soundtouch_vtable = {
+    soundtouch_process,
+    soundtouch_get_required_input_frames,
+    1,
+    1,
+    MA_NODE_FLAG_DIFFERENT_PROCESSING_RATES,
+};
+} // namespace
+
+ma_result audio_backend::soundtouch_node_init(ma_node_graph *p_graph, ma_uint32 p_channels, ma_uint32 p_sample_rate,
+                                              ma_node **p_node)
+{
+  if (p_graph == nullptr || p_node == nullptr || p_channels == 0)
+  {
+    return MA_INVALID_ARGS;
+  }
+
+  SoundTouchNode *l_node = new (std::nothrow) SoundTouchNode();
+  if (l_node == nullptr)
+  {
+    return MA_OUT_OF_MEMORY;
+  }
+
+  l_node->channels = p_channels;
+  l_node->processor.setChannels(p_channels);
+  l_node->processor.setSampleRate(p_sample_rate);
+  l_node->processor.setSetting(SETTING_USE_QUICKSEEK, 0);
+  l_node->processor.setSetting(SETTING_USE_AA_FILTER, 1);
+
+  ma_node_config l_config = ma_node_config_init();
+  l_config.vtable = &g_soundtouch_vtable;
+  l_config.pInputChannels = &l_node->channels;
+  l_config.pOutputChannels = &l_node->channels;
+
+  const ma_result l_result = ma_node_init(p_graph, &l_config, nullptr, &l_node->base);
+  if (l_result != MA_SUCCESS)
+  {
+    delete l_node;
+    return l_result;
+  }
+
+  *p_node = reinterpret_cast<ma_node *>(l_node);
+  return MA_SUCCESS;
+}
+
+void audio_backend::soundtouch_node_uninit(ma_node *p_node)
+{
+  if (p_node == nullptr)
+  {
+    return;
+  }
+  SoundTouchNode *l_node = reinterpret_cast<SoundTouchNode *>(p_node);
+  ma_node_uninit(&l_node->base, nullptr);
+  delete l_node;
+}
+
+void audio_backend::soundtouch_node_set_pitch(ma_node *p_node, float p_semitones)
+{
+  if (p_node == nullptr)
+  {
+    return;
+  }
+  SoundTouchNode *l_node = reinterpret_cast<SoundTouchNode *>(p_node);
+  l_node->pitch_semitones.store(p_semitones);
+}
+
+void audio_backend::soundtouch_node_set_tempo(ma_node *p_node, float p_tempo)
+{
+  if (p_node == nullptr)
+  {
+    return;
+  }
+  if (p_tempo <= 0.0f)
+  {
+    p_tempo = 0.01f;
+  }
+  SoundTouchNode *l_node = reinterpret_cast<SoundTouchNode *>(p_node);
+  l_node->tempo.store(p_tempo);
+}
+
+bool audio_backend::soundtouch_node_is_drained(ma_node *p_node)
+{
+  if (p_node == nullptr)
+  {
+    return true;
+  }
+  SoundTouchNode *l_node = reinterpret_cast<SoundTouchNode *>(p_node);
+  return l_node->flushed.load() && l_node->remaining_frames.load() == 0;
 }

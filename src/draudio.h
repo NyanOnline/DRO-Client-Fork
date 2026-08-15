@@ -25,6 +25,9 @@ enum Option
    * If enabled, the engine will suppress all audio when the application is inactive.
    */
   OEngineSuppressBackgroundAudio = 0x4,
+
+  // independent SoundTouch pitch/tempo instead of linked resampling
+  OEngineIndependentPitchTempo = 0x8,
 };
 Q_DECLARE_FLAGS(Options, Option)
 

@@ -88,6 +88,15 @@ public:
   int blip_rate() const;
   int punctuation_delay() const;
   bool blank_blips_enabled() const;
+  int master_pitch() const;
+  int master_speed() const;
+  int effect_pitch() const;
+  int effect_speed() const;
+  int music_pitch() const;
+  int music_speed() const;
+  int blip_pitch() const;
+  int blip_speed() const;
+  bool independent_pitch_tempo() const;
 
   double theme_resize() const;
   double font_resize() const;
@@ -170,6 +179,15 @@ public slots:
   void set_blip_rate(int p_number);
   void set_punctuation_delay(int p_number);
   void set_blank_blips(bool p_enabled);
+  void set_master_pitch(int p_number);
+  void set_master_speed(int p_number);
+  void set_effect_pitch(int p_number);
+  void set_effect_speed(int p_number);
+  void set_music_pitch(int p_number);
+  void set_music_speed(int p_number);
+  void set_blip_pitch(int p_number);
+  void set_blip_speed(int p_number);
+  void set_independent_pitch_tempo(bool p_enabled);
   void setThemeResize(double resize);
   void setFontResize(double resize);
   void setFadeDuration(int duration);
@@ -252,6 +270,15 @@ signals:
   void blip_rate_changed(int);
   void punctuation_delay_changed(int);
   void blank_blips_changed(bool);
+  void master_pitch_changed(int);
+  void master_speed_changed(int);
+  void effect_pitch_changed(int);
+  void effect_speed_changed(int);
+  void music_pitch_changed(int);
+  void music_speed_changed(int);
+  void blip_pitch_changed(int);
+  void blip_speed_changed(int);
+  void independent_pitch_tempo_changed(bool);
 
   //Theme
   void theme_resize_changed(double);

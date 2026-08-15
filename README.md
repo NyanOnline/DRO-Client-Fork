@@ -62,3 +62,9 @@ Copyright (C) 2026 The Qt Company Ltd.
 ## miniaudio
 This client runs on [miniaudio](https://miniaud.io/). It is released into the public domain, or MIT-0 at your option.
 
+## SoundTouch
+This client uses SoundTouch (https://www.surina.net/soundtouch) to process audio for independent pitch and tempo adjustment. SoundTouch is licensed under the GNU Lesser General Public License, version 2.1 (LGPL 2.1). The full license text is available at https://www.gnu.org/licenses/lgpl-2.1.html.
+
+SoundTouch audio processing library
+Copyright (c) Olli Parviainen
+

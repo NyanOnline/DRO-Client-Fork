@@ -115,6 +115,8 @@ DRAudioStream::ptr DRAudioStreamFamily::create_stream(QString p_filename)
   update_capacity();
 
   l_stream->set_volume(calculate_volume());
+  l_stream->set_family_pitch(m_pitch);
+  l_stream->set_family_speed(m_speed);
 
   return l_stream;
 }
@@ -135,6 +137,8 @@ DRAudioStream::ptr DRAudioStreamFamily::create_url_stream(QString t_url)
   update_capacity();
 
   l_stream->set_volume(calculate_volume());
+  l_stream->set_family_pitch(m_pitch);
+  l_stream->set_family_speed(m_speed);
 
   return l_stream;
 }
@@ -202,13 +206,19 @@ void DRAudioStreamFamily::update_volume()
 void DRAudioStreamFamily::update_pitch()
 {
   for (auto &stream : m_stream_list)
-    stream->set_pitch(m_pitch);
+    stream->set_family_pitch(m_pitch);
 }
 
 void DRAudioStreamFamily::update_speed()
 {
   for (auto &stream : m_stream_list)
-    stream->set_speed(m_speed);
+    stream->set_family_speed(m_speed);
+}
+
+void DRAudioStreamFamily::update_rate_mode()
+{
+  for (auto &stream : m_stream_list)
+    stream->refresh_rate_mode();
 }
 
 void DRAudioStreamFamily::on_stream_finished()

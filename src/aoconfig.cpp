@@ -126,6 +126,15 @@ private:
   double font_resize;
   int fade_duration;
   bool blank_blips;
+  int master_pitch;
+  int master_speed;
+  int effect_pitch;
+  int effect_speed;
+  int music_pitch;
+  int music_speed;
+  int blip_pitch;
+  int blip_speed;
+  bool independent_pitch_tempo;
 
   // audio sync
   DRAudioEngine *audio_engine = nullptr;
@@ -261,6 +270,15 @@ void AOConfigPrivate::load_file()
   SceneManager::get().setFadeDuration(fade_duration);
   blank_blips = cfg.value("blank_blips").toBool();
   manual_resize = cfg.value("manual_resize", true).toBool();
+  master_pitch = cfg.value("master_pitch", 0).toInt();
+  master_speed = cfg.value("master_speed", 0).toInt();
+  effect_pitch = cfg.value("effect_pitch", 0).toInt();
+  effect_speed = cfg.value("effect_speed", 0).toInt();
+  music_pitch = cfg.value("music_pitch", 0).toInt();
+  music_speed = cfg.value("music_speed", 0).toInt();
+  blip_pitch = cfg.value("blip_pitch", 0).toInt();
+  blip_speed = cfg.value("blip_speed", 0).toInt();
+  independent_pitch_tempo = cfg.value("independent_pitch_tempo", false).toBool();
 
   // audio update
   audio_engine->set_volume(master_volume);
@@ -273,6 +291,15 @@ void AOConfigPrivate::load_file()
   audio_engine->get_family(DRAudio::Family::FVideo)->set_ignore_suppression(effect_ignore_suppression);
   audio_engine->get_family(DRAudio::Family::FBlip)->set_volume(blip_volume);
   audio_engine->get_family(DRAudio::Family::FBlip)->set_ignore_suppression(effect_ignore_suppression);
+  audio_engine->set_pitch(master_pitch);
+  audio_engine->set_speed(master_speed);
+  audio_engine->get_family(DRAudio::Family::FEffect)->set_pitch(effect_pitch);
+  audio_engine->get_family(DRAudio::Family::FEffect)->set_speed(effect_speed);
+  audio_engine->get_family(DRAudio::Family::FMusic)->set_pitch(music_pitch);
+  audio_engine->get_family(DRAudio::Family::FMusic)->set_speed(music_speed);
+  audio_engine->get_family(DRAudio::Family::FBlip)->set_pitch(blip_pitch);
+  audio_engine->get_family(DRAudio::Family::FBlip)->set_speed(blip_speed);
+  audio_engine->set_option(DRAudio::OEngineIndependentPitchTempo, independent_pitch_tempo);
 
   { // ini swap
     cfg.beginGroup("character_ini");
@@ -382,6 +409,15 @@ void AOConfigPrivate::save_file()
   cfg.setValue("fade_duration", fade_duration);
   cfg.setValue("blank_blips", blank_blips);
   cfg.setValue("manual_resize", manual_resize);
+  cfg.setValue("master_pitch", master_pitch);
+  cfg.setValue("master_speed", master_speed);
+  cfg.setValue("effect_pitch", effect_pitch);
+  cfg.setValue("effect_speed", effect_speed);
+  cfg.setValue("music_pitch", music_pitch);
+  cfg.setValue("music_speed", music_speed);
+  cfg.setValue("blip_pitch", blip_pitch);
+  cfg.setValue("blip_speed", blip_speed);
+  cfg.setValue("independent_pitch_tempo", independent_pitch_tempo);
 
   cfg.remove("character_ini");
   { // ini swap
@@ -807,6 +843,51 @@ int AOConfig::punctuation_delay() const
 bool AOConfig::blank_blips_enabled() const
 {
   return d->blank_blips;
+}
+
+int AOConfig::master_pitch() const
+{
+  return d->master_pitch;
+}
+
+int AOConfig::master_speed() const
+{
+  return d->master_speed;
+}
+
+int AOConfig::effect_pitch() const
+{
+  return d->effect_pitch;
+}
+
+int AOConfig::effect_speed() const
+{
+  return d->effect_speed;
+}
+
+int AOConfig::music_pitch() const
+{
+  return d->music_pitch;
+}
+
+int AOConfig::music_speed() const
+{
+  return d->music_speed;
+}
+
+int AOConfig::blip_pitch() const
+{
+  return d->blip_pitch;
+}
+
+int AOConfig::blip_speed() const
+{
+  return d->blip_speed;
+}
+
+bool AOConfig::independent_pitch_tempo() const
+{
+  return d->independent_pitch_tempo;
 }
 
 double AOConfig::theme_resize() const
@@ -1380,6 +1461,87 @@ void AOConfig::set_blank_blips(bool p_enabled)
   d->blank_blips = p_enabled;
   d->audio_engine->get_family(DRAudio::Family::FBlip)->set_ignore_suppression(p_enabled);
   d->invoke_signal("blank_blips_changed", Q_ARG(bool, p_enabled));
+}
+
+void AOConfig::set_master_pitch(int p_number)
+{
+  if (d->master_pitch == p_number)
+    return;
+  d->master_pitch = p_number;
+  d->audio_engine->set_pitch(p_number);
+  d->invoke_signal("master_pitch_changed", Q_ARG(int, p_number));
+}
+
+void AOConfig::set_master_speed(int p_number)
+{
+  if (d->master_speed == p_number)
+    return;
+  d->master_speed = p_number;
+  d->audio_engine->set_speed(p_number);
+  d->invoke_signal("master_speed_changed", Q_ARG(int, p_number));
+}
+
+void AOConfig::set_effect_pitch(int p_number)
+{
+  if (d->effect_pitch == p_number)
+    return;
+  d->effect_pitch = p_number;
+  d->audio_engine->get_family(DRAudio::Family::FEffect)->set_pitch(p_number);
+  d->invoke_signal("effect_pitch_changed", Q_ARG(int, p_number));
+}
+
+void AOConfig::set_effect_speed(int p_number)
+{
+  if (d->effect_speed == p_number)
+    return;
+  d->effect_speed = p_number;
+  d->audio_engine->get_family(DRAudio::Family::FEffect)->set_speed(p_number);
+  d->invoke_signal("effect_speed_changed", Q_ARG(int, p_number));
+}
+
+void AOConfig::set_music_pitch(int p_number)
+{
+  if (d->music_pitch == p_number)
+    return;
+  d->music_pitch = p_number;
+  d->audio_engine->get_family(DRAudio::Family::FMusic)->set_pitch(p_number);
+  d->invoke_signal("music_pitch_changed", Q_ARG(int, p_number));
+}
+
+void AOConfig::set_music_speed(int p_number)
+{
+  if (d->music_speed == p_number)
+    return;
+  d->music_speed = p_number;
+  d->audio_engine->get_family(DRAudio::Family::FMusic)->set_speed(p_number);
+  d->invoke_signal("music_speed_changed", Q_ARG(int, p_number));
+}
+
+void AOConfig::set_blip_pitch(int p_number)
+{
+  if (d->blip_pitch == p_number)
+    return;
+  d->blip_pitch = p_number;
+  d->audio_engine->get_family(DRAudio::Family::FBlip)->set_pitch(p_number);
+  d->invoke_signal("blip_pitch_changed", Q_ARG(int, p_number));
+}
+
+void AOConfig::set_blip_speed(int p_number)
+{
+  if (d->blip_speed == p_number)
+    return;
+  d->blip_speed = p_number;
+  d->audio_engine->get_family(DRAudio::Family::FBlip)->set_speed(p_number);
+  d->invoke_signal("blip_speed_changed", Q_ARG(int, p_number));
+}
+
+void AOConfig::set_independent_pitch_tempo(bool p_enabled)
+{
+  if (d->independent_pitch_tempo == p_enabled)
+    return;
+  d->independent_pitch_tempo = p_enabled;
+  d->audio_engine->set_option(DRAudio::OEngineIndependentPitchTempo, p_enabled);
+  d->invoke_signal("independent_pitch_tempo_changed", Q_ARG(bool, p_enabled));
 }
 
 void AOConfig::setThemeResize(double resize)

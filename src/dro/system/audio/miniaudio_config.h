@@ -11,4 +11,10 @@ ma_uint32 custom_backend_count();
 
 ma_result reverb_node_init(ma_node_graph *p_graph, ma_uint32 p_channels, ma_uint32 p_sample_rate, ma_node **p_node);
 void reverb_node_uninit(ma_node *p_node);
+
+ma_result soundtouch_node_init(ma_node_graph *p_graph, ma_uint32 p_channels, ma_uint32 p_sample_rate, ma_node **p_node);
+void soundtouch_node_uninit(ma_node *p_node);
+void soundtouch_node_set_pitch(ma_node *p_node, float p_semitones);
+void soundtouch_node_set_tempo(ma_node *p_node, float p_tempo);
+bool soundtouch_node_is_drained(ma_node *p_node);
 } // namespace audio_backend

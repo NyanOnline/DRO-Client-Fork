@@ -97,6 +97,16 @@ int32_t DRAudioEngine::get_volume()
   return d->volume;
 }
 
+float DRAudioEngine::get_pitch()
+{
+  return d->pitch;
+}
+
+float DRAudioEngine::get_speed()
+{
+  return d->speed;
+}
+
 DRAudio::Options DRAudioEngine::get_options()
 {
   return d->options;
@@ -131,6 +141,24 @@ void DRAudioEngine::set_volume(int32_t p_volume)
   d->volume = p_volume;
   d->update_volume();
   Q_EMIT d->invoke_signal("volume_changed", Q_ARG(int32_t, d->volume));
+}
+
+void DRAudioEngine::set_pitch(float p_pitch)
+{
+  if (d->pitch == p_pitch)
+    return;
+  d->pitch = p_pitch;
+  d->update_pitch();
+  Q_EMIT d->invoke_signal("pitch_changed", Q_ARG(float, d->pitch));
+}
+
+void DRAudioEngine::set_speed(float p_speed)
+{
+  if (d->speed == p_speed)
+    return;
+  d->speed = p_speed;
+  d->update_speed();
+  Q_EMIT d->invoke_signal("speed_changed", Q_ARG(float, d->speed));
 }
 
 void DRAudioEngine::set_options(DRAudio::Options p_options)

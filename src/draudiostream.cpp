@@ -20,6 +20,7 @@ public:
   ma_decoder decoder;
   ma_sound sound;
   ma_node *reverb_node = nullptr;
+  ma_node *pitch_tempo_node = nullptr;
   bool decoder_ready = false;
   bool sound_ready = false;
   NetworkStream *network = nullptr;
@@ -58,6 +59,11 @@ DRAudioStream::DRAudioStream(DRAudio::Family p_family)
   m_fade_timer->setSingleShot(true);
   connect(m_fade_timer, &QTimer::timeout, this, &DRAudioStream::handle_fade_finished);
 
+  m_drain_timer = new QTimer(this);
+  m_drain_timer->setSingleShot(false);
+  m_drain_timer->setInterval(25);
+  connect(m_drain_timer, &QTimer::timeout, this, &DRAudioStream::check_drain);
+
   connect(m_engine, &DRAudioEngine::current_device_changed, this, &DRAudioStream::update_device);
 }
 
@@ -82,6 +88,11 @@ void DRAudioStream::release_sound()
   {
     audio_backend::reverb_node_uninit(d->reverb_node);
     d->reverb_node = nullptr;
+  }
+  if (d->pitch_tempo_node != nullptr)
+  {
+    audio_backend::soundtouch_node_uninit(d->pitch_tempo_node);
+    d->pitch_tempo_node = nullptr;
   }
   if (d->decoder_ready)
   {
@@ -160,6 +171,7 @@ void DRAudioStream::playSynced(const DRAudioStream *reference)
 
 void DRAudioStream::stop()
 {
+  m_drain_timer->stop();
   if (!ensure_init())
     return;
   ma_sound_stop(&d->sound);
@@ -170,6 +182,12 @@ void DRAudioStream::handle_end()
 {
   if (!m_repeatable)
   {
+    if (d->pitch_tempo_node != nullptr && !audio_backend::soundtouch_node_is_drained(d->pitch_tempo_node))
+    {
+      m_drain_timer->start();
+      return;
+    }
+    m_drain_timer->stop();
     Q_EMIT finished();
   }
   else
@@ -222,11 +240,109 @@ void DRAudioStream::set_speed(float speed)
   apply_rate();
 }
 
+void DRAudioStream::set_family_pitch(float pitch)
+{
+  m_family_pitch = pitch;
+  if (!ensure_init())
+    return;
+  apply_rate();
+}
+
+void DRAudioStream::refresh_rate_mode()
+{
+  if (!ensure_init())
+    return;
+  rewire();
+}
+
+void DRAudioStream::set_family_speed(float speed)
+{
+  m_family_speed = speed;
+  if (!ensure_init())
+    return;
+  apply_rate();
+}
+
 void DRAudioStream::apply_rate()
 {
   if (!d->sound_ready)
     return;
-  ma_sound_set_pitch(&d->sound, semitones_to_ratio(m_pitch) * percent_to_ratio(m_speed));
+
+  const float l_pitch = DRAudioEngine::get_pitch() + m_family_pitch + m_pitch;
+  const float l_speed = DRAudioEngine::get_speed() + m_family_speed + m_speed;
+
+  if (DRAudioEngine::is_option(DRAudio::OEngineIndependentPitchTempo))
+  {
+    if (d->pitch_tempo_node != nullptr)
+    {
+      audio_backend::soundtouch_node_set_pitch(d->pitch_tempo_node, l_pitch);
+      audio_backend::soundtouch_node_set_tempo(d->pitch_tempo_node, percent_to_ratio(l_speed));
+    }
+    ma_sound_set_pitch(&d->sound, 1.0f);
+  }
+  else
+  {
+    ma_sound_set_pitch(&d->sound, semitones_to_ratio(l_pitch) * percent_to_ratio(l_speed));
+  }
+}
+
+void DRAudioStream::rewire()
+{
+  if (!d->sound_ready)
+    return;
+
+  ma_engine *l_engine = audio_backend::engine();
+  if (l_engine == nullptr)
+    return;
+
+  ma_node_graph *l_graph = ma_engine_get_node_graph(l_engine);
+  ma_node *l_endpoint = ma_node_graph_get_endpoint(l_graph);
+  const bool l_independent = DRAudioEngine::is_option(DRAudio::OEngineIndependentPitchTempo);
+
+  if (l_independent && d->pitch_tempo_node == nullptr)
+  {
+    const ma_uint32 l_channels = ma_engine_get_channels(l_engine);
+    const ma_uint32 l_sample_rate = ma_engine_get_sample_rate(l_engine);
+    if (audio_backend::soundtouch_node_init(l_graph, l_channels, l_sample_rate, &d->pitch_tempo_node) != MA_SUCCESS)
+    {
+      d->pitch_tempo_node = nullptr;
+    }
+  }
+  else if (!l_independent && d->pitch_tempo_node != nullptr)
+  {
+    audio_backend::soundtouch_node_uninit(d->pitch_tempo_node);
+    d->pitch_tempo_node = nullptr;
+  }
+
+  if (m_reverb && d->reverb_node == nullptr)
+  {
+    const ma_uint32 l_channels = ma_engine_get_channels(l_engine);
+    const ma_uint32 l_sample_rate = ma_engine_get_sample_rate(l_engine);
+    if (audio_backend::reverb_node_init(l_graph, l_channels, l_sample_rate, &d->reverb_node) != MA_SUCCESS)
+    {
+      d->reverb_node = nullptr;
+    }
+  }
+  else if (!m_reverb && d->reverb_node != nullptr)
+  {
+    audio_backend::reverb_node_uninit(d->reverb_node);
+    d->reverb_node = nullptr;
+  }
+
+  ma_node *l_prev = reinterpret_cast<ma_node *>(&d->sound);
+  if (l_independent && d->pitch_tempo_node != nullptr)
+  {
+    ma_node_attach_output_bus(l_prev, 0, d->pitch_tempo_node, 0);
+    l_prev = d->pitch_tempo_node;
+  }
+  if (m_reverb && d->reverb_node != nullptr)
+  {
+    ma_node_attach_output_bus(l_prev, 0, d->reverb_node, 0);
+    l_prev = d->reverb_node;
+  }
+  ma_node_attach_output_bus(l_prev, 0, l_endpoint, 0);
+
+  apply_rate();
 }
 
 void DRAudioStream::set_volume(float p_volume)
@@ -370,9 +486,8 @@ bool DRAudioStream::ensure_init()
 
   m_init_state = InitFinished;
   init_loop();
-  toggle_reverb(m_reverb);
+  rewire();
   update_volume();
-  apply_rate();
   return true;
 }
 
@@ -417,39 +532,7 @@ void DRAudioStream::toggle_reverb(bool reverb)
   m_reverb = reverb;
   if (!d->sound_ready)
     return;
-
-  ma_engine *l_engine = audio_backend::engine();
-  if (l_engine == nullptr)
-    return;
-
-  ma_node_graph *l_graph = ma_engine_get_node_graph(l_engine);
-
-  if (reverb)
-  {
-    if (d->reverb_node != nullptr)
-      return;
-
-    const ma_uint32 l_channels = ma_engine_get_channels(l_engine);
-    const ma_uint32 l_sample_rate = ma_engine_get_sample_rate(l_engine);
-
-    if (audio_backend::reverb_node_init(l_graph, l_channels, l_sample_rate, &d->reverb_node) != MA_SUCCESS)
-    {
-      d->reverb_node = nullptr;
-      return;
-    }
-
-    ma_node_attach_output_bus(d->reverb_node, 0, ma_node_graph_get_endpoint(l_graph), 0);
-    ma_node_attach_output_bus(&d->sound, 0, d->reverb_node, 0);
-  }
-  else
-  {
-    if (d->reverb_node == nullptr)
-      return;
-
-    ma_node_attach_output_bus(&d->sound, 0, ma_node_graph_get_endpoint(l_graph), 0);
-    audio_backend::reverb_node_uninit(d->reverb_node);
-    d->reverb_node = nullptr;
-  }
+  rewire();
 }
 
 void DRAudioStream::update_device(DRAudioDevice p_device)
@@ -500,4 +583,14 @@ void DRAudioStream::update_pitch()
 void DRAudioStream::update_speed()
 {
   apply_rate();
+}
+
+void DRAudioStream::check_drain()
+{
+  if (d->pitch_tempo_node != nullptr && !audio_backend::soundtouch_node_is_drained(d->pitch_tempo_node))
+  {
+    return;
+  }
+  m_drain_timer->stop();
+  Q_EMIT finished();
 }

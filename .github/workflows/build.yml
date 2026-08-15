@@ -57,9 +57,10 @@ jobs:
             ./3rd/lua
             ./3rd/stb_image_resize2.h
             ./3rd/miniaudio
+            ./3rd/soundtouch
             ./bin/discord-rpc.dll
             ./bin/lua54.dll
-          key: ${{ runner.os }}-3rd-v3
+          key: ${{ runner.os }}-3rd-v4
 
       - name: Install Windows Discord RPC
         if: steps.cache-3rd.outputs.cache-hit != 'true'
@@ -114,6 +115,13 @@ jobs:
           curl -L $BASE/extras/decoders/libopus/miniaudio_libopus.h -o ./3rd/miniaudio/extras/decoders/libopus/miniaudio_libopus.h
           curl -L $BASE/extras/decoders/libopus/miniaudio_libopus.c -o ./3rd/miniaudio/extras/decoders/libopus/miniaudio_libopus.c
 
+      - name: Install SoundTouch
+        if: steps.cache-3rd.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          git clone --depth 1 --branch 2.3.3 https://codeberg.org/soundtouch/soundtouch.git ./3rd/soundtouch
+          rm -rf ./3rd/soundtouch/.git
+
       - name: Cache QtApng
         id: cache-qtapng
         uses: actions/cache@v5
@@ -166,10 +174,8 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          name: V1.8.5-Test5
+          name: V1.8.5-Test6
           files: DRO-Client-Windows.zip
           prerelease: true
           body: |
-            All pre release features inherited.
-            You can now set custom asset/base paths.
-            Changed the reload button to "change theme" to be more clear and user friendly.
+            Just simply added Soundtouch library AGPLv3 compatible for pitch and tempo capabilities

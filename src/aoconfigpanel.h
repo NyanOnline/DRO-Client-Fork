@@ -78,6 +78,8 @@ private slots:
   void on_audio_device_list_changed(QVector<DRAudioDevice> p_device_list);
 
   void on_volume_value_changed(int p_num);
+  void on_pitch_value_changed(int p_num);
+  void on_tempo_value_changed(int p_num);
 
   void on_length_threshold_value_changed(int p_number);
 
@@ -209,6 +211,23 @@ private:
   QCheckBox *ui_blip_ignore_suppression = nullptr;
   QLabel *ui_blip_value = nullptr;
   QPushButton *ui_reload_audiotracks = nullptr;
+  QSlider *ui_master_pitch = nullptr;
+  QLabel *ui_master_pitch_value = nullptr;
+  QSlider *ui_master_tempo = nullptr;
+  QLabel *ui_master_tempo_value = nullptr;
+  QSlider *ui_effect_pitch = nullptr;
+  QLabel *ui_effect_pitch_value = nullptr;
+  QSlider *ui_effect_tempo = nullptr;
+  QLabel *ui_effect_tempo_value = nullptr;
+  QSlider *ui_music_pitch = nullptr;
+  QLabel *ui_music_pitch_value = nullptr;
+  QSlider *ui_music_tempo = nullptr;
+  QLabel *ui_music_tempo_value = nullptr;
+  QSlider *ui_blip_pitch = nullptr;
+  QLabel *ui_blip_pitch_value = nullptr;
+  QSlider *ui_blip_tempo = nullptr;
+  QLabel *ui_blip_tempo_value = nullptr;
+  QCheckBox *ui_independent_pitch_tempo = nullptr;
 
   // about
   QLabel *ui_about = nullptr;

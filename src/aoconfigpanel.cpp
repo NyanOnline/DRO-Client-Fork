@@ -173,6 +173,23 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_blank_blips = AO_GUI_WIDGET(QCheckBox, "blank_blips");
   ui_punctuation_delay = AO_GUI_WIDGET(QSpinBox, "punctuation_delay");
   ui_reload_audiotracks = AO_GUI_WIDGET(QPushButton, "reload_audiotracks");
+  ui_master_pitch = AO_GUI_WIDGET(QSlider, "master_pitch");
+  ui_master_pitch_value = AO_GUI_WIDGET(QLabel, "master_pitch_value");
+  ui_master_tempo = AO_GUI_WIDGET(QSlider, "master_tempo");
+  ui_master_tempo_value = AO_GUI_WIDGET(QLabel, "master_tempo_value");
+  ui_effect_pitch = AO_GUI_WIDGET(QSlider, "effect_pitch");
+  ui_effect_pitch_value = AO_GUI_WIDGET(QLabel, "effect_pitch_value");
+  ui_effect_tempo = AO_GUI_WIDGET(QSlider, "effect_tempo");
+  ui_effect_tempo_value = AO_GUI_WIDGET(QLabel, "effect_tempo_value");
+  ui_music_pitch = AO_GUI_WIDGET(QSlider, "music_pitch");
+  ui_music_pitch_value = AO_GUI_WIDGET(QLabel, "music_pitch_value");
+  ui_music_tempo = AO_GUI_WIDGET(QSlider, "music_tempo");
+  ui_music_tempo_value = AO_GUI_WIDGET(QLabel, "music_tempo_value");
+  ui_blip_pitch = AO_GUI_WIDGET(QSlider, "blip_pitch");
+  ui_blip_pitch_value = AO_GUI_WIDGET(QLabel, "blip_pitch_value");
+  ui_blip_tempo = AO_GUI_WIDGET(QSlider, "blip_tempo");
+  ui_blip_tempo_value = AO_GUI_WIDGET(QLabel, "blip_tempo_value");
+  ui_independent_pitch_tempo = AO_GUI_WIDGET(QCheckBox, "independent_pitch_tempo");
   ui_theme_resize = AO_GUI_WIDGET(QDoubleSpinBox, "themeResizeSpinbox");
   ui_font_resize = AO_GUI_WIDGET(QDoubleSpinBox, "font_resize");
   ui_fade_duration = AO_GUI_WIDGET(QSpinBox, "FadeDurationBox");
@@ -358,6 +375,35 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   connect(ui_punctuation_delay, &QSpinBox::valueChanged, m_config, &AOConfig::set_punctuation_delay);
   connect(ui_blank_blips, &QAbstractButton::toggled, m_config, &AOConfig::set_blank_blips);
 
+  connect(m_config, &AOConfig::master_pitch_changed, ui_master_pitch, &QSlider::setValue);
+  connect(m_config, &AOConfig::master_speed_changed, ui_master_tempo, &QSlider::setValue);
+  connect(m_config, &AOConfig::effect_pitch_changed, ui_effect_pitch, &QSlider::setValue);
+  connect(m_config, &AOConfig::effect_speed_changed, ui_effect_tempo, &QSlider::setValue);
+  connect(m_config, &AOConfig::music_pitch_changed, ui_music_pitch, &QSlider::setValue);
+  connect(m_config, &AOConfig::music_speed_changed, ui_music_tempo, &QSlider::setValue);
+  connect(m_config, &AOConfig::blip_pitch_changed, ui_blip_pitch, &QSlider::setValue);
+  connect(m_config, &AOConfig::blip_speed_changed, ui_blip_tempo, &QSlider::setValue);
+  connect(m_config, &AOConfig::independent_pitch_tempo_changed, ui_independent_pitch_tempo, &QAbstractButton::setChecked);
+
+  connect(ui_master_pitch, &QSlider::valueChanged, m_config, &AOConfig::set_master_pitch);
+  connect(ui_master_tempo, &QSlider::valueChanged, m_config, &AOConfig::set_master_speed);
+  connect(ui_effect_pitch, &QSlider::valueChanged, m_config, &AOConfig::set_effect_pitch);
+  connect(ui_effect_tempo, &QSlider::valueChanged, m_config, &AOConfig::set_effect_speed);
+  connect(ui_music_pitch, &QSlider::valueChanged, m_config, &AOConfig::set_music_pitch);
+  connect(ui_music_tempo, &QSlider::valueChanged, m_config, &AOConfig::set_music_speed);
+  connect(ui_blip_pitch, &QSlider::valueChanged, m_config, &AOConfig::set_blip_pitch);
+  connect(ui_blip_tempo, &QSlider::valueChanged, m_config, &AOConfig::set_blip_speed);
+  connect(ui_independent_pitch_tempo, &QAbstractButton::toggled, m_config, &AOConfig::set_independent_pitch_tempo);
+
+  connect(ui_master_pitch, &QSlider::valueChanged, this, &AOConfigPanel::on_pitch_value_changed);
+  connect(ui_effect_pitch, &QSlider::valueChanged, this, &AOConfigPanel::on_pitch_value_changed);
+  connect(ui_music_pitch, &QSlider::valueChanged, this, &AOConfigPanel::on_pitch_value_changed);
+  connect(ui_blip_pitch, &QSlider::valueChanged, this, &AOConfigPanel::on_pitch_value_changed);
+  connect(ui_master_tempo, &QSlider::valueChanged, this, &AOConfigPanel::on_tempo_value_changed);
+  connect(ui_effect_tempo, &QSlider::valueChanged, this, &AOConfigPanel::on_tempo_value_changed);
+  connect(ui_music_tempo, &QSlider::valueChanged, this, &AOConfigPanel::on_tempo_value_changed);
+  connect(ui_blip_tempo, &QSlider::valueChanged, this, &AOConfigPanel::on_tempo_value_changed);
+
   connect(ui_theme_resize, &QDoubleSpinBox::valueChanged, m_config, &AOConfig::setThemeResize);
   connect(ui_font_resize, &QDoubleSpinBox::valueChanged, m_config, &AOConfig::setFontResize);
   connect(ui_fade_duration, &QSpinBox::valueChanged, m_config, &AOConfig::setFadeDuration);
@@ -467,6 +513,23 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_blip_rate->setValue(m_config->blip_rate());
   ui_punctuation_delay->setValue(m_config->punctuation_delay());
   ui_blank_blips->setChecked(m_config->blank_blips_enabled());
+  ui_master_pitch->setValue(m_config->master_pitch());
+  ui_master_pitch_value->setText(QString::number(m_config->master_pitch()));
+  ui_master_tempo->setValue(m_config->master_speed());
+  ui_master_tempo_value->setText(QString::number(m_config->master_speed()) + "%");
+  ui_effect_pitch->setValue(m_config->effect_pitch());
+  ui_effect_pitch_value->setText(QString::number(m_config->effect_pitch()));
+  ui_effect_tempo->setValue(m_config->effect_speed());
+  ui_effect_tempo_value->setText(QString::number(m_config->effect_speed()) + "%");
+  ui_music_pitch->setValue(m_config->music_pitch());
+  ui_music_pitch_value->setText(QString::number(m_config->music_pitch()));
+  ui_music_tempo->setValue(m_config->music_speed());
+  ui_music_tempo_value->setText(QString::number(m_config->music_speed()) + "%");
+  ui_blip_pitch->setValue(m_config->blip_pitch());
+  ui_blip_pitch_value->setText(QString::number(m_config->blip_pitch()));
+  ui_blip_tempo->setValue(m_config->blip_speed());
+  ui_blip_tempo_value->setText(QString::number(m_config->blip_speed()) + "%");
+  ui_independent_pitch_tempo->setChecked(m_config->independent_pitch_tempo());
 
   ui_theme_resize->setValue(m_config->theme_resize());
   ui_font_resize->setValue(m_config->font_resize());
@@ -846,6 +909,32 @@ void AOConfigPanel::on_volume_value_changed(int p_num)
     QLabel* label = volumeSliderMap.value(slider);
     label->setText(QString::number(p_num) + "%");
   }
+}
+
+void AOConfigPanel::on_pitch_value_changed(int p_num)
+{
+  QSlider *slider = qobject_cast<QSlider *>(sender());
+  if (slider == ui_master_pitch)
+    ui_master_pitch_value->setText(QString::number(p_num));
+  else if (slider == ui_effect_pitch)
+    ui_effect_pitch_value->setText(QString::number(p_num));
+  else if (slider == ui_music_pitch)
+    ui_music_pitch_value->setText(QString::number(p_num));
+  else if (slider == ui_blip_pitch)
+    ui_blip_pitch_value->setText(QString::number(p_num));
+}
+
+void AOConfigPanel::on_tempo_value_changed(int p_num)
+{
+  QSlider *slider = qobject_cast<QSlider *>(sender());
+  if (slider == ui_master_tempo)
+    ui_master_tempo_value->setText(QString::number(p_num) + "%");
+  else if (slider == ui_effect_tempo)
+    ui_effect_tempo_value->setText(QString::number(p_num) + "%");
+  else if (slider == ui_music_tempo)
+    ui_music_tempo_value->setText(QString::number(p_num) + "%");
+  else if (slider == ui_blip_tempo)
+    ui_blip_tempo_value->setText(QString::number(p_num) + "%");
 }
 
 void AOConfigPanel::on_length_threshold_value_changed(int p_number)

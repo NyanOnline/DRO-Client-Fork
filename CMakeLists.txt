@@ -207,6 +207,20 @@ set(SOURCES
   src/dro/system/audio/miniaudio_impl.cpp
   3rd/miniaudio/extras/decoders/libvorbis/miniaudio_libvorbis.c
   3rd/miniaudio/extras/decoders/libopus/miniaudio_libopus.c
+  3rd/soundtouch/source/SoundTouch/AAFilter.cpp
+  3rd/soundtouch/source/SoundTouch/BPMDetect.cpp
+  3rd/soundtouch/source/SoundTouch/cpu_detect_x86.cpp
+  3rd/soundtouch/source/SoundTouch/FIFOSampleBuffer.cpp
+  3rd/soundtouch/source/SoundTouch/FIRFilter.cpp
+  3rd/soundtouch/source/SoundTouch/InterpolateCubic.cpp
+  3rd/soundtouch/source/SoundTouch/InterpolateLinear.cpp
+  3rd/soundtouch/source/SoundTouch/InterpolateShannon.cpp
+  3rd/soundtouch/source/SoundTouch/mmx_optimized.cpp
+  3rd/soundtouch/source/SoundTouch/PeakFinder.cpp
+  3rd/soundtouch/source/SoundTouch/RateTransposer.cpp
+  3rd/soundtouch/source/SoundTouch/SoundTouch.cpp
+  3rd/soundtouch/source/SoundTouch/sse_optimized.cpp
+  3rd/soundtouch/source/SoundTouch/TDStretch.cpp
   src/dro/system/audio/network_stream.cpp
   src/dro/system/audio/blip_player.cpp
   src/dro/system/audio/music_player.cpp
@@ -340,6 +354,7 @@ target_include_directories(dro-client PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/lua
+  ${CMAKE_CURRENT_SOURCE_DIR}/3rd/soundtouch/include
   ${OPUSFILE_INCLUDE_DIR}
   ${OPUSFILE_INCLUDE_DIR}/opus
   ${VORBIS_INCLUDE_DIR}

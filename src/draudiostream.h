@@ -49,6 +49,8 @@ public slots:
 
   void set_pitch(float pitch);
   void set_speed(float speed);
+  void set_family_pitch(float pitch);
+  void set_family_speed(float speed);
 
   void toggle_reverb(bool reverb);
   void set_volume(float volume);
@@ -69,6 +71,7 @@ public slots:
   void play();
   void playSynced(const DRAudioStream *reference);
   void stop();
+  void refresh_rate_mode();
 
 signals:
   void file_name_changed(QString file);
@@ -104,10 +107,13 @@ private:
   float m_volume = 0.0f;
   float m_pitch = 0.0f;
   float m_speed = 0.0f;
+  float m_family_pitch = 0.0f;
+  float m_family_speed = 0.0f;
   bool m_repeatable = false;
   quint64 m_loop_start = 0;
   quint64 m_loop_end = 0;
   QTimer *m_fade_timer = nullptr;
+  QTimer *m_drain_timer = nullptr;
   std::unique_ptr<DRAudioStreamPrivate> d;
 
   bool ensure_init();
@@ -115,6 +121,7 @@ private:
   void update_device(DRAudioDevice);
   void init_loop();
   void apply_rate();
+  void rewire();
   void release_sound();
 
 private slots:
@@ -122,6 +129,7 @@ private slots:
   void update_pitch();
   void update_speed();
   void handle_fade_finished();
+  void check_drain();
 
 signals:
   void device_error(QPrivateSignal);
