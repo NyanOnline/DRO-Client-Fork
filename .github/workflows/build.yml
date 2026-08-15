@@ -90,7 +90,7 @@ jobs:
         if: steps.cache-3rd.outputs.cache-hit != 'true'
         shell: bash
         run: |
-          curl https://master.dl.sourceforge.net/project/luabinaries/5.4.2/Windows%20Libraries/Dynamic/lua-5.4.2_Win64_dll16_lib.zip?viasf=1 -o lua.zip
+          curl -L https://master.dl.sourceforge.net/project/luabinaries/5.4.2/Windows%20Libraries/Dynamic/lua-5.4.2_Win64_dll16_lib.zip?viasf=1 -o lua.zip
           unzip -d lua -o lua.zip
           cp ./lua/lua54.dll ./bin/
           cp ./lua/lua54.lib ./3rd/lua
