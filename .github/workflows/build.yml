@@ -175,8 +175,9 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          name: V1.8.5-Test6
+          name: V1.8.5-Test7
           files: DRO-Client-Windows.zip
           prerelease: true
           body: |
-            Just simply added Soundtouch library AGPLv3 compatible for pitch and tempo capabilities
+            streaming music by URL froze and failed to play because the client waited for the network reply on the UI thread, which Windows kept blocked from delivering the download, and the fix lets that wait run the event loop so the data actually arrives.
+            inherits all pre release patches

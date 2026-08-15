@@ -1,9 +1,12 @@
 #include "network_stream.h"
 
 #include <QDeadlineTimer>
+#include <QEventLoop>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QThread>
+#include <QTimer>
 
 namespace
 {
@@ -64,12 +67,46 @@ void NetworkStream::handle_finished()
   m_wait.wakeAll();
 }
 
-bool NetworkStream::wait_for_header()
+bool NetworkStream::wait_for_buffered(qint64 p_needed, int p_timeout_ms)
 {
-  QMutexLocker l_locker(&m_mutex);
-  QDeadlineTimer l_deadline(HEADER_WAIT_MS);
+  if (QThread::currentThread() == thread())
+  {
+    QDeadlineTimer l_deadline(p_timeout_ms);
 
-  while (!m_finished && m_buffer.size() < HEADER_BYTES)
+    while (true)
+    {
+      {
+        QMutexLocker l_locker(&m_mutex);
+        if (m_finished || m_buffer.size() >= p_needed)
+        {
+          break;
+        }
+      }
+
+      if (l_deadline.hasExpired())
+      {
+        break;
+      }
+
+      QEventLoop l_loop;
+      QTimer l_timer;
+      l_timer.setSingleShot(true);
+      l_timer.setInterval(qMax(0, int(l_deadline.remainingTime())));
+      QObject::connect(&l_timer, &QTimer::timeout, &l_loop, &QEventLoop::quit);
+      QObject::connect(m_reply, &QIODevice::readyRead, &l_loop, &QEventLoop::quit);
+      QObject::connect(m_reply, &QNetworkReply::finished, &l_loop, &QEventLoop::quit);
+      l_timer.start();
+      l_loop.exec();
+    }
+
+    QMutexLocker l_locker(&m_mutex);
+    return !m_failed && !m_buffer.isEmpty();
+  }
+
+  QMutexLocker l_locker(&m_mutex);
+  QDeadlineTimer l_deadline(p_timeout_ms);
+
+  while (!m_finished && m_buffer.size() < p_needed)
   {
     if (!m_wait.wait(&m_mutex, l_deadline))
     {
@@ -80,18 +117,22 @@ bool NetworkStream::wait_for_header()
   return !m_failed && !m_buffer.isEmpty();
 }
 
+bool NetworkStream::wait_for_header()
+{
+  return wait_for_buffered(HEADER_BYTES, HEADER_WAIT_MS);
+}
+
 ma_result NetworkStream::read(void *p_buffer, size_t p_bytes, size_t *r_read)
 {
-  QMutexLocker l_locker(&m_mutex);
-
-  QDeadlineTimer l_deadline(READ_WAIT_MS);
-  while (!m_finished && (m_cursor + qint64(p_bytes)) > m_buffer.size())
+  qint64 l_needed = 0;
   {
-    if (!m_wait.wait(&m_mutex, l_deadline))
-    {
-      break;
-    }
+    QMutexLocker l_locker(&m_mutex);
+    l_needed = m_cursor + qint64(p_bytes);
   }
+
+  wait_for_buffered(l_needed, READ_WAIT_MS);
+
+  QMutexLocker l_locker(&m_mutex);
 
   const qint64 l_available = m_buffer.size() - m_cursor;
   if (l_available <= 0)
@@ -116,45 +157,39 @@ ma_result NetworkStream::read(void *p_buffer, size_t p_bytes, size_t *r_read)
 
 ma_result NetworkStream::seek(ma_int64 p_offset, ma_seek_origin p_origin)
 {
-  QMutexLocker l_locker(&m_mutex);
-
   qint64 l_target = 0;
-  if (p_origin == ma_seek_origin_start)
   {
-    l_target = p_offset;
-  }
-  else if (p_origin == ma_seek_origin_current)
-  {
-    l_target = m_cursor + p_offset;
-  }
-  else
-  {
-    if (!m_finished)
+    QMutexLocker l_locker(&m_mutex);
+
+    if (p_origin == ma_seek_origin_start)
     {
-      return MA_INVALID_OPERATION;
+      l_target = p_offset;
     }
-    l_target = m_buffer.size() + p_offset;
+    else if (p_origin == ma_seek_origin_current)
+    {
+      l_target = m_cursor + p_offset;
+    }
+    else
+    {
+      if (!m_finished)
+      {
+        return MA_INVALID_OPERATION;
+      }
+      l_target = m_buffer.size() + p_offset;
+    }
+
+    if (l_target < 0)
+    {
+      return MA_INVALID_ARGS;
+    }
   }
 
-  if (l_target < 0)
-  {
-    return MA_INVALID_ARGS;
-  }
+  wait_for_buffered(l_target, READ_WAIT_MS);
 
+  QMutexLocker l_locker(&m_mutex);
   if (l_target > m_buffer.size())
   {
-    QDeadlineTimer l_deadline(READ_WAIT_MS);
-    while (!m_finished && l_target > m_buffer.size())
-    {
-      if (!m_wait.wait(&m_mutex, l_deadline))
-      {
-        break;
-      }
-    }
-    if (l_target > m_buffer.size())
-    {
-      return MA_BAD_SEEK;
-    }
+    return MA_BAD_SEEK;
   }
 
   m_cursor = l_target;
