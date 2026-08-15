@@ -80,6 +80,8 @@ private slots:
   void on_volume_value_changed(int p_num);
   void on_pitch_value_changed(int p_num);
   void on_tempo_value_changed(int p_num);
+  void on_reset_pitch_tempo_clicked();
++++++++ REPLACE</parameter>
 
   void on_length_threshold_value_changed(int p_number);
 
@@ -228,6 +230,7 @@ private:
   QSlider *ui_blip_tempo = nullptr;
   QLabel *ui_blip_tempo_value = nullptr;
   QCheckBox *ui_independent_pitch_tempo = nullptr;
+  QPushButton *ui_reset_pitch_tempo = nullptr;
 
   // about
   QLabel *ui_about = nullptr;

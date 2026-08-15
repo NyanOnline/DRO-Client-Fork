@@ -20,7 +20,7 @@ public:
   AOMusicPlayer(QObject *p_parent = nullptr);
 
 public slots:
-  void play(QString p_song, BGMPlayback playbackType = BGMPlayback_Standard);
+  void play(QString p_song, BGMPlayback playbackType = BGMPlayback_Standard, float pitch = 0.0f, float speed = 0.0f);
   void setSpeed(float speed);
   void toggleReverb(bool reverb);
   void setPitch(float speed);

@@ -88,6 +88,10 @@ QString build_about_message()
                         "https://github.com/AttorneyOnline/AO2-Client</a>"
                         "<p>Running on Qt version %2 with the miniaudio %3 audio engine.<br>"
                         "APNG plugin loaded: %4"
+                        "<p><b>Libraries:</b><br>"
+                        "Qt 6.8.3, miniaudio 0.11.25, SoundTouch 2.3.3, libogg, libvorbis, "
+                        "libvorbisfile, opus, opusfile, Lua 5.4.2, sol2 3.3.0, discord-rpc 3.4.0, "
+                        "stb_image_resize2, QtApng plugin"
                         "<p>Built on %5 %6<br>")
                     .arg(get_version_string())
                     .arg(QLatin1String(QT_VERSION_STR))

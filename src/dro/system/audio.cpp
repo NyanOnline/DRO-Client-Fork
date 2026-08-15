@@ -124,9 +124,9 @@ namespace audio
       s_musicPlayer->stop();
     }
 
-    void PlayMode(const std::string &name, BGMPlayback playbackType)
+    void PlayMode(const std::string &name, BGMPlayback playbackType, float pitch, float speed)
     {
-      s_musicPlayer->play(QString::fromStdString(name), playbackType);
+      s_musicPlayer->play(QString::fromStdString(name), playbackType, pitch, speed);
     }
 
   }

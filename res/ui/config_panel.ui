@@ -994,14 +994,21 @@
                </property>
               </widget>
              </item>
-             <item row="5" column="0" colspan="5">
-              <widget class="QCheckBox" name="independent_pitch_tempo">
-               <property name="text">
-                <string>Independent pitch and tempo (SoundTouch)</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+              <item row="5" column="0" colspan="5">
+               <widget class="QCheckBox" name="independent_pitch_tempo">
+                <property name="text">
+                 <string>Independent pitch and tempo (SoundTouch)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0" colspan="5">
+               <widget class="QPushButton" name="reset_pitch_tempo">
+                <property name="text">
+                 <string>Reset all pitch and tempo</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
            </widget>
           </item>
           <item row="2" column="1">

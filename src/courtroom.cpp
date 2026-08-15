@@ -2889,15 +2889,18 @@ void Courtroom::handle_song(QStringList p_contents)
 
   if(!LuaBridge::SongChangeEvent(l_song.toStdString(), l_song_meta.title().toStdString(), l_showname.toStdString()))
   {
+    const float l_pitch = p_contents.size() > 5 ? p_contents.at(5).toFloat() : 0.0f;
+    const float l_tempo = p_contents.size() > 6 ? p_contents.at(6).toFloat() : 0.0f;
+
     if(p_contents.length() > 4)
     {
       if (l_song.isEmpty())
       {
-        audio::bgm::PlayMode("", BGMPlayback(p_contents.at(4).toInt()));
+        audio::bgm::PlayMode("", BGMPlayback(p_contents.at(4).toInt()), l_pitch, l_tempo);
       }
       else
       {
-        audio::bgm::PlayMode(l_song.toStdString(), BGMPlayback(p_contents.at(4).toInt()));
+        audio::bgm::PlayMode(l_song.toStdString(), BGMPlayback(p_contents.at(4).toInt()), l_pitch, l_tempo);
       }
     }
 

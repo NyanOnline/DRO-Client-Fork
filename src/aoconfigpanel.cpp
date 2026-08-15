@@ -190,6 +190,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_blip_tempo = AO_GUI_WIDGET(QSlider, "blip_tempo");
   ui_blip_tempo_value = AO_GUI_WIDGET(QLabel, "blip_tempo_value");
   ui_independent_pitch_tempo = AO_GUI_WIDGET(QCheckBox, "independent_pitch_tempo");
+  ui_reset_pitch_tempo = AO_GUI_WIDGET(QPushButton, "reset_pitch_tempo");
   ui_theme_resize = AO_GUI_WIDGET(QDoubleSpinBox, "themeResizeSpinbox");
   ui_font_resize = AO_GUI_WIDGET(QDoubleSpinBox, "font_resize");
   ui_fade_duration = AO_GUI_WIDGET(QSpinBox, "FadeDurationBox");
@@ -394,6 +395,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   connect(ui_blip_pitch, &QSlider::valueChanged, m_config, &AOConfig::set_blip_pitch);
   connect(ui_blip_tempo, &QSlider::valueChanged, m_config, &AOConfig::set_blip_speed);
   connect(ui_independent_pitch_tempo, &QAbstractButton::toggled, m_config, &AOConfig::set_independent_pitch_tempo);
+  connect(ui_reset_pitch_tempo, &QPushButton::clicked, this, &AOConfigPanel::on_reset_pitch_tempo_clicked);
 
   connect(ui_master_pitch, &QSlider::valueChanged, this, &AOConfigPanel::on_pitch_value_changed);
   connect(ui_effect_pitch, &QSlider::valueChanged, this, &AOConfigPanel::on_pitch_value_changed);
@@ -935,6 +937,18 @@ void AOConfigPanel::on_tempo_value_changed(int p_num)
     ui_music_tempo_value->setText(QString::number(p_num) + "%");
   else if (slider == ui_blip_tempo)
     ui_blip_tempo_value->setText(QString::number(p_num) + "%");
+}
+
+void AOConfigPanel::on_reset_pitch_tempo_clicked()
+{
+  m_config->set_master_pitch(0);
+  m_config->set_master_speed(0);
+  m_config->set_effect_pitch(0);
+  m_config->set_effect_speed(0);
+  m_config->set_music_pitch(0);
+  m_config->set_music_speed(0);
+  m_config->set_blip_pitch(0);
+  m_config->set_blip_speed(0);
 }
 
 void AOConfigPanel::on_length_threshold_value_changed(int p_number)
