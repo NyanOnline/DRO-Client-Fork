@@ -1,7 +1,7 @@
 #ifndef EMOTION_SELECTOR_H
 #define EMOTION_SELECTOR_H
 
-#include <AOApplication.h>
+#include <aoapplication.h>
 #include <QObject>
 #include <QWidget>
 #include "dro/interface/widgets/rp_widget.h"

@@ -1,6 +1,6 @@
 #include "viewport_overlay.h"
 #include "drtheme.h"
-#include <AOApplication.h>
+#include <aoapplication.h>
 #include <QMenu>
 #include <dro/interface/widgets/image_display.h>
 #include <modules/theme/thememanager.h>

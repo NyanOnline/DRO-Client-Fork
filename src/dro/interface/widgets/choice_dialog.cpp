@@ -1,5 +1,5 @@
 #include "choice_dialog.h"
-#include "AOApplication.h"
+#include "aoapplication.h"
 #include "commondefs.h"
 #include "drtheme.h"
 #include "dro/fs/fs_reading.h"

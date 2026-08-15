@@ -1,6 +1,6 @@
 #include "pair_manager.h"
 #include "commondefs.h"
-#include <AOApplication.h>
+#include <aoapplication.h>
 #include <modules/theme/thememanager.h>
 
 PairManager PairManager::s_Instance;
