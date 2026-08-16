@@ -509,25 +509,33 @@ void DRAudioStream::init_loop()
     return;
   }
 
-  ma_uint64 l_length = 0;
-  ma_data_source_get_length_in_pcm_frames(l_source, &l_length);
-
   ma_uint64 l_begin = m_loop_start;
   ma_uint64 l_end = m_loop_end;
 
-  if (l_length > 0)
+  if (m_url.isEmpty())
   {
-    if (l_begin >= l_length)
+    ma_uint64 l_length = 0;
+    ma_data_source_get_length_in_pcm_frames(l_source, &l_length);
+
+    if (l_length > 0)
     {
-      l_begin = 0;
+      if (l_begin >= l_length)
+      {
+        l_begin = 0;
+      }
+      if (l_end <= l_begin || l_end > l_length)
+      {
+        l_end = l_length;
+      }
     }
-    if (l_end <= l_begin || l_end > l_length)
+    else
     {
-      l_end = l_length;
+      l_end = ~((ma_uint64)0);
     }
   }
   else
   {
+    l_begin = 0;
     l_end = ~((ma_uint64)0);
   }
 
