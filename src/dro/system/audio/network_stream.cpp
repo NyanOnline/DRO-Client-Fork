@@ -124,13 +124,24 @@ bool NetworkStream::wait_for_header()
 
 ma_result NetworkStream::read(void *p_buffer, size_t p_bytes, size_t *r_read)
 {
-  qint64 l_needed = 0;
+  while (true)
   {
-    QMutexLocker l_locker(&m_mutex);
-    l_needed = m_cursor + qint64(p_bytes);
-  }
+    qint64 l_needed = 0;
+    {
+      QMutexLocker l_locker(&m_mutex);
+      if (m_failed)
+      {
+        return MA_ERROR;
+      }
+      if (m_finished || m_buffer.size() > m_cursor)
+      {
+        break;
+      }
+      l_needed = m_cursor + 1;
+    }
 
-  wait_for_buffered(l_needed, READ_WAIT_MS);
+    wait_for_buffered(l_needed, READ_WAIT_MS);
+  }
 
   QMutexLocker l_locker(&m_mutex);
 
