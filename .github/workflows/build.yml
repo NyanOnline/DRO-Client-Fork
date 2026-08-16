@@ -312,7 +312,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: 6.8.4
+          version: 6.8.3
           target: desktop
           arch: clang_64
           modules: 'qtimageformats qtwebsockets qtmultimedia'
@@ -370,6 +370,13 @@ jobs:
           rm -rf ./3rd/soundtouch/.git
 
 
+      - name: Create AGL stub
+        shell: bash
+        run: |
+          mkdir -p AGLStub/AGL.framework
+          printf 'void agl_stub(void) {}\n' > /tmp/agl_stub.c
+          clang -dynamiclib -o AGLStub/AGL.framework/AGL /tmp/agl_stub.c
+
       - name: Patch sol2 for AppleClang
         shell: bash
         run: |
@@ -396,7 +403,7 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          cmake . -D CMAKE_BUILD_TYPE=Release -D CMAKE_PREFIX_PATH="$QT_ROOT_DIR;$(brew --prefix)"
+          cmake . -D CMAKE_BUILD_TYPE=Release -D CMAKE_PREFIX_PATH="$QT_ROOT_DIR;$(brew --prefix)" -DCMAKE_EXE_LINKER_FLAGS="-F$GITHUB_WORKSPACE/AGLStub"
           cmake --build . --config Release
 
       - name: Deploy macOS
