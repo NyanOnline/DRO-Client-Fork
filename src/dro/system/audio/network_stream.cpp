@@ -215,3 +215,23 @@ ma_result NetworkStream::on_seek(ma_decoder *pDecoder, ma_int64 byteOffset, ma_s
   }
   return l_self->seek(byteOffset, origin);
 }
+
+ma_result NetworkStream::tell(ma_int64 *r_cursor)
+{
+  QMutexLocker l_locker(&m_mutex);
+  if (r_cursor != nullptr)
+  {
+    *r_cursor = m_cursor;
+  }
+  return MA_SUCCESS;
+}
+
+ma_result NetworkStream::on_tell(ma_decoder *pDecoder, ma_int64 *pCursor)
+{
+  NetworkStream *l_self = static_cast<NetworkStream *>(pDecoder->pUserData);
+  if (l_self == nullptr)
+  {
+    return MA_INVALID_ARGS;
+  }
+  return l_self->tell(pCursor);
+}

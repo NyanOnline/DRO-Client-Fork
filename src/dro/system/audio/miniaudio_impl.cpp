@@ -143,6 +143,19 @@ ma_uint32 audio_backend::custom_backend_count()
   return sizeof(g_backends) / sizeof(g_backends[0]);
 }
 
+ma_result audio_backend::decoder_init_with_tell(ma_decoder_read_proc p_on_read, ma_decoder_seek_proc p_on_seek,
+                                                ma_decoder_tell_proc p_on_tell, void *p_user_data,
+                                                const ma_decoder_config *p_config, ma_decoder *p_decoder)
+{
+  ma_decoder_config l_config = ma_decoder_config_init_copy(p_config);
+  ma_result l_result = ma_decoder__preinit(p_on_read, p_on_seek, p_on_tell, p_user_data, &l_config, p_decoder);
+  if (l_result != MA_SUCCESS)
+  {
+    return l_result;
+  }
+  return ma_decoder_init__internal(p_on_read, p_on_seek, p_user_data, &l_config, p_decoder);
+}
+
 ma_result audio_backend::reverb_node_init(ma_node_graph *p_graph, ma_uint32 p_channels, ma_uint32 p_sample_rate,
                                           ma_node **p_node)
 {

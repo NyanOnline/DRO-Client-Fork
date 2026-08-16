@@ -449,7 +449,7 @@ bool DRAudioStream::ensure_init()
       return false;
     }
 
-    l_result = ma_decoder_init(&NetworkStream::on_read, &NetworkStream::on_seek, d->network, &l_config, &d->decoder);
+    l_result = audio_backend::decoder_init_with_tell(&NetworkStream::on_read, &NetworkStream::on_seek, &NetworkStream::on_tell, d->network, &l_config, &d->decoder);
   }
   else if (m_filename.isEmpty())
   {

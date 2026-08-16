@@ -9,6 +9,10 @@ namespace audio_backend
 ma_decoding_backend_vtable **custom_backends();
 ma_uint32 custom_backend_count();
 
+ma_result decoder_init_with_tell(ma_decoder_read_proc p_on_read, ma_decoder_seek_proc p_on_seek,
+                                ma_decoder_tell_proc p_on_tell, void *p_user_data,
+                                const ma_decoder_config *p_config, ma_decoder *p_decoder);
+
 ma_result reverb_node_init(ma_node_graph *p_graph, ma_uint32 p_channels, ma_uint32 p_sample_rate, ma_node **p_node);
 void reverb_node_uninit(ma_node *p_node);
 
