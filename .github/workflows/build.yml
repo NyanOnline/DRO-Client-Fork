@@ -264,7 +264,7 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          cmake . -D CMAKE_BUILD_TYPE=Release -D CMAKE_PREFIX_PATH="$QT_ROOT_DIR"
+          cmake . -D CMAKE_BUILD_TYPE=Release -D CMAKE_PREFIX_PATH="$QT_ROOT_DIR" -DCMAKE_EXE_LINKER_FLAGS=-no-pie
           cmake --build . --config Release
 
       - name: Package Linux
@@ -290,7 +290,7 @@ jobs:
           path: DRO-Client-Linux-x86_64.AppImage
 
   build-macos:
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v6
         with:
