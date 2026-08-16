@@ -167,7 +167,7 @@ QString AOApplication::get_case_sensitive_path(QString p_file)
 
   const QDir l_dir(l_dir_path);
   const auto l_file_list = l_dir.entryList(QDir::Files);
-  const auto l_regex = QRegularExpression(p_file, Qt::CaseInsensitive, QRegularExpression::FixedString);
+  const auto l_regex = QRegularExpression(QRegularExpression::escape(p_file), QRegularExpression::CaseInsensitiveOption);
   for (auto &i_file : l_file_list)
   {
     const QString l_file_path = l_dir.absoluteFilePath(i_file);

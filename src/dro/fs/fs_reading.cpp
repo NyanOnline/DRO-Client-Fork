@@ -1,6 +1,7 @@
 #include "fs_reading.h"
 #include "fs_mounting.h"
 
+#include <QCoreApplication>
 #include <QDir>
 #include <QFileInfo>
 
