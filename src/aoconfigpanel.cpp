@@ -206,6 +206,9 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
 
   // about
   ui_about = AO_GUI_WIDGET(QLabel, "about_label");
+  ui_about->setTextFormat(Qt::RichText);
+  ui_about->setOpenExternalLinks(true);
+  ui_about->setTextInteractionFlags(Qt::TextBrowserInteraction);
 
   // packages
   ui_packages_list = AO_GUI_WIDGET(QListWidget, "packages_list");
