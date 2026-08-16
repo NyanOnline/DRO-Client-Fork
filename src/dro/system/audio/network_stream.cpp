@@ -117,51 +117,6 @@ bool NetworkStream::wait_for_buffered(qint64 p_needed, int p_timeout_ms)
   return !m_failed && !m_buffer.isEmpty();
 }
 
-void NetworkStream::wait_for_finished(int p_timeout_ms)
-{
-  if (QThread::currentThread() == thread())
-  {
-    QDeadlineTimer l_deadline(p_timeout_ms);
-
-    while (true)
-    {
-      {
-        QMutexLocker l_locker(&m_mutex);
-        if (m_finished)
-        {
-          break;
-        }
-      }
-
-      if (l_deadline.hasExpired())
-      {
-        break;
-      }
-
-      QEventLoop l_loop;
-      QTimer l_timer;
-      l_timer.setSingleShot(true);
-      l_timer.setInterval(qMax(0, int(l_deadline.remainingTime())));
-      QObject::connect(&l_timer, &QTimer::timeout, &l_loop, &QEventLoop::quit);
-      QObject::connect(m_reply, &QNetworkReply::finished, &l_loop, &QEventLoop::quit);
-      l_timer.start();
-      l_loop.exec();
-    }
-    return;
-  }
-
-  QMutexLocker l_locker(&m_mutex);
-  QDeadlineTimer l_deadline(p_timeout_ms);
-
-  while (!m_finished)
-  {
-    if (!m_wait.wait(&m_mutex, l_deadline))
-    {
-      break;
-    }
-  }
-}
-
 bool NetworkStream::wait_for_header()
 {
   return wait_for_buffered(HEADER_BYTES, HEADER_WAIT_MS);
@@ -202,11 +157,6 @@ ma_result NetworkStream::read(void *p_buffer, size_t p_bytes, size_t *r_read)
 
 ma_result NetworkStream::seek(ma_int64 p_offset, ma_seek_origin p_origin)
 {
-  if (p_origin == ma_seek_origin_end)
-  {
-    wait_for_finished(READ_WAIT_MS);
-  }
-
   qint64 l_target = 0;
   {
     QMutexLocker l_locker(&m_mutex);
@@ -221,6 +171,10 @@ ma_result NetworkStream::seek(ma_int64 p_offset, ma_seek_origin p_origin)
     }
     else
     {
+      if (!m_finished)
+      {
+        return MA_INVALID_OPERATION;
+      }
       l_target = m_buffer.size() + p_offset;
     }
 

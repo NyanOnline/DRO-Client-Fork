@@ -30,7 +30,6 @@ private slots:
 
 private:
   bool wait_for_buffered(qint64 p_needed, int p_timeout_ms);
-  void wait_for_finished(int p_timeout_ms);
   ma_result read(void *p_buffer, size_t p_bytes, size_t *r_read);
   ma_result seek(ma_int64 p_offset, ma_seek_origin p_origin);
 

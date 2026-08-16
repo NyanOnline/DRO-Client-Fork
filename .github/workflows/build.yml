@@ -464,7 +464,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          name: V1.8.5-Test9
+          name: V1.8.5-Test10
           files: |
             artifacts/DRO-Client-Windows/DRO-Client-Windows.zip
             artifacts/DRO-Client-Linux/DRO-Client-Linux-x86_64.AppImage
