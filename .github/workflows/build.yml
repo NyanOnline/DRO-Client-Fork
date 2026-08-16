@@ -339,7 +339,7 @@ jobs:
         shell: bash
         run: |
           git clone --depth 1 --branch v3.4.0 https://github.com/discord/discord-rpc.git /tmp/discord-rpc
-          cmake -S /tmp/discord-rpc -B /tmp/discord-rpc/build -DBUILD_EXAMPLES=OFF -DCMAKE_BUILD_TYPE=Release
+          cmake -S /tmp/discord-rpc -B /tmp/discord-rpc/build -DBUILD_EXAMPLES=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5
           cmake --build /tmp/discord-rpc/build --config Release
           mkdir -p ./3rd/discord-rpc
           cp /tmp/discord-rpc/build/src/libdiscord-rpc.a ./3rd/discord-rpc/libdiscord-rpc.a
