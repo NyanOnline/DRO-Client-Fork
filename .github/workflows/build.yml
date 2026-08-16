@@ -290,7 +290,7 @@ jobs:
           path: DRO-Client-Linux-x86_64.AppImage
 
   build-macos:
-    runs-on: macos-14
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v6
         with:
@@ -312,7 +312,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: 6.8.3
+          version: 6.8.4
           target: desktop
           arch: clang_64
           modules: 'qtimageformats qtwebsockets qtmultimedia'
@@ -338,11 +338,12 @@ jobs:
       - name: Install Discord RPC
         shell: bash
         run: |
+          git clone --depth 1 --branch v3.4.0 https://github.com/discord/discord-rpc.git /tmp/discord-rpc
+          cmake -S /tmp/discord-rpc -B /tmp/discord-rpc/build -DBUILD_EXAMPLES=OFF -DCMAKE_BUILD_TYPE=Release
+          cmake --build /tmp/discord-rpc/build --config Release
           mkdir -p ./3rd/discord-rpc
-          curl -L https://github.com/discordapp/discord-rpc/releases/download/v3.4.0/discord-rpc-osx.zip -o discord-rpc.zip
-          unzip -q discord-rpc.zip
-          cp discord-rpc/osx-static/include/discord_rpc.h discord-rpc/osx-static/include/discord_register.h ./3rd/discord-rpc/
-          cp discord-rpc/osx-static/lib/libdiscord-rpc.a ./3rd/discord-rpc/libdiscord-rpc.a
+          cp /tmp/discord-rpc/build/src/libdiscord-rpc.a ./3rd/discord-rpc/libdiscord-rpc.a
+          cp /tmp/discord-rpc/include/discord_rpc.h /tmp/discord-rpc/include/discord_register.h ./3rd/discord-rpc/
 
       - name: Install stb_image_resize
         shell: bash
