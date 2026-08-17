@@ -57,7 +57,6 @@ Lobby::Lobby(AOApplication *p_ao_app)
   ui_gallery_background = new AOImageDisplay(this, ao_app);
   ui_gallery_preview = new AOImageDisplay(ui_gallery_background, ao_app);
 
-  \
   ui_public_server_filter = new RPButton(this);
 
   ui_favorite_server_filter = new RPButton(this);
@@ -176,11 +175,6 @@ Lobby::Lobby(AOApplication *p_ao_app)
 Lobby::~Lobby()
 {
   save_settings();
-}
-
-DRServerInfoList Lobby::get_combined_server_list()
-{
-  return m_combined_server_list;
 }
 
 // sets images, position and size
@@ -367,7 +361,6 @@ void Lobby::load_favorite_server_list()
 
   DRServerInfoList l_server_list;
   QSettings l_ini(l_file_path, QSettings::IniFormat);
-  l_server_list.clear();
   QStringList l_group_list = l_ini.childGroups();
 
   {
@@ -449,7 +442,6 @@ void Lobby::update_server_list()
 {
   m_server_list = m_master_client->server_list();
   update_combined_server_list();
-  emit server_list_changed();
 }
 
 void Lobby::set_favorite_server_list(DRServerInfoList p_server_list)
@@ -457,7 +449,6 @@ void Lobby::set_favorite_server_list(DRServerInfoList p_server_list)
   m_favorite_server_list = p_server_list;
   save_favorite_server_list();
   update_combined_server_list();
-  emit favorite_server_list_changed();
 }
 
 void Lobby::update_combined_server_list()
@@ -518,22 +509,6 @@ void Lobby::select_current_server()
   }
 }
 
-void Lobby::onReplayRowChanged(int row)
-{
-  if (row == -1) return;
-
-  //QString lImagePath = ReplayManager::get().getReplayImagePath(mCurrentPackage, mCurrentCategory, pUiReplayList->item(row)->text());
-  //
-  //if(!file_exists(lImagePath))
-  //{
-  //  pUIReplayPreview->set_theme_image("replay_preview.png");
-  //}
-  //else
-  //{
-  //  pUIReplayPreview->set_image(lImagePath);
-  //}
-}
-
 void Lobby::onGalleryPackageChanged(int index)
 {
   m_currentPackage = "";
@@ -559,8 +534,6 @@ void Lobby::onGalleryCategoryChanged(int index)
   ui_replay_list->hideColumn(1);
   // Make sure the replay names are readable
   ui_replay_list->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
-  // QStringList lReplays = dro::system::replays::io::packageContents(m_currentPackage, m_currentCategory);
-  // ui_replay_list->addItems(lReplays);
 }
 
 void Lobby::onGalleryToggle()
