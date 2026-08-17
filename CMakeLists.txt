@@ -207,7 +207,6 @@ set(SOURCES
   3rd/miniaudio/extras/decoders/libvorbis/miniaudio_libvorbis.c
   3rd/miniaudio/extras/decoders/libopus/miniaudio_libopus.c
   3rd/soundtouch/source/SoundTouch/AAFilter.cpp
-  3rd/soundtouch/source/SoundTouch/BPMDetect.cpp
   3rd/soundtouch/source/SoundTouch/cpu_detect_x86.cpp
   3rd/soundtouch/source/SoundTouch/FIFOSampleBuffer.cpp
   3rd/soundtouch/source/SoundTouch/FIRFilter.cpp
@@ -215,7 +214,6 @@ set(SOURCES
   3rd/soundtouch/source/SoundTouch/InterpolateLinear.cpp
   3rd/soundtouch/source/SoundTouch/InterpolateShannon.cpp
   3rd/soundtouch/source/SoundTouch/mmx_optimized.cpp
-  3rd/soundtouch/source/SoundTouch/PeakFinder.cpp
   3rd/soundtouch/source/SoundTouch/RateTransposer.cpp
   3rd/soundtouch/source/SoundTouch/SoundTouch.cpp
   3rd/soundtouch/source/SoundTouch/sse_optimized.cpp
