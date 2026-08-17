@@ -179,25 +179,6 @@ QStringList GetFileList(const QString &directoryPath, bool includePackages, cons
   return returnValues;
 }
 
-QStringList GetDirectoryList(const QString &directoryPath, bool includePackages)
-{
-  QStringList returnValues = {};
-
-  QDir targetDirectory(Paths::BasePath() + directoryPath);
-  QStringList subDirectories = targetDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-  for (const QString &directoryName : subDirectories)
-  {
-    returnValues.append(directoryName);
-  }
-
-  if(includePackages)
-  {
-    QVector<QString> searchArchives = Packages::CachedNames();
-  }
-
-  return returnValues;
-}
-
 QStringList GetFileList(const QString &directoryPath, const QString &packageName, const QString &extensionFilter, bool includeExtension)
 {
   QStringList returnValues = {};

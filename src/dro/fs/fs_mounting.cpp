@@ -143,11 +143,6 @@ void FS::Packages::RemoveMountPath(const QString& path)
   SaveMounts();
 }
 
-bool FS::Packages::IsMountPath(const QString& name)
-{
-  return s_mountRoots.contains(name);
-}
-
 QString FS::Packages::RootFor(const QString& name)
 {
   return s_mountRoots.value(name);

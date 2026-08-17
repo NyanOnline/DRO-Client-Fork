@@ -14,7 +14,6 @@ namespace FS::Packages
   QVector<QString> MountPaths();
   void AddMountPath(const QString& path);
   void RemoveMountPath(const QString& path);
-  bool IsMountPath(const QString& name);
   QString RootFor(const QString& name);
 }
 
