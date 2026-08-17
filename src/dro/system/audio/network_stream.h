@@ -39,6 +39,7 @@ private:
   QNetworkReply *m_reply = nullptr;
   QByteArray m_buffer;
   qint64 m_cursor = 0;
+  qint64 m_total = -1;
   bool m_finished = false;
   bool m_failed = false;
   QMutex m_mutex;

@@ -52,6 +52,10 @@ void NetworkStream::handle_ready_read()
   }
 
   QMutexLocker l_locker(&m_mutex);
+  if (m_total < 0)
+  {
+    m_total = m_reply->header(QNetworkRequest::ContentLengthHeader).toLongLong();
+  }
   m_buffer.append(l_data);
   m_wait.wakeAll();
 }
@@ -168,6 +172,37 @@ ma_result NetworkStream::read(void *p_buffer, size_t p_bytes, size_t *r_read)
 
 ma_result NetworkStream::seek(ma_int64 p_offset, ma_seek_origin p_origin)
 {
+  if (p_origin == ma_seek_origin_end)
+  {
+    // opusfile/vorbisfile ignore a failed end seek and trust tell() after it, so for a
+    // finite ogg stream wait out the download; on a stall settle for what has arrived
+    qint64 l_progress = -1;
+    while (true)
+    {
+      {
+        QMutexLocker l_locker(&m_mutex);
+        if (m_failed)
+        {
+          return MA_ERROR;
+        }
+        if (m_finished)
+        {
+          break;
+        }
+        if (m_total <= 0 || !m_buffer.startsWith("OggS"))
+        {
+          return MA_INVALID_OPERATION;
+        }
+        if (m_buffer.size() <= l_progress)
+        {
+          break;
+        }
+        l_progress = m_buffer.size();
+      }
+      wait_for_buffered(l_progress + 1, READ_WAIT_MS);
+    }
+  }
+
   qint64 l_target = 0;
   {
     QMutexLocker l_locker(&m_mutex);
@@ -182,10 +217,6 @@ ma_result NetworkStream::seek(ma_int64 p_offset, ma_seek_origin p_origin)
     }
     else
     {
-      if (!m_finished)
-      {
-        return MA_INVALID_OPERATION;
-      }
       l_target = m_buffer.size() + p_offset;
     }
 
