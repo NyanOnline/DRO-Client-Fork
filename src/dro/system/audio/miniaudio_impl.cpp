@@ -5,8 +5,6 @@
 #include <miniaudio/extras/decoders/libopus/miniaudio_libopus.h>
 
 #include <atomic>
-#include <cmath>
-#include <cstring>
 #include <vector>
 
 #include <SoundTouch.h>
