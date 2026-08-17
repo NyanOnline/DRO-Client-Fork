@@ -47,7 +47,6 @@ set(HEADERS
   src/dro/interface/widgets/emotion_selector.h
   src/dro/interface/widgets/choice_dialog.h
   src/dro/interface/widgets/sticker_viewer.h
-  src/dro/interface/widgets/viewport_overlay.h
   src/dro/interface/widgets/tab_toggle_button.h
   src/dro/interface/widgets/aotimer.h
   src/dro/interface/widgets/viewports/legacy_viewport.h
@@ -185,7 +184,6 @@ set(SOURCES
   src/dro/interface/widgets/emotion_selector.cpp
   src/dro/interface/widgets/choice_dialog.cpp
   src/dro/interface/widgets/sticker_viewer.cpp
-  src/dro/interface/widgets/viewport_overlay.cpp
   src/dro/interface/widgets/tab_toggle_button.cpp
   src/dro/interface/widgets/aotimer.cpp
   src/dro/interface/widgets/viewports/legacy_viewport.cpp

@@ -94,10 +94,6 @@ void ThemeModuleReader::ParseLayers()
         if(!layerChild.isEmpty()) layerInfo.append(layerChild);
       }
 
-      if(widget_name == "viewport")
-      {
-        layerInfo.append("viewport_overlay");
-      }
       m_WidgetLayers.append(layerInfo);
     }
   }

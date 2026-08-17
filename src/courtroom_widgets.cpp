@@ -137,8 +137,6 @@ void Courtroom::create_widgets()
   ui_vp_evidence->setZValue(ViewportLayers_Objection);
   ui_video->setZValue(ViewportLayers_Video);
 
-  w_ViewportOverlay = new ViewportOverlay(ui_viewport);
-
   ui_vp_music_display_a = new AOImageDisplay(this, ao_app);
   ui_vp_music_display_b = new AOImageDisplay(this, ao_app);
   ui_vp_music_area = new QWidget(ui_vp_music_display_a);
@@ -754,7 +752,6 @@ void Courtroom::reset_widget_names()
       {"vertical_offset", ui_slider_vertical_axis},
       {"scale_offset", ui_slider_scale},
       {"viewport_transition", SceneManager::get().GetTransition()},
-      {"viewport_overlay", w_ViewportOverlay},
       {"outfit_selector", wOutfitDropdown},
       {"screenshot", p_ScreenshotBtn},
       {"chara_animations", animList}
@@ -1091,9 +1088,6 @@ void Courtroom::set_widgets()
   set_size_and_pos(ui_vp_music_area, "music_area", COURTROOM_DESIGN_INI, ao_app);
   ui_vp_music_area->show();
   set_size_and_pos(ui_vp_music_name, "music_name", COURTROOM_DESIGN_INI, ao_app);
-
-  setupWidgetElement(w_ViewportOverlay, "viewport", true);
-  w_ViewportOverlay->move(0, 0);
 
   setupWidgetElement(ui_vp_music_display_a, "music_display_a", "music_display_a.png", true);
   setupWidgetElement(ui_vp_music_display_b, "music_display_b", "music_display_b.png", true);

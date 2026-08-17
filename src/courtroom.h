@@ -77,7 +77,6 @@ class QLabel;
 #include <mk2/drplayer.h>
 #include "dro/interface/widgets/emotion_selector.h"
 #include "dro/interface/widgets/choice_dialog.h"
-#include "dro/interface/widgets/viewport_overlay.h"
 
 using namespace dro::network;
 
@@ -490,8 +489,6 @@ private:
 
   AONoteArea *ui_note_area = nullptr;
 
-
-  ViewportOverlay *w_ViewportOverlay = nullptr;
 
   RPSlider *ui_slider_horizontal_axis = nullptr;
   RPSlider *ui_slider_vertical_axis = nullptr;
