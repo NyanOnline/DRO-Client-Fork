@@ -76,7 +76,7 @@ QString build_about_message()
                         "<a href='https://github.com/NyanOnline/DRO-Client-Fork'>"
                         "https://github.com/NyanOnline/DRO-Client-Fork</a>"
                         "<p><b>Development:</b><br>"
-                        "Cerapter, Elf, Iuvee, Tricky Leifa, Keightiie, Crystalwarrior"
+                        "Cerapter, Elf, Iuvee, Tricky Leifa, Keightiie, Crystalwarrior, SyntaxNyah"
                         "<p><b>Fork:</b><br>"
                         "This is the a forked version of the offical DRO client last updated by Crystal Warrior. "
                         "it is a derivative of Attorney-Online-Client-Remake. Created by SyntaxNyah not a replacement "
