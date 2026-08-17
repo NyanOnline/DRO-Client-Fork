@@ -78,11 +78,6 @@ void Courtroom::create_widgets()
   ThemeManager::get().setCourtroomBackground(ui_background);
 
   ui_viewport = new DRGraphicsView(this);
-  if(ao_config->opengl_enabled())
-  {
-    //ui_opengl_viewport = new QOpenGLWidget();
-    //ui_viewport->setViewport(ui_opengl_viewport);
-  }
 
   SceneManager::get().CreateTransition(this, ao_app, ui_viewport);
 
@@ -607,8 +602,6 @@ void Courtroom::reset_widget_toggles()
 
     if(ao_app->current_theme->m_jsonLoaded)
     {
-      QString l_parent_name = "Chat";
-
       QStringList chat_tab = ao_app->current_theme->get_tab_widgets("Chat");
       QStringList area_tab = ao_app->current_theme->get_tab_widgets("Area");
       QStringList gm_tab = ao_app->current_theme->get_tab_widgets("GM");
@@ -1287,18 +1280,6 @@ void Courtroom::set_widgets()
       else
         ui_checks[i]->setText(label_images[i]);
     }
-
-    for (int i = 0; i < ui_labels.size(); ++i) // now through labels..........
-    {
-      int j = i + ui_checks.size();
-      QString image = label_images[j].toLower() + ".png";
-      ui_label_images[j]->set_theme_image(image);
-
-      if (!ui_label_images[j]->get_image().isEmpty())
-        ui_labels[i]->setText("");
-      else
-        ui_labels[i]->setText(label_images[j]);
-    }
   }
   else
   {
@@ -1306,13 +1287,6 @@ void Courtroom::set_widgets()
     {
       ui_checks[i]->setText(label_images[i]);
       ui_label_images[i]->set_theme_image("");
-    }
-
-    for (int i = 0; i < ui_labels.size(); ++i) // same thing
-    {
-      int j = i + ui_checks.size();
-      ui_labels[i]->setText(label_images[j]);
-      ui_label_images[j]->set_theme_image("");
     }
   }
 

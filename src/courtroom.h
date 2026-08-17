@@ -32,7 +32,6 @@ class AOCharButton;
 class AOConfig;
 class AOEmoteButton;
 class AOImageDisplay;
-class RPLabel;
 class AOMovie;
 class AOMusicPlayer;
 class AONoteArea;
@@ -665,7 +664,6 @@ private:
   QVector<bool> shouts_enabled;
   QVector<bool> effects_enabled;
   QVector<bool> wtce_enabled;
-  QVector<bool> free_blocks_enabled;
 
   QVector<DR::CommandData> message_components;
   QTextDocumentFragment m_additive_previous;
@@ -686,7 +684,6 @@ private:
   QCheckBox *ui_hide_character = nullptr;
 
   QVector<QCheckBox *> ui_checks; // 0 = pre, 1 = flip, 2 = hidden
-  QVector<RPLabel *> ui_labels;   // 0 = music, 1 = sfx, 2 = blip
   QVector<AOImageDisplay *> ui_label_images;
   QVector<QString> label_images = {"Pre", "Flip", "Hidden"};
 

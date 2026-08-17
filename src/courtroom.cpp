@@ -538,13 +538,11 @@ void Courtroom::playEffect(const QString &effectName, const QString &charaName)
   if(ui_vp_effect->is_running()) return;
   if (!effectName.isEmpty() && effectName != "effect_shake") // check to prevent crashing
   {
-    bool once = true;
-
     audio::effect::Play(ao_app->get_sfx(effectName).toStdString());
     ui_vp_effect->stop();
     ui_vp_effect->set_file_name(ao_app->get_effect_anim_path(effectName));
 
-    ui_vp_effect->set_play_once(once);
+    ui_vp_effect->set_play_once(true);
     ui_vp_effect->start();
   }
 }
@@ -566,7 +564,6 @@ void Courtroom::update_background_scene()
   }
 
   const QString l_position_id = m_chatmessage[CMPosition];
-  DRPosition l_position = m_position_map.get_position(m_chatmessage[CMPosition]);
 
   {
     const QString l_file_name = SceneManager::get().getBackgroundPath(l_position_id);
@@ -1225,7 +1222,6 @@ void Courtroom::on_ic_message_return_pressed()
   if (ui_evidence_list->presenting)
   {
     int m_evi_id = ui_evidence_list->getCurrentSelection() + 1;
-    qInfo() << "CURRENT EVI: " << m_evi_id;
     packet_contents.append(QString::number(m_evi_id));
   }
   else
@@ -1540,7 +1536,6 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
   const int l_effect_id = m_pre_chatmessage[CMEffectState].toInt();
 
   { // backgrounds
-    DRPosition l_position = m_position_map.get_position(l_position_id);
     l_file_list.insert(ViewportStageBack, SceneManager::get().getBackgroundPath(l_position_id));
     l_file_list.insert(ViewportStageFront, SceneManager::get().getForegroundPath(l_position_id));
   }
@@ -1853,8 +1848,6 @@ void Courtroom::handle_chatmessage_2() // handles IC
 
     if(hOffset != 0)
     {
-      int courtroomWidth = ui_viewport->width();
-      int halfWidth = courtroomWidth / 2;
       ui_vp_player_char->setHorizontalOffset(hOffset);
     }
     else
@@ -2287,10 +2280,7 @@ void Courtroom::update_ic_log(bool p_reset_log)
 
     if (ao_config->log_display_timestamp_enabled())
     {
-      bool use_utc = false;
       QDateTime timestamp = l_record.get_timestamp();
-      if (use_utc)
-        timestamp = timestamp.toUTC();
       l_cursor.insertText(QString("[%1] ").arg(timestamp.toString("hh:mm")), l_target_name_format);
     }
 
@@ -3080,12 +3070,7 @@ void Courtroom::on_ooc_message_return_pressed()
   {
     // Timer resume
     int space_location = l_message.indexOf(" ");
-
-    int timer_id;
-    if (space_location == -1)
-      timer_id = 0;
-    else
-      timer_id = l_message.mid(space_location + 1).toInt();
+    int timer_id = l_message.mid(space_location + 1).toInt();
     resume_timer(timer_id);
   }
   else if (l_message.startsWith("/ts "))
@@ -3111,12 +3096,7 @@ void Courtroom::on_ooc_message_return_pressed()
   {
     // Timer pause
     int space_location = l_message.indexOf(" ");
-
-    int timer_id;
-    if (space_location == -1)
-      timer_id = 0;
-    else
-      timer_id = l_message.mid(space_location + 1).toInt();
+    int timer_id = l_message.mid(space_location + 1).toInt();
     pause_timer(timer_id);
   }
   else if(l_message.startsWith("/"))

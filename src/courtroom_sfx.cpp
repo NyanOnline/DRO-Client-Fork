@@ -72,12 +72,10 @@ void Courtroom::load_current_character_sfx_list()
   }
 
   // create items
-  QList<QListWidgetItem *> l_item_list;
   for (int i = 0; i < m_sfx_list.length(); ++i)
   {
     const DRSfx &i_sfx = m_sfx_list.at(i);
     QListWidgetItem *l_item = new QListWidgetItem(ui_sfx_list);
-    l_item_list.append(l_item);
     l_item->setText(i_sfx.name);
     l_item->setData(Qt::UserRole, i);
     set_sfx_item_color(l_item);
