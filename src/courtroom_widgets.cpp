@@ -29,13 +29,9 @@
 #include <QComboBox>
 #include <QDebug>
 #include <QFile>
-#include <QGraphicsBlurEffect>
 #include <QHBoxLayout>
-#include <QInputDialog>
 #include <QListWidget>
 #include <QMenu>
-#include <QOpenGLContext>
-#include <QOpenGLWidget>
 #include <QPropertyAnimation>
 #include <QScrollArea>
 #include <QScrollBar>

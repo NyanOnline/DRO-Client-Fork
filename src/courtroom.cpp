@@ -46,13 +46,10 @@
 #include <QComboBox>
 #include <QCursor>
 #include <QDebug>
-#include <QDir>
 #include <QFileInfo>
-#include <QGraphicsBlurEffect>
 #include <QInputDialog>
 #include <QLineEdit>
 #include <QListWidget>
-#include <QMenu>
 #include <QMessageBox>
 #include <QPropertyAnimation>
 #include <QScrollArea>

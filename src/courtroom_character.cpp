@@ -14,7 +14,6 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QFutureWatcher>
-#include <QListView>
 #include <QPixmap>
 #include <QUrl>
 #include <QtConcurrent/QtConcurrent>

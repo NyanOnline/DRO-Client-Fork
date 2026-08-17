@@ -3,7 +3,6 @@
 
 // src
 #include "datatypes.h"
-#include "qdebug.h"
 
 class AOApplication;
 

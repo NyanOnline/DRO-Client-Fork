@@ -22,16 +22,11 @@
 #include <QCollator>
 #include <QDebug>
 #include <QFile>
-#include <QFontDatabase>
 #include <QIcon>
-#include <QInputDialog>
-#include <QLineEdit>
 #include <QListWidget>
 #include <QMenu>
-#include <QMessageBox>
 #include <QPixmap>
 #include <QProgressBar>
-#include <QScopedPointer>
 #include <QSettings>
 #include <QDesktopServices>
 

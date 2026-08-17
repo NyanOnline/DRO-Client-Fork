@@ -49,7 +49,6 @@ class DRShoutMovie;
 class DRSplashMovie;
 class DRStickerViewer;
 class RPTextEdit;
-#include <QMainWindow>
 #include <QMap>
 #include <QModelIndex>
 #include <QQueue>

@@ -10,9 +10,6 @@
 
 // qt
 #include <QApplication>
-#include <QDebug>
-#include <QDir>
-#include <QFileInfo>
 #include <QMap>
 #include <QSettings>
 #include <QSharedPointer>

@@ -4,24 +4,19 @@
 #include "aoconfig.h"
 #include "aoguiloader.h"
 #include "datatypes.h"
-#include "drtheme.h"
-#include "mk2/spritedynamicreader.h"
 #include "version.h"
 
 #include <QCheckBox>
 #include <QComboBox>
-#include <QDebug>
 #include <QDir>
 #include <QFileDialog>
 #include <QGroupBox>
 #include <QLabel>
 #include <QLineEdit>
-#include <QProcess>
 #include <QPushButton>
 #include <QRadioButton>
 #include <QSlider>
 #include <QSpinBox>
-#include <QStandardItemModel>
 #include <QStringListModel>
 #include <QTabWidget>
 

@@ -1,13 +1,10 @@
 #include "character_manager.h"
-#include "dro/interface/widgets/emotion_button.h"
 #include "commondefs.h"
 #include "dro/fs/fs_reading.h"
 
 #include <aoapplication.h>
-#include <QCheckBox>
 #include <QFile>
 #include "courtroom.h"
-#include "qmath.h"
 #include <QTextStream>
 #include "dro/system/theme_scripting.h"
 #include "dro/interface/courtroom_layout.h"

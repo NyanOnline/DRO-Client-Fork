@@ -5,10 +5,8 @@
 #include "dro/fs/fs_reading.h"
 #include "drtheme.h"
 
-#include <QCheckBox>
 #include <QColor>
 #include "dro/system/localization.h"
-#include "modules/managers/character_manager.h"
 #include <QLineEdit>
 #include <QListWidget>
 #include <QMenu>
