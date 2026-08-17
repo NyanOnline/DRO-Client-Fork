@@ -22,7 +22,6 @@
 
 #include <modules/managers/character_manager.h>
 #include "dro/system/localization.h"
-#include "dro/fs/fs_reading.h"
 #include "dro/system/runtime_loop.h"
 #include "dro/system/effects.h"
 

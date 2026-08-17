@@ -31,7 +31,6 @@
 #include "mk2/spriteseekingreader.h"
 #include "src/datatypes.h"
 #include "theme.h"
-#include "dro/fs/fs_reading.h"
 #include "dro/network/metadata/server_metadata.h"
 #include "dro/network/metadata/message_metadata.h"
 #include "dro/system/theme_scripting.h"

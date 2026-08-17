@@ -7,7 +7,6 @@
 #include <QTcpSocket>
 #include <QtWebSockets/QWebSocket>
 
-class QTcpSocket;
 class QTimer;
 
 class DRServerSocket : public QObject

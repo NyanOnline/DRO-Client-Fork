@@ -15,7 +15,6 @@
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 
-#include "dro/fs/fs_reading.h"
 #include "dro/system/audio.h"
 
 #include <optional>

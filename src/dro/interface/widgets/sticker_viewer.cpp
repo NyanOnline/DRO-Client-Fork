@@ -3,7 +3,6 @@
 #include "aoapplication.h"
 #include "drtheme.h"
 #include "dro/fs/fs_reading.h"
-#include "dro/fs/fs_reading.h"
 
 DRStickerViewer::DRStickerViewer(AOApplication *ao_app, QWidget *parent)
     : mk2::SpriteViewer(parent)

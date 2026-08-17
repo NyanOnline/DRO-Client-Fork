@@ -6,7 +6,6 @@
 #include "courtroom.h"
 #include "modules/theme/thememanager.h"
 #include "theme.h"
-#include "dro/fs/fs_reading.h"
 #include "dro/system/theme_scripting.h"
 
 ChoiceDialog::ChoiceDialog(QWidget *parent)

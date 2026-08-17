@@ -52,7 +52,6 @@
 #include "dro/system/debug/time_debugger.h"
 #include "dro/system/localization.h"
 
-#include "dro/fs/fs_reading.h"
 #include "dro/interface/courtroom_layout.h"
 
 using namespace dro::system;

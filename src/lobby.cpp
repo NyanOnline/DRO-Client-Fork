@@ -35,7 +35,6 @@
 #include <QSettings>
 #include <QDesktopServices>
 
-#include <qfilesystemmodel.h>
 #include <qheaderview.h>
 #include <utility>
 #include "dro/fs/fs_reading.h"

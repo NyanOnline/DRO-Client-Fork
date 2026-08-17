@@ -16,7 +16,6 @@
 #include "hardware_functions.h"
 #include "lobby.h"
 #include "version.h"
-#include "dro/fs/fs_reading.h"
 #include "dro/network/metadata/server_metadata.h"
 #include "dro/network/metadata/area_metadata.h"
 #include "dro/network/json_packet.h"
