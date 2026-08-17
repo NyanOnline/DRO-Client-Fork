@@ -16,19 +16,6 @@ DRStickerViewer::DRStickerViewer(AOApplication *ao_app, QWidget *parent)
 DRStickerViewer::~DRStickerViewer()
 {}
 
-void DRStickerViewer::set_hide_when_done(bool p_enabled)
-{
-  if (m_hide_when_done == p_enabled)
-  {
-    return;
-  }
-  m_hide_when_done = p_enabled;
-  if (!is_running())
-  {
-    maybe_hide();
-  }
-}
-
 void DRStickerViewer::set_theme_image(QString p_file_name)
 {
   set_file_name(ao_app->get_theme_sprite_path(p_file_name, ""));

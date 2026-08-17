@@ -208,7 +208,6 @@ public:
   QString get_character_ini();
   QString get_character_content_url();
   void update_iniswap_list();
-  QStringList SearchForCharacterList();
   void update_default_iniswap_item();
   void select_base_character_iniswap();
   void refresh_character_content_url();
