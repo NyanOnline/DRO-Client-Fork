@@ -50,12 +50,6 @@ public slots:
   void dropdownChanged(int id);
   void emoteClicked(int id);
 
-private slots:
-  void showEmoteTooltip(int id, QPoint pos);
-  void hideEmoteTooltip(int id);
-
-signals:
-
 protected:
   void wheelEvent(QWheelEvent *event) override;
 

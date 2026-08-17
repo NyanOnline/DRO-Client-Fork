@@ -10,7 +10,6 @@ class CharacterSelectWidget : public QWidget
   Q_OBJECT
 public:
   CharacterSelectWidget(QWidget *parent, AOApplication *p_ao_app);
-signals:
 protected:
   void wheelEvent(QWheelEvent *event) override;
 

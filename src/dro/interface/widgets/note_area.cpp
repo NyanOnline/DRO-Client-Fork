@@ -80,8 +80,6 @@ void Courtroom::set_note_files()
     return;
   }
 
-  QTextStream in(&config_file);
-
   QByteArray t;
 
   for (int i = 0; i < ui_note_area->m_layout->count() - 1; ++i)

@@ -60,7 +60,6 @@ void RPTextEdit::realign_text()
     return;
   m_status = Status::InProgress;
   setAlignment(m_text_align);
-  //  refresh_horizontal_alignment();
   refresh_vertical_alignment();
   m_status = Status::Done;
 }
@@ -75,29 +74,6 @@ void RPTextEdit::on_text_changed()
   if (!is_auto_align)
     return;
   realign_text();
-}
-
-void RPTextEdit::refresh_horizontal_alignment()
-{
-  // This stores the number of blocks. We use blocks here as Qt makes its horizontal
-  // alignment based on blocks (rather than apparent line breaks/places where words wrap).
-  int new_document_blocks = document()->blockCount();
-  if (document()->toPlainText().isEmpty())
-  {
-    // Qt is very special and does not set this to 0 for empty documents.
-    m_current_document_blocks = 0;
-    // We also don't need to do any adjusting for empty documents, so return immediately
-    return;
-  }
-  // If we have not changed the number of blocks in the document with this new incoming text change,
-  // We do not need to update anything, so we exit early.
-  if (new_document_blocks == m_current_document_blocks)
-    return;
-
-  // Otherwise, we have changed the number of blocks. By induction only the current block needs to be
-  // updated, which is why we can get away with doing this setAlignment once, and right here.
-  // qDebug() << this << document()->toPlainText() << new_document_blocks;
-  setAlignment(m_text_align);
 }
 
 void RPTextEdit::refresh_vertical_alignment()
