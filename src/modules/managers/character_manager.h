@@ -23,7 +23,6 @@ public:
   }
 
   void setOutfitList(QStringList t_outfits);
-  void setOutfitIndex(int t_index);
 
   QString lastCharList = "Server Characters";
   QVector<char_type> GetCharList();
@@ -69,7 +68,6 @@ private:
   static CharacterManager s_Instance;
   QHash<QString, bool>CharacterTaken = {};
   QStringList mCharacterPackages = {"Server Characters", "Favorites", "All"};
-  QStringList mCharacterOutfits = {};
 
 };
 

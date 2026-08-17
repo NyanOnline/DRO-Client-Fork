@@ -101,8 +101,6 @@ ActorData *CharacterManager::SwitchCharacter(QString t_folder)
 
 void CharacterManager::setOutfitList(QStringList t_outfits)
 {
-  mCharacterOutfits = t_outfits;
-  
   QWidget *l_outfitSelectorWidget = ThemeManager::get().getWidget("outfit_selector");
 
   if (dynamic_cast<QComboBox*>(l_outfitSelectorWidget) != nullptr)
@@ -112,11 +110,6 @@ void CharacterManager::setOutfitList(QStringList t_outfits)
     l_outfitSelectorCombo->addItems(t_outfits);
     if(l_outfitSelectorCombo->count() > 1) l_outfitSelectorCombo->setCurrentIndex(1);
   }
-}
-
-void CharacterManager::setOutfitIndex(int t_index)
-{
-
 }
 
 QVector<char_type> CharacterManager::GetCharList()

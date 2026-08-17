@@ -57,7 +57,6 @@ public:
 
   void setResize(double size);
   double getResize();
-  void setViewporResize(double size);
   double getViewporResize();
   void setFontResize(double size);
   double getFontResize();
@@ -101,8 +100,6 @@ private:
   QMap<QString, QWidget *> m_TabDeletionQueue = {};
 
   QHash<QString, QWidget *> m_WidgetNames = {};
-  QHash<QString, RPButton*> mButtonWidgets { };
-  QHash<QString, RPLineEdit*> mLineEditWidgets { };
   QHash<QString, RPComboBox*> mComboBoxWidgets { };
 
   bool mRequiresReload = true;
