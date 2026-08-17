@@ -9,16 +9,28 @@ Main goal get people upgrade from 1.8.0 to 1.8.4 by addressing bugs so crystal w
 Currently fixed, changed or Added since V1.82.0.
 ---------------------
 
-Audio engine Bass.DLL removed and changed to miniaudio. Replaced a propriety audio engine with an AGPLv3 compatible one.
+Audio engine Bass.DLL removed and changed to miniaudio. Replaced a propriety audio engine with an AGPLv3 compatible one 
 
-Backgrounds no longer are blank in the view port upon entering areas.  
+Backgrounds no longer are blank in the view port upon entering areas. 
 
 Text no longer cuts off at all. It always follows the text wraps perfectly and doesn't go off screen.
+Cleaned and fixed additive text! 
+
+Make the additive text function a UI element a check box of sorts a tiny check box, so people dont have to type everytime they want to use additive, its one tiny check box then all messages are treated as additive. A clean option just like how AO2 client does it. This basically allows you to use additive without constantly typing everytime like a checkbox. 
+
+You can now set custom asset/base paths. 
+
+Changed the reload button to "change theme" to be more clear and user friendly. 
+
+A toggle to disable blankposts so if you press ENTER, nothing sends. 
+
+Softer toggle called soft blankpost option where u have to press ENTER at least three times on an empty message to send a BLANKPOST. Purpose is to prevent accidental blankposts. 
+
+Added a new library called SoundTouch which lets you adjust pitch and tempo. Also fixed music streaming was broken in 1.8.4. You can also stream opus and ogg files now. WAV OPUS MP3 OGG 
 
 Current Bug reports so far that I will work on in the future
 -----------------------------
-
-Fix Additive. DRO's implementation is borked. Just port over AO2's for now the text rolls over itself. - FIXED IN 1.85.0 TEST BUILD!
+Fix linux macos builds
 
 Feature requests or quality of life improvement requests
 ----------------------------------------------------------------------
