@@ -37,23 +37,6 @@ Write prooject documentation with detailed easy to understand guides such as bui
 
 Add Linux Builds back make DRO linux compatible again 🚧 🚧
 
-# 1.8.5 BETA BUILD FEATURES CURRENTLY IMPLEMENTED AND TESTED!
-------------------------------
-
-Cleaned and fixed additive text! 
-
-Make the additive text function a UI element a check box of sorts a tiny check box, so people dont have to type everytime they want to use additive, its one tiny check box then all messages are treated as additive. A clean option just like how AO2 client does it. This basically allows you to use additive without constantly typing everytime like a checkbox. 
-
-You can now set custom asset/base paths. 
-
-Changed the reload button to "change theme" to be more clear and user friendly.
-
-A toggle to disable blankposts so if you press ENTER, nothing sends. 
-
-Softer toggle called soft blankpost option where u have to press ENTER at least three times on an empty message to send a BLANKPOST. Purpose is to prevent accidental blankposts. 
-
-Added a new library called SoundTouch which lets you adjust pitch and tempo. Also fixed music streaming was broken in 1.8.4 
-
 Not a replacement for DRO client, just a fork intended to clean-up some legacy crust and fix some issues.
 
 ## Qt
