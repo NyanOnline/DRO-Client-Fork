@@ -46,8 +46,6 @@ void DRServerSocket::connect_to_server(DRServerInfo p_server)
   disconnect_from_server();
   m_server = p_server;
 
-  qDebug() << p_server.ws_port;
-
   if (p_server.protocol == DRServerProtocolType::WEBSOCKET)
   {
     qDebug() << "Using Websocket connection.";
@@ -57,7 +55,6 @@ void DRServerSocket::connect_to_server(DRServerInfo p_server)
     connect(m_socket.ws, &QWebSocket::stateChanged, this, &DRServerSocket::_p_update_state);
     connect(m_socket.ws, &QWebSocket::textMessageReceived, this, &DRServerSocket::_p_read_ws_socket);
     const QString url = QString("ws://%1:%2").arg(p_server.address).arg(p_server.ws_port);
-    qDebug() << url;
     m_socket.m_active_type = DRServerProtocolType::WEBSOCKET;
     m_socket.ws->open(url);
   }
@@ -97,7 +94,6 @@ void DRServerSocket::send_packet(DRPacket p_packet)
 {
   if (!is_connected())
   {
-    const QString l_server_info = m_server.to_info();
     qWarning().noquote() << QString("Failed to send packet; not connected to server%1").arg(drFormatServerInfo(m_server));
     return;
   }

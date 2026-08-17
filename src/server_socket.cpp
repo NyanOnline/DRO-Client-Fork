@@ -126,8 +126,6 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
       return;
 
     s_lastMessageId = l_content.at(1).toInt();
-
-
   }
   else if (l_header == "ID")
   {
@@ -137,10 +135,8 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     metadata::user::setClientId(l_content.at(0).toInt());
     m_server_software = l_content.at(1);
 
-
     int versionBase = s_lastMessageId == -1 ? 0 : s_lastMessageId;
     send_server_packet(DRPacket("ID", {"DRO", get_version_string(versionBase)}));
-
   }
   else if (l_header == "FL")
   {
@@ -252,7 +248,6 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
       CharacterManager::get().SetCharaTaken(i, l_content.at(i) == "-1");
     }
 
-
     CharacterManager::get().SetCharList(l_chr_list);
   }
   else if (l_header == "SC")
@@ -333,7 +328,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     {
       LuaBridge::LuaEventCall("OnAreaDescriptionRecieved", l_content.at(1).toStdString());
       AreaMetadata::SetDescription(l_content.at(1).toUtf8());
-    };
+    }
 
     m_courtroom->m_current_reportcard_reason = Courtroom::ReportCardReason(prompt);
     m_courtroom->construct_playerlist_layout();
@@ -403,11 +398,8 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     l_area_bg.background = l_content.at(0);
     // position argument
     QString pos = "";
-    if (l_area_bg.background_tod_map.isEmpty())
-    {
-      if (l_content.size() >= 2)
-        pos = l_content.at(1);
-    }
+    if (l_content.size() >= 2)
+      pos = l_content.at(1);
     // Test for Time of Day data
     for (int i = 2; i < l_content.size(); ++i)
     {

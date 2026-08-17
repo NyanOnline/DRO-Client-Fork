@@ -61,8 +61,7 @@ void JsonPacket::ProcessPlayerListPacket(JSONReader& jsonReader)
     drp->setAfk(isAfk);
     SceneManager::get().mPlayerDataList.append(*drp);
   }
-  if(AOApplication::getInstance()->m_courtroom != nullptr)
-    AOApplication::getInstance()->m_courtroom->construct_playerlist_layout();
+  AOApplication::getInstance()->m_courtroom->construct_playerlist_layout();
 }
 
 void JsonPacket::ProcessNotifyRequestPacket(JSONReader& jsonReader)
