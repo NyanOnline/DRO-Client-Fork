@@ -79,8 +79,6 @@ public:
 
   virtual SpriteFrame get_frame(int number);
 
-  virtual QVector<SpriteFrame> get_frame_list();
-
   mk2::SpriteReader::State get_state() const;
 
   bool is_loaded() const;

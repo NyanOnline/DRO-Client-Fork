@@ -77,11 +77,6 @@ QString SpritePlayer::get_file_name() const
   return m_reader->get_file_name();
 }
 
-QIODevice *SpritePlayer::get_device() const
-{
-  return nullptr;
-}
-
 SpritePlayer::ScalingMode SpritePlayer::get_scaling_mode() const
 {
   return m_scaling_mode;
@@ -192,16 +187,9 @@ void SpritePlayer::start(ScalingMode scaling, double scale)
   m_scale = scale;
   m_manualScalingMode = scaling;
   m_running = true;
-  m_elapsed_timer.start();
   emit started();
   resolve_scaling_mode(m_manualScalingMode, m_scale);
   fetch_next_frame();
-}
-
-void SpritePlayer::restart()
-{
-  stop();
-  start();
 }
 
 void SpritePlayer::stop()
@@ -224,16 +212,9 @@ void SpritePlayer::start(int p_start_frame, ScalingMode scaling, double scale)
     m_frame_number = 0;
   }
   m_running = true;
-  m_elapsed_timer.start();
   emit started();
   resolve_scaling_mode(m_manualScalingMode, scale);
   fetch_next_frame();
-}
-
-void SpritePlayer::restart(int p_start_frame)
-{
-  stop();
-  start(p_start_frame);
 }
 
 void SpritePlayer::addLayer(SpriteLayer *layer)
