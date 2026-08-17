@@ -53,12 +53,11 @@ jobs:
             ./3rd/discord-rpc
             ./3rd/sol
             ./3rd/lua
-            ./3rd/stb_image_resize2.h
             ./3rd/miniaudio
             ./3rd/soundtouch
             ./bin/discord-rpc.dll
             ./bin/lua54.dll
-          key: ${{ runner.os }}-3rd-v4
+          key: ${{ runner.os }}-3rd-v5
 
       - name: Install Windows Discord RPC
         if: steps.cache-3rd.outputs.cache-hit != 'true'
@@ -93,12 +92,6 @@ jobs:
           cp ./lua/lua54.dll ./bin/
           cp ./lua/lua54.lib ./3rd/lua
           cp ./lua/include/* ./3rd/lua
-
-      - name: Install stb_image_resize
-        if: steps.cache-3rd.outputs.cache-hit != 'true'
-        shell: bash
-        run: |
-          curl https://raw.githubusercontent.com/nothings/stb/refs/heads/master/stb_image_resize2.h -o ./3rd/stb_image_resize2.h
 
       - name: Install miniaudio
         if: steps.cache-3rd.outputs.cache-hit != 'true'
@@ -224,11 +217,6 @@ jobs:
           cp discord-rpc/linux-static/include/discord_rpc.h discord-rpc/linux-static/include/discord_register.h ./3rd/discord-rpc/
           cp discord-rpc/linux-static/lib/libdiscord-rpc.a ./3rd/discord-rpc/libdiscord-rpc.a
 
-      - name: Install stb_image_resize
-        shell: bash
-        run: |
-          curl https://raw.githubusercontent.com/nothings/stb/refs/heads/master/stb_image_resize2.h -o ./3rd/stb_image_resize2.h
-
       - name: Install miniaudio
         shell: bash
         run: |
@@ -344,11 +332,6 @@ jobs:
           mkdir -p ./3rd/discord-rpc
           cp /tmp/discord-rpc/build/src/libdiscord-rpc.a ./3rd/discord-rpc/libdiscord-rpc.a
           cp /tmp/discord-rpc/include/discord_rpc.h /tmp/discord-rpc/include/discord_register.h ./3rd/discord-rpc/
-
-      - name: Install stb_image_resize
-        shell: bash
-        run: |
-          curl https://raw.githubusercontent.com/nothings/stb/refs/heads/master/stb_image_resize2.h -o ./3rd/stb_image_resize2.h
 
       - name: Install miniaudio
         shell: bash

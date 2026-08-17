@@ -99,7 +99,6 @@ QString build_about_message()
                         "<a href='https://www.lua.org/'>Lua 5.4.2</a>, "
                         "<a href='https://github.com/ThePhD/sol2'>sol2 3.3.0</a>, "
                         "<a href='https://github.com/discord/discord-rpc'>discord-rpc 3.4.0</a>, "
-                        "<a href='https://github.com/nothings/stb'>stb_image_resize2</a>, "
                         "<a href='https://github.com/jurplel/QtApng'>QtApng plugin</a>"
                         "<p>Built on %5 %6<br>")
                     .arg(get_version_string())
