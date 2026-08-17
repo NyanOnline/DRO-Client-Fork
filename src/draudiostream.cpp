@@ -567,7 +567,6 @@ void DRAudioStream::update_device(DRAudioDevice p_device)
 
   if (!ensure_init())
   {
-    Q_EMIT device_error(QPrivateSignal());
     return;
   }
 
@@ -586,16 +585,6 @@ void DRAudioStream::update_volume()
   if (!d->sound_ready)
     return;
   ma_sound_set_volume(&d->sound, m_volume * 0.01f);
-}
-
-void DRAudioStream::update_pitch()
-{
-  apply_rate();
-}
-
-void DRAudioStream::update_speed()
-{
-  apply_rate();
 }
 
 void DRAudioStream::check_drain()

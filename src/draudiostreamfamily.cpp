@@ -1,6 +1,3 @@
-#include "draudiostream.h"
-#define NOMINMAX
-
 #include "draudiostreamfamily.h"
 
 #include "draudioengine.h"

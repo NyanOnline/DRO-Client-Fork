@@ -19,7 +19,6 @@ public:
   using ptr = QPointer<DRAudioEnginePrivate>;
 
   QObjectList children;
-  QPointer<DRAudioEngine> engine;
 
   QPointer<QTimer> update_timer;
   QVector<DRAudioDevice> device_list;

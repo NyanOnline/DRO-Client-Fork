@@ -126,11 +126,6 @@ private:
 
 private slots:
   void update_volume();
-  void update_pitch();
-  void update_speed();
   void handle_fade_finished();
   void check_drain();
-
-signals:
-  void device_error(QPrivateSignal);
 };

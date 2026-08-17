@@ -30,7 +30,5 @@ enum Option
   OEngineIndependentPitchTempo = 0x8,
 };
 Q_DECLARE_FLAGS(Options, Option)
-
-QString get_audio_error(const int32_t p_error_code);
 } // namespace DRAudio
 Q_DECLARE_METATYPE(DRAudio::Options)
