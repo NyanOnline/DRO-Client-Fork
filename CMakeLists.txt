@@ -2,14 +2,13 @@ cmake_minimum_required(VERSION 3.16)
 
 project(dro-client VERSION 1.8.3 LANGUAGES C CXX)
 
-set(CMAKE_AUTOUIC ON)
+# forms load at runtime via QUiLoader, no AUTOUIC needed
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Gui Widgets UiTools Network WebSockets Multimedia MultimediaWidgets)
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets UiTools Network WebSockets Multimedia MultimediaWidgets)
 
 set(HEADERS
@@ -348,10 +347,9 @@ target_compile_definitions(dro-client PRIVATE
     QT_WARN_DEPRECATED_UP_TO=0x060500
 )
 
-target_include_directories(dro-client PUBLIC
+target_include_directories(dro-client PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/src
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/lua
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/soundtouch/include
@@ -370,7 +368,7 @@ target_link_directories(dro-client PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/lua
 )
 
-target_link_libraries(dro-client
+target_link_libraries(dro-client PRIVATE
   Qt6::Core
   Qt6::Gui
   Qt6::Widgets
