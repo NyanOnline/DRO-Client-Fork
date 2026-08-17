@@ -66,7 +66,6 @@ void AOApplication::reload_packages()
     QDir replaysDirectory(packageRoot + "replays");
     if (replaysDirectory.exists())
     {
-      QVector<QString> l_replayGroups;
       QStringList l_folderGroups = replaysDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
       dro::system::replays::io::cachePackage(packageName, l_folderGroups);
     }
