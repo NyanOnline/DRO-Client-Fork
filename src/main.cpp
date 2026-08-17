@@ -29,18 +29,11 @@ int main(int argc, char *argv[])
     }
   }
 
-  if (l_dpi_scaling)
-  {
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-  }
-  else
+  if (!l_dpi_scaling)
   {
     qputenv("QT_FONT_DPI", "96");
     qputenv("QT_SCALE_FACTOR", "1");
     qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "0");
-
-    QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling, false);
   }
 
   AOApplication app(argc, argv);
@@ -54,7 +47,6 @@ int main(int argc, char *argv[])
 
     app.load_fonts();
     app.construct_lobby();
-    app.get_lobby()->show();
 
     l_exit_code = app.exec();
 
