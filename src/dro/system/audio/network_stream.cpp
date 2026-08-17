@@ -7,6 +7,7 @@
 #include <QNetworkRequest>
 #include <QThread>
 #include <QTimer>
+#include <cstring>
 
 namespace
 {

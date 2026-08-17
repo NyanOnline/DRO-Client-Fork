@@ -20,9 +20,13 @@
 
 #pragma once
 
+#include <QIODevice>
 #include <QObject>
 #include <QPixmap>
 #include <QSharedPointer>
+#include <QVector>
+
+#include <atomic>
 
 namespace mk2
 {

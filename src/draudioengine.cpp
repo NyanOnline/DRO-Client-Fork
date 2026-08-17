@@ -4,6 +4,8 @@
 
 #include <QTimer>
 
+#include <algorithm>
+
 static const int UPDATE_TIMER_INTERVAL = 100;
 
 static class DRAudioEngineData

@@ -3,6 +3,7 @@
 #include "dro/system/audio/miniaudio_config.h"
 
 #include <QDebug>
+#include <cstring>
 
 namespace
 {

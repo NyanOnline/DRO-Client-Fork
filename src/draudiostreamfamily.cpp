@@ -7,6 +7,8 @@
 
 #include <QDebug>
 
+#include <algorithm>
+
 DRAudioStreamFamily::DRAudioStreamFamily(DRAudio::Family p_family)
     : m_family(p_family)
 {}

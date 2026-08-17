@@ -1,5 +1,6 @@
 #include "audio.h"
 #include <aoapplication.h>
+#include "draudioengine.h"
 #include "dro/system/audio/blip_player.h"
 #include "dro/system/audio/music_player.h"
 #include "dro/system/audio/sfx_player.h"

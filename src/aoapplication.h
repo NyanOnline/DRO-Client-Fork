@@ -14,6 +14,7 @@ class DRMasterClient;
 class Lobby;
 
 #include <QApplication>
+#include <QDateTime>
 #include <QVector>
 
 #include <optional>
