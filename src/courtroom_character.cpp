@@ -120,61 +120,9 @@ void Courtroom::UpdateIniswapList()
 
   update_default_iniswap_item();
   select_base_character_iniswap();
-  iniswapTimer = new QTimer(this);
-  //UpdateIniswapIcons(true, 2);
   update_iniswap_dropdown_searchable();
 
 
-}
-
-void Courtroom::UpdateIniswapIcons(bool reset, int batch_count, int starting_index)
-{
-
-  if(reset)
-  {
-    if (iniswapTimer && iniswapTimer->isActive())
-    {
-      iniswapTimer->stop();
-    }
-
-    iniswapTimer = new QTimer(this);
-
-    currentIniswapIconIndex = starting_index;
-  }
-
-
-  for (int i = 0; i < batch_count && currentIniswapIconIndex < currentIniswapList.length(); ++i, ++currentIniswapIconIndex)
-  {
-    const QString &i_name = currentIniswapList.at(currentIniswapIconIndex);
-    drSetItemIcon(ui_iniswap_dropdown, currentIniswapIconIndex, i_name, ao_app);
-  }
-
-  if (currentIniswapIconIndex < currentIniswapList.length())
-  {
-    if (iniswapTimer && iniswapTimer->isActive())
-    {
-      iniswapTimer->stop();
-    }
-
-    iniswapTimer = new QTimer(this);
-    connect(iniswapTimer, &QTimer::timeout, this, &Courtroom::OnIniswapTimerTimeout);
-    iniswapTimer->start(100);
-  }
-  else
-  {
-    if (iniswapTimer && iniswapTimer->isActive())
-    {
-      iniswapTimer->stop();
-    }
-  }
-
-
-}
-
-
-void Courtroom::OnIniswapTimerTimeout()
-{
-  UpdateIniswapIcons(false, 2);
 }
 
 void Courtroom::SetChatboxFocus()

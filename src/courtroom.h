@@ -188,12 +188,6 @@ public:
   // implementations in path_functions.cpp
   QString get_background_path(QString p_file);
 
-private:
-  QTimer* iniswapTimer;
-
-private slots:
-  void OnIniswapTimerTimeout();
-
 public:
   QHash<QString, QWidget *> widget_names;
 
@@ -201,8 +195,6 @@ public:
   QStringList currentIniswapList = {"Default"};
   void SearchForCharacterListAsync();
   void UpdateIniswapList();
-  void UpdateIniswapIcons(bool reset, int batch_count, int starting_index = 0);
-  int currentIniswapIconIndex = 0;
 
   QString get_character_ini();
   QString get_character_content_url();
