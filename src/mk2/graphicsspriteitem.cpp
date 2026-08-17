@@ -25,12 +25,9 @@
 #include <QPainter>
 #include <QVector3D>
 
-#include <functional>
-
 #include <modules/managers/scene_manager.h>
 #include "dro/param/animation_reader.h"
 #include "dro/interface/courtroom_layout.h"
-#include "spritedynamicreader.h"
 #include "spriteseekingreader.h"
 #include "aoapplication.h"
 #include "dro/system/text_encoding.h"

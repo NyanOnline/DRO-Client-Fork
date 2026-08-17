@@ -21,9 +21,7 @@
 #include "mk2/spritedynamicreader.h"
 #include "mk2/spriteviewer.h"
 
-#include <QFile>
 #include <QPainter>
-#include <QResizeEvent>
 
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 #include "graphicsspriteitem.h"

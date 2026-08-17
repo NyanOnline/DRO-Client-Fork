@@ -3,7 +3,6 @@
 #include <QFile>
 #include <QImageReader>
 #include <QString>
-#include <qprocess.h>
 #include <miniaudio/miniaudio.h>
 #include "datatypes.h"
 

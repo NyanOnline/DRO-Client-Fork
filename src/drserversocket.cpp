@@ -1,5 +1,4 @@
 #include "drserversocket.h"
-#include "qabstractsocket.h"
 
 #include <QTcpSocket>
 #include <QTimer>

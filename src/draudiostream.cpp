@@ -5,10 +5,8 @@
 #include "dro/system/audio/network_stream.h"
 
 #include <QDebug>
-#include <QFileInfo>
 #include <QTimer>
 #include <QUrl>
-#include <QtMath>
 
 #include <cmath>
 

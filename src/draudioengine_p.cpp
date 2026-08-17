@@ -12,7 +12,6 @@
 #include "dro/system/audio/audio_backend.h"
 
 #include <QDebug>
-#include <QGuiApplication>
 #include <QTimer>
 
 DRAudioEnginePrivate::DRAudioEnginePrivate()
