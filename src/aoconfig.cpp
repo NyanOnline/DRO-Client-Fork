@@ -30,7 +30,6 @@ class AOConfigPrivate : public QObject
 
 public:
   AOConfigPrivate();
-  ~AOConfigPrivate();
 
   // setters
 public slots:
@@ -147,9 +146,6 @@ AOConfigPrivate::AOConfigPrivate()
 
   load_file();
 }
-
-AOConfigPrivate::~AOConfigPrivate()
-{}
 
 void AOConfigPrivate::load_file()
 {
@@ -1066,7 +1062,6 @@ void AOConfig::setLanguage(QString t_language)
 {
   if(d->language == t_language) return;
   d->language = t_language;
-  d->invoke_signal("language_changed", Q_ARG(QString, t_language));
 }
 
 void AOConfig::set_theme(QString p_string)
@@ -1351,7 +1346,6 @@ void AOConfig::set_favorite_device_driver(QString p_device_driver)
     return;
   d->favorite_device_driver = p_device_driver;
   d->update_favorite_device();
-  d->invoke_signal("favorite_device_changed", Q_ARG(QString, p_device_driver));
 }
 
 void AOConfig::set_system_volume(int p_number)

@@ -10,8 +10,6 @@ class AOConfig;
 #include <QDoubleSpinBox>
 #include <QMap>
 #include <QWidget>
-#include <qtableview.h>
-#include <qtreeview.h>
 
 class QCheckBox;
 class QComboBox;
@@ -29,9 +27,6 @@ class AOConfigPanel : public QWidget
 
 public:
   AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent = nullptr);
-
-public slots:
-  void on_config_reload_theme_requested();
 
 signals:
   void reload_theme();
@@ -146,7 +141,6 @@ private:
 
   QPushButton *ui_switch_theme = nullptr;
   QPushButton *ui_reload_theme = nullptr;
-  QTreeView *ui_themeModules = nullptr;
   QLineEdit *ui_gamemode = nullptr;
   QComboBox *ui_manual_gamemode = nullptr;
   QCheckBox *ui_manual_gamemode_selection = nullptr;
@@ -190,7 +184,6 @@ private:
 
   // audio
   QComboBox *ui_device = nullptr;
-  QCheckBox *ui_favorite_device = nullptr;
 
   //Audio Sliders
   QMap<QSlider*, QLabel*> volumeSliderMap = {};
@@ -239,10 +232,6 @@ private:
   QPushButton *ui_load_new_packages = nullptr;
   QPushButton *ui_add_package_path = nullptr;
   QPushButton *ui_remove_package_path = nullptr;
-
-  //Updates
-  QCheckBox *ui_beta_updates = nullptr;
-  QPushButton *ui_check_updates = nullptr;
 
   //Theme
   QDoubleSpinBox *ui_theme_resize = nullptr;

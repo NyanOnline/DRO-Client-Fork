@@ -78,7 +78,6 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_discord_hide_character = AO_GUI_WIDGET(QCheckBox, "discord_hide_character");
 
   // game
-  //ui_themeModules = AO_GUI_WIDGET(QTreeView, "themeModules");
   ui_theme = AO_GUI_WIDGET(QComboBox, "theme");
   wSettingsLanguage = AO_GUI_WIDGET(QComboBox, "languageSelector");
   wLanguageCredits = AO_GUI_WIDGET(QLabel, "translationCredit");
@@ -146,7 +145,6 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
 
   // audio
   ui_device = AO_GUI_WIDGET(QComboBox, "device");
-  ui_favorite_device = AO_GUI_WIDGET(QCheckBox, "favorite_device");
   ui_master = AO_GUI_WIDGET(QSlider, "master");
   ui_master_value = AO_GUI_WIDGET(QLabel, "master_value");
   ui_suppress_background_audio = AO_GUI_WIDGET(QGroupBox, "suppress_background_audio");
@@ -574,7 +572,6 @@ void AOConfigPanel::refresh_packages_list()
   for (const QString &package : packageNames)
   {
     QListWidgetItem* item = new QListWidgetItem(package, ui_packages_list);
-    item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
     item->setCheckState(disabledPackages.contains(package) ? Qt::Unchecked : Qt::Checked);
   }
 
@@ -996,13 +993,6 @@ void AOConfigPanel::updateTabsVisibility(const QModelIndex &current)
   QString selected = current.data(Qt::DisplayRole).toString();
 
   //Create a structure to store which tabs are used for each category
-  struct TabInfo
-  {
-    QVector<int> indices;
-    bool visible;
-    bool enabled;
-  };
-
   std::map<QString, QVector<int>> tabInfoMap = {
       {"General", {0, 1}},
       {"Audio", {2}},
@@ -1049,11 +1039,4 @@ void AOConfigPanel::advertiser_editing_finished()
 void AOConfigPanel::callwords_editing_finished()
 {
   m_config->set_callwords(ui_callwords->text());
-}
-
-void AOConfigPanel::on_config_reload_theme_requested()
-{
-  refresh_theme_list();
-  refresh_gamemode_list();
-  refresh_timeofday_list();
 }

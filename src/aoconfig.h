@@ -223,7 +223,6 @@ signals:
   void additive_changed(bool);
 
   // theme
-  void language_changed(QString);
   void theme_changed(QString);
   void gamemode_changed(QString);
   void manual_gamemode_changed(QString);
@@ -255,7 +254,6 @@ signals:
   void caching_threshold_changed(int);
 
   // audio
-  void favorite_device_changed(QString);
   void master_volume_changed(int);
   void suppress_background_audio_changed(bool);
   void system_volume_changed(int);
