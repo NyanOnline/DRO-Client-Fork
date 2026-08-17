@@ -43,12 +43,8 @@ public:
   QString getDirectoryPath();
 private:
   //Config
-  int m_configMusicSpeed = -1;
-  int m_configTimer = -1;
   QHash<QString, bool> m_configBooleans = {};
   QHash<QString, QString> m_configSounds = {};
-  QMap<QString, DR::ColorInfo> m_configColors = {};
-  QHash<QString, dialogueHighlights> m_configHighlights = {};
 
   //Scenes
   ThemeScene *m_CourtroomScene = nullptr;
@@ -57,7 +53,6 @@ private:
   ThemeScene *m_ViewportScene = nullptr;
 
   //Other
-  QHash<QString, widgetFontStruct*> m_ChatlogColours = {};
   QVector<ThemeTabInfo> m_themeTabs = {};
   QVector<QStringList> m_WidgetLayers = {};
 

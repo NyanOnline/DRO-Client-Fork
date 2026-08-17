@@ -36,32 +36,13 @@ void ThemeModuleReader::ParseModuleConfig()
   for (const QString& optionName : configOptionNames) {
     if (isValueExists(optionName)) m_configBooleans[optionName] = getBoolValue(optionName);
   }
-  
-  if(isValueExists("music_scroll_speed")) m_configMusicSpeed = getIntValue("music_scroll_speed");
-  if(isValueExists("timer_number")) m_configTimer = getIntValue("timer_number");
 
-  QJsonArray configColorsArray = getArrayValue("colors");
-  QJsonArray configHighlightsArray = getArrayValue("highlights");
   QJsonArray configSoundsArray = getArrayValue("sounds");
-
-  for(QJsonValueRef colorValue : configColorsArray)
-  {
-    SetTargetObject(colorValue.toObject());
-    m_configColors[getStringValue("color")].code = getStringValue("code");
-  }
 
   for(QJsonValueRef soundValue : configSoundsArray)
   {
     SetTargetObject(soundValue.toObject());
     m_configSounds[getStringValue("sound")] = getStringValue("file");
-  }
-
-  for(QJsonValueRef highlighValue : configHighlightsArray)
-  {
-    SetTargetObject(highlighValue.toObject());
-    m_configHighlights[getStringValue("chars")].chars = getStringValue("chars");
-    m_configHighlights[getStringValue("chars")].color = getStringValue("color");
-    m_configHighlights[getStringValue("chars")].keepCharacters = getBoolValue("keep_characters");
   }
 }
 

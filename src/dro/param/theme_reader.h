@@ -22,7 +22,6 @@ public:
   AOPixmap GetCachedPixmap(QString path);
 
   QVector<QStringList> GetLayers();
-  QStringList GetLayerChildren(QString t_widget);
 
   bool GetConfigBool(QString boolValue);
   QString GetConfigSoundName(QString soundName);

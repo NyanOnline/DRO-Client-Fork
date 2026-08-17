@@ -41,7 +41,6 @@ class ActorData
 public:
   ActorData(){};
 
-  virtual QString GetEmoteSprite(const DREmote& t_emote);
   virtual QString GetEmoteButton(const DREmote& t_emote, bool t_enabled);
   virtual QString GetSelectedImage(const DREmote& t_emote);
 
@@ -86,7 +85,6 @@ public:
   virtual void reload() {};
 
   virtual QVector<EmoteLayer> GetEmoteOverlays(const QString& outfit, const QString& emoteName) = 0;
-  virtual OutfitReader* GetEmoteOutfit(const QString& emoteName) = 0;
 
 private:
   QVector<ActorScalingPreset> m_Presets = {};
@@ -104,7 +102,6 @@ public:
   ActorDataReader() = default;
 
   void LoadActor(const QString& folder) override;
-  QString GetEmoteSprite(const DREmote& t_emote) override;
   QString GetEmoteButton(const DREmote& t_emote, bool t_enabled) override;
   QString GetSelectedImage(const DREmote& t_emote) override;
   QStringList GetOutfitNames() override;
@@ -113,14 +110,12 @@ public:
 
   QVector<DREmote> GetEmotes() override;
   QVector<EmoteLayer> GetEmoteOverlays(const QString& outfit, const QString& emoteName) override;
-  OutfitReader* GetEmoteOutfit(const QString& emoteName) override;
 
   void reload() override;
 
 private:
   void LoadOutfits();
 
-  QString m_Showname = "";
   QMap<QString, OutfitReader*> m_Outfits = {};
   QStringList m_OutfitNames = {};
   QStringList m_OutfitsOrder = {};
@@ -139,18 +134,10 @@ public:
   QString DRLookupKey(const QStringList &keyList, const QString &targetKey);
 
   QVector<DREmote> GetEmotes() override;
-  QString GetEmoteSprite(const DREmote& emote) override { return ""; };
   QString GetEmoteButton(const DREmote& t_emote, bool t_enabled) override;
   QString GetSelectedImage(const DREmote& t_emote) override;
   QVector<EmoteLayer> GetEmoteOverlays(const QString& outfit, const QString& emoteName) override { return {}; };
-  OutfitReader* GetEmoteOutfit(const QString& emoteName) override { return nullptr; };
 
-};
-
-class ActorLoader
-{
-public:
-  static ActorData *GetCharacter(const QString& folder);
 };
 
 #endif // ACTOR_LOADER_H

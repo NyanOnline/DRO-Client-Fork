@@ -9,36 +9,6 @@
 
 #include <QDir>
 
-static QMap<QString, ActorData*> s_CachedCharacters;
-
-ActorData *ActorLoader::GetCharacter(const QString& folder)
-{
-  if(!s_CachedCharacters.contains(folder))
-  {
-    QString charaConfigPath = AOApplication::getInstance()->get_character_path(folder, CHARACTER_CHAR_JSON);
-    ActorData *characterData;
-    if(FS::Checks::FileExists(charaConfigPath))
-    {
-      characterData = new ActorDataReader();
-    }
-    else
-    {
-      characterData = new LegacyActorReader();
-    }
-
-    characterData->LoadActor(folder);
-    s_CachedCharacters[folder] = characterData;
-  }
-
-  return s_CachedCharacters[folder];
-}
-
-QString ActorData::GetEmoteSprite(const DREmote& emote)
-{
-  Q_UNUSED(emote);
-  return "";
-}
-
 QString ActorData::GetEmoteButton(const DREmote& emote, bool enabled)
 {
   const QString filename = enabled ? QString("emotions/button%1_on.png").arg(emote.key) : QString("emotions/button%1_off.png").arg(emote.key);
@@ -99,12 +69,6 @@ void ActorDataReader::LoadActor(const QString& folder)
   SetScalingPresets(presets);
 
   LoadOutfits();
-}
-
-QString ActorDataReader::GetEmoteSprite(const DREmote& emote)
-{
-  Q_UNUSED(emote);
-  return "";
 }
 
 QString ActorDataReader::GetEmoteButton(const DREmote& emote, bool enabled)
@@ -228,18 +192,6 @@ QVector<EmoteLayer> ActorDataReader::GetEmoteOverlays(const QString& outfit, con
       if (emote.comment == emoteName) return emote.emoteOverlays;
   }
   return {};
-}
-
-OutfitReader *ActorDataReader::GetEmoteOutfit(const QString& emotePath)
-{
-  if (!emotePath.contains("outfits/"))
-    return nullptr;
-
-  const QStringList parts = emotePath.split('/');
-  if (parts.size() < 3) return nullptr;
-
-  const QString& outfit = parts[1];
-  return m_Outfits.value(outfit, nullptr);
 }
 
 void LegacyActorReader::LoadActor(const QString& folder)
