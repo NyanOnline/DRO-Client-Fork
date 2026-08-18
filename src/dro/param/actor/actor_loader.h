@@ -2,6 +2,7 @@
 #define ACTOR_LOADER_H
 
 #include <datatypes.h>
+#include <QtAlgorithms>
 #include "dro/param/json_reader.h"
 #include "mk2/spriteplayer.h"
 
@@ -40,6 +41,7 @@ class ActorData
 {
 public:
   ActorData(){};
+  virtual ~ActorData() = default;
 
   virtual QString GetEmoteButton(const DREmote& t_emote, bool t_enabled);
   virtual QString GetSelectedImage(const DREmote& t_emote);
@@ -100,6 +102,9 @@ class ActorDataReader : public ActorData, public JSONReader
 {
 public:
   ActorDataReader() = default;
+  ~ActorDataReader() override { qDeleteAll(m_Outfits); }
+  ActorDataReader(const ActorDataReader&) = delete;
+  ActorDataReader& operator=(const ActorDataReader&) = delete;
 
   void LoadActor(const QString& folder) override;
   QString GetEmoteButton(const DREmote& t_emote, bool t_enabled) override;

@@ -45,8 +45,24 @@ ActorData *CharacterManager::ReadCharacter(QString t_folder)
     return l_returnData;
   }
 
+  QString l_iniPath = AOApplication::getInstance()->get_character_path(t_folder, CHARACTER_CHAR_INI);
+  QFileInfo iniInfo(l_iniPath);
+  QDateTime lastModified = iniInfo.lastModified();
+
+  if (s_cache.contains(t_folder)) {
+    const auto& cached = s_cache[t_folder];
+    if (cached.first == lastModified)
+    {
+      return cached.second;
+    } else
+    {
+      delete cached.second;
+    }
+  }
+
   ActorData *l_returnData = new LegacyActorReader();
   l_returnData->LoadActor(t_folder);
+  s_cache[t_folder] = qMakePair(lastModified, l_returnData);
   return l_returnData;
 }
 
