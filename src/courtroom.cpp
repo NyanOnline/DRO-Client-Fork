@@ -2481,9 +2481,7 @@ void Courtroom::setup_chat()
   QString l_jsonPath = AOApplication::getInstance()->get_character_path(m_chatmessage[CMChrName], CHARACTER_CHAR_JSON);
   if(FS::Checks::FileExists(l_jsonPath))
   {
-    ActorData *speakerActor = new ActorDataReader();
-    speakerActor->LoadActor(m_chatmessage[CMChrName]);
-    f_gender = speakerActor->GetGender();
+    f_gender = CharacterManager::get().ReadCharacter(m_chatmessage[CMChrName])->GetGender();
   }
   else
   {
