@@ -1559,10 +1559,10 @@ void Courtroom::load_effects()
   for (int i = 1; i <= ui_effects.size(); ++i)
   {
     QStringList names = ao_app->get_effect(i);
-    if (!names.isEmpty())
+    const QString l_name = names.isEmpty() ? QString() : names.at(0).trimmed();
+    effect_names.append(l_name);
+    if (!l_name.isEmpty())
     {
-      const QString l_name = names.at(0).trimmed();
-      effect_names.append(l_name);
       RPButton *l_button = ui_effects.at(i - 1);
       l_button->setProperty("effect_name", l_name);
       Q_EMIT l_button->toggled(l_button->isChecked());
@@ -1629,9 +1629,9 @@ void Courtroom::load_shouts()
     connect(l_button, &RPButton::toggled, this, &Courtroom::on_shout_button_toggled);
 
 
+    shout_names.append(shout_name);
     if(!shout_name.isEmpty())
     {
-      shout_names.append(shout_name);
       RPButton *l_button = ui_shouts.at(i);
       widget_names.insert(shout_name, l_button);
       l_button->setObjectName(shout_name);
@@ -1664,9 +1664,9 @@ void Courtroom::load_wtce()
 
     QString wtce_name = ao_app->current_theme->get_wtce(i + 1);
 
+    wtce_names.append(wtce_name);
     if(!wtce_name.isEmpty())
     {
-      wtce_names.append(wtce_name);
       widget_names[wtce_name] = ui_wtce[i];
       ui_wtce[i]->setObjectName(wtce_name);
     }
