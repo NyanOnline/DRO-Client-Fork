@@ -348,17 +348,7 @@ void DRAudioStream::set_volume(float p_volume)
   m_volume = p_volume;
   if (!ensure_init())
     return;
-
-  if (m_fade_running)
-  {
-    const Fade l_prev_fade = m_fade;
-    m_fade = NoFade;
-    fade(l_prev_fade, m_fade_duration);
-  }
-  else
-  {
-    update_volume();
-  }
+  update_volume();
 }
 
 void DRAudioStream::set_repeatable(bool p_enabled)
@@ -385,9 +375,9 @@ void DRAudioStream::fade(Fade p_fade, int p_duration)
     return;
   }
 
-  const float l_volume = m_volume * 0.01f;
-  const float l_begin = (p_fade == FadeOut) ? l_volume : 0.0f;
-  const float l_end = (p_fade == FadeOut) ? 0.0f : l_volume;
+  // the fader multiplies on top of the sound volume, so it ramps 0..1
+  const float l_begin = (p_fade == FadeOut) ? 1.0f : 0.0f;
+  const float l_end = (p_fade == FadeOut) ? 0.0f : 1.0f;
 
   m_fade = p_fade;
   m_fade_duration = qMax(0, p_duration);
