@@ -23,7 +23,7 @@ AONoteArea::AONoteArea(QWidget *p_parent, AOApplication *p_ao_app)
 
 void Courtroom::on_add_button_clicked()
 {
-  if (ui_note_area->m_layout->count() > 6)
+  if (ui_note_area->m_layout->count() >= AONoteArea::MAX_NOTE_SLOTS)
     return;
 
   AONotePicker *f_notepicker = new AONotePicker(ui_note_area, ao_app);

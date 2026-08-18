@@ -883,6 +883,8 @@ void Courtroom::list_note_files()
       continue;
 
     int f_index = f_contents.at(0).toInt();
+    if (f_index < 0 || f_index >= AONoteArea::MAX_NOTE_SLOTS)
+      continue;
     f_filestring = f_filename = f_contents.at(1).trimmed();
 
     if (f_contents.size() > 2)
@@ -891,7 +893,9 @@ void Courtroom::list_note_files()
     while (f_index >= f_layout->count())
       on_add_button_clicked();
 
-    AONotePicker *f_notepicker = static_cast<AONotePicker *>(f_layout->itemAt(f_index)->widget());
+    AONotePicker *f_notepicker = qobject_cast<AONotePicker *>(f_layout->itemAt(f_index)->widget());
+    if (f_notepicker == nullptr)
+      continue;
     f_notepicker->ui_line->setText(f_filename);
     f_notepicker->m_file = f_filestring;
   }
