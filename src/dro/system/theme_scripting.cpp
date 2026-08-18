@@ -8,8 +8,6 @@
 #include "courtroom.h"
 #include <lobby.h>
 
-#pragma comment(lib, "lua54.lib")
-
 static sol::state s_themeScript;
 static QMap<std::string, sol::function> s_registeredFunctions;
 
