@@ -56,10 +56,10 @@ void JsonPacket::ProcessPlayerListPacket(JSONReader& jsonReader)
     QString charaIPID = jsonReader.getStringValue("IPID");
     QString charaHDID = jsonReader.getStringValue("HDID");
 
-    DrPlayer* drp = new DrPlayer(playerId, showname, characterName, charaURL, statusPlayer, characterOutfit);
-    drp->setMod(charaIPID, charaHDID);
-    drp->setAfk(isAfk);
-    SceneManager::get().mPlayerDataList.append(*drp);
+    DrPlayer drp(playerId, showname, characterName, charaURL, statusPlayer, characterOutfit);
+    drp.setMod(charaIPID, charaHDID);
+    drp.setAfk(isAfk);
+    SceneManager::get().mPlayerDataList.append(drp);
   }
   AOApplication::getInstance()->m_courtroom->construct_playerlist_layout();
 }
