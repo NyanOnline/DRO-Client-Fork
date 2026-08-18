@@ -867,31 +867,38 @@ void Courtroom::list_note_files()
     return;
   }
 
+  QStringList f_lines;
+  QTextStream in(&f_file);
+  while (!in.atEnd())
+    f_lines.append(in.readLine().trimmed());
+  f_file.close();
+
   QString f_filestring = "";
   QString f_filename = "";
 
-  QTextStream in(&f_file);
-
   QVBoxLayout *f_layout = ui_note_area->m_layout;
+  bool l_added = false;
 
-  while (!in.atEnd())
+  for (const QString &line : f_lines)
   {
-    QString line = in.readLine().trimmed();
-
     QStringList f_contents = line.split("=");
     if (f_contents.size() < 2)
       continue;
 
-    int f_index = f_contents.at(0).toInt();
-    if (f_index < 0 || f_index >= AONoteArea::MAX_NOTE_SLOTS)
+    bool l_ok = false;
+    int f_index = f_contents.at(0).trimmed().toInt(&l_ok);
+    if (!l_ok || f_index < 0 || f_index >= AONoteArea::MAX_NOTE_SLOTS)
       continue;
     f_filestring = f_filename = f_contents.at(1).trimmed();
 
     if (f_contents.size() > 2)
       f_filename = f_contents.at(2).trimmed();
 
-    while (f_index >= f_layout->count())
+    while (f_index >= f_layout->count() - (contains_add_button ? 1 : 0))
+    {
       on_add_button_clicked();
+      l_added = true;
+    }
 
     AONotePicker *f_notepicker = qobject_cast<AONotePicker *>(f_layout->itemAt(f_index)->widget());
     if (f_notepicker == nullptr)
@@ -899,6 +906,9 @@ void Courtroom::list_note_files()
     f_notepicker->ui_line->setText(f_filename);
     f_notepicker->m_file = f_filestring;
   }
+
+  if (l_added && contains_add_button)
+    set_note_files();
 }
 
 QString Courtroom::get_current_position()
