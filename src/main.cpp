@@ -2,7 +2,6 @@
 #include "aoconfig.h"
 #include "drmediatester.h"
 #include "lobby.h"
-#include "logger.h"
 #include "version.h"
 
 #include <QDebug>
@@ -15,7 +14,6 @@ int main(int argc, char *argv[])
   qputenv("QT_MAC_WANTS_LAYER", "1");
 #endif
 
-  //qInstallMessageHandler(logger::log);
   qInfo() << "Starting Danganronpa Online...";
 
   bool l_dpi_scaling = false;
@@ -49,8 +47,6 @@ int main(int argc, char *argv[])
     app.construct_lobby();
 
     l_exit_code = app.exec();
-
-    //logger::shutdown();
 
     if (l_config.autosave())
     {

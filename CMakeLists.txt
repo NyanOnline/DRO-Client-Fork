@@ -126,7 +126,6 @@ set(HEADERS
   src/drthememovie.h
   src/hardware_functions.h
   src/lobby.h
-  src/logger.h
   src/mk2/drplayer.h
   src/mk2/graphicsspriteitem.h
   src/mk2/graphicsvideoscreen.h
@@ -282,7 +281,6 @@ set(SOURCES
   src/emotes.cpp
   src/hardware_functions.cpp
   src/lobby.cpp
-  src/logger.cpp
   src/main.cpp
   src/mk2/drplayer.cpp
   src/mk2/graphicsspriteitem.cpp
