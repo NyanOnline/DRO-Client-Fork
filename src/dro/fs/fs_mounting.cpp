@@ -80,6 +80,7 @@ QVector<QString> &FS::Packages::Scan()
   QFile iniFile(iniPath);
   if (!iniFile.open(QFile::ReadOnly)) return s_foundPackages;
 
+  s_disabledPackages.clear();
   QTextStream in(&iniFile);
   while (!in.atEnd())
   {
