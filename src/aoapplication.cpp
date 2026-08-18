@@ -131,8 +131,11 @@ void AOApplication::destruct_lobby()
     return;
   }
 
-  delete m_lobby;
+  // null first so the guards hold during teardown
+  Lobby *l_lobby = m_lobby;
+  m_lobby = nullptr;
   is_lobby_constructed = false;
+  delete l_lobby;
 }
 
 Courtroom *AOApplication::get_courtroom() const
@@ -511,7 +514,8 @@ void AOApplication::loading_cancelled()
 {
   destruct_courtroom();
 
-  m_lobby->hide_loading_overlay();
+  if (is_lobby_constructed)
+    m_lobby->hide_loading_overlay();
 }
 
 void AOApplication::on_courtroom_closing()

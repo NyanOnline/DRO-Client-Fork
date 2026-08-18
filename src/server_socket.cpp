@@ -174,6 +174,8 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   }
   else if (l_header == "PN")
   {
+    if (!is_lobby_constructed)
+      return;
     if (l_content.size() < 2)
       return;
 
@@ -181,6 +183,8 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   }
   else if (l_header == "SI")
   {
+    if (!is_lobby_constructed)
+      return;
     if (l_content.size() != 3)
       return;
 
@@ -308,10 +312,13 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     m_courtroom->set_music_list(l_music_list);
 
     m_loaded_music = m_music_count;
-    m_lobby->set_loading_text("Loading music:\n" + QString::number(m_loaded_music) + "/" + QString::number(m_music_count));
-    int total_loading_size = m_character_count + m_evidence_count + m_music_count;
-    int loading_value = ((m_loaded_characters + m_loaded_evidence + m_loaded_music) / static_cast<double>(total_loading_size)) * 100;
-    m_lobby->set_loading_value(loading_value);
+    if (is_lobby_constructed)
+    {
+      m_lobby->set_loading_text("Loading music:\n" + QString::number(m_loaded_music) + "/" + QString::number(m_music_count));
+      int total_loading_size = m_character_count + m_evidence_count + m_music_count;
+      int loading_value = ((m_loaded_characters + m_loaded_evidence + m_loaded_music) / static_cast<double>(total_loading_size)) * 100;
+      m_lobby->set_loading_value(loading_value);
+    }
     send_server_packet(DRPacket("RD"));
   }
   else if (l_header == "JSN")
