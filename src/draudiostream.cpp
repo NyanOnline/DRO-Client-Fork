@@ -30,7 +30,7 @@ void sound_end_proc(void *pUserData, ma_sound *pSound)
 {
   Q_UNUSED(pSound);
   DRAudioStream *l_stream = static_cast<DRAudioStream *>(pUserData);
-  QMetaObject::invokeMethod(l_stream, "handle_end", Qt::QueuedConnection);
+  QMetaObject::invokeMethod(l_stream, &DRAudioStream::handle_end, Qt::QueuedConnection);
 }
 
 float semitones_to_ratio(float p_semitones)
@@ -178,10 +178,14 @@ void DRAudioStream::stop()
 
 void DRAudioStream::handle_end()
 {
+  // handlers may drop our last reference, keep us alive until we return
+  const ptr l_self = sharedFromThis();
+
   if (!m_repeatable)
   {
     if (d->pitch_tempo_node != nullptr && !audio_backend::soundtouch_node_is_drained(d->pitch_tempo_node))
     {
+      m_drain_ticks = 0;
       m_drain_timer->start();
       return;
     }
@@ -584,10 +588,14 @@ void DRAudioStream::update_volume()
 
 void DRAudioStream::check_drain()
 {
-  if (d->pitch_tempo_node != nullptr && !audio_backend::soundtouch_node_is_drained(d->pitch_tempo_node))
+  // the drained flag may never latch, so cap the wait
+  m_drain_ticks += 1;
+  if (m_drain_ticks < 20 && d->pitch_tempo_node != nullptr && !audio_backend::soundtouch_node_is_drained(d->pitch_tempo_node))
   {
     return;
   }
+  // handlers may drop our last reference, keep us alive until we return
+  const ptr l_self = sharedFromThis();
   m_drain_timer->stop();
   Q_EMIT finished();
 }

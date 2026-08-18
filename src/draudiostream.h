@@ -117,6 +117,7 @@ private:
   quint64 m_loop_end = 0;
   QTimer *m_fade_timer = nullptr;
   QTimer *m_drain_timer = nullptr;
+  int m_drain_ticks = 0;
   std::unique_ptr<DRAudioStreamPrivate> d;
 
   bool ensure_init();
