@@ -4,6 +4,7 @@
 #include "draudiodevice.h"
 #include "draudioerror.h"
 
+#include <QEnableSharedFromThis>
 #include <QObject>
 #include <QSharedPointer>
 
@@ -16,7 +17,9 @@ class DRAudioStreamFamily;
 class DRAudioStreamPrivate;
 class QTimer;
 
-class DRAudioStream : public QObject
+class DRAudioStream
+    : public QObject
+    , public QEnableSharedFromThis<DRAudioStream>
 {
   Q_OBJECT
 

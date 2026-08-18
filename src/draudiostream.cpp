@@ -410,13 +410,18 @@ void DRAudioStream::fadeOut(int p_duration)
 
 void DRAudioStream::handle_fade_finished()
 {
-  m_fade_running = false;
-  Q_EMIT faded(m_fade);
+  // handlers may drop our last reference, keep us alive until we return
+  const ptr l_self = sharedFromThis();
 
-  if (m_fade == FadeOut)
+  m_fade_running = false;
+  const Fade l_fade = m_fade;
+
+  if (l_fade == FadeOut)
   {
     stop();
   }
+
+  Q_EMIT faded(l_fade);
 }
 
 bool DRAudioStream::ensure_init()
