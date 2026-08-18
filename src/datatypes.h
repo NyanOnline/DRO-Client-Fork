@@ -216,9 +216,9 @@ public:
   QString name;
   QString description;
   QString address;
-  int port;
-  int ws_port;
-  DRServerProtocolType protocol;
+  int port = 0;
+  int ws_port = 0;
+  DRServerProtocolType protocol = DRServerProtocolType::TCP;
 
   QString to_info() const;
   QString to_address() const;
