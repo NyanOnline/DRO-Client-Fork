@@ -512,7 +512,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   }
   else if (l_header == "CL")
   {
-    if (is_courtroom_constructed && l_content.size() > 0)
+    if (is_courtroom_constructed && l_content.size() > 1)
       m_courtroom->handle_clock(l_content.at(1));
   }
   else if (l_header == "GM")
