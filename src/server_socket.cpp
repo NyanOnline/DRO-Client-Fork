@@ -325,6 +325,8 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   {
     if (!is_courtroom_constructed)
       return;
+    if (l_content.size() < 2)
+      return;
     int prompt = l_content.at(0).toInt();
 
     if(!LuaBridge::LuaEventCall("AreaDescriptionEvent", l_content.at(1).toStdString()))
