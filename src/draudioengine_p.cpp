@@ -56,21 +56,25 @@ void DRAudioEnginePrivate::update_current_device()
 
   if (device.has_value() && device.value() == l_target_device)
     return;
-  const std::optional<DRAudioDevice> l_prev_device = device;
-  device = l_target_device;
 
-  if (l_prev_device.has_value() && l_prev_device->get_native_id() == device->get_native_id())
-    return;
-
-  if (!device->is_init())
+  if (device.has_value() && device->get_native_id() == l_target_device.get_native_id())
   {
-    if (!audio_backend::select_device(device->get_native_id()))
+    device = l_target_device;
+    return;
+  }
+
+  if (!l_target_device.is_init())
+  {
+    if (!audio_backend::select_device(l_target_device.get_native_id()))
     {
-      qWarning() << "Error: failed to initialize audio device: (device:" << device->get_name() << ")";
+      qWarning() << "Error: failed to initialize audio device: (device:" << l_target_device.get_name() << ")";
       return;
     }
-    device->set_init(true);
+    l_target_device.set_init(true);
   }
+
+  // only remember the device once it initialized, so a failure retries next tick
+  device = l_target_device;
 
   qInfo() << "Audio device changed to" << device->get_name();
   invoke_signal("current_device_changed", Q_ARG(DRAudioDevice, device.value()));
