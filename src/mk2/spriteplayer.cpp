@@ -436,6 +436,7 @@ void SpritePlayer::scale_current_frame()
         composed = composed.scaled(finalWidth, finalHeight, Qt::IgnoreAspectRatio, Qt::FastTransformation);
       }
     }
+    break;
 
   case PixelScaling:
     composed = composed.scaledToHeight(m_size.height() * m_scale, Qt::FastTransformation);
