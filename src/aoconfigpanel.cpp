@@ -581,6 +581,7 @@ void AOConfigPanel::refresh_packages_list()
     if (packageNames.contains(mount))
       continue;
     QListWidgetItem* item = new QListWidgetItem(mount, ui_packages_list);
+    item->setFlags(item->flags() & ~Qt::ItemIsUserCheckable);
     item->setForeground(Qt::darkGray);
     item->setToolTip("Folder not found. Select it and press Remove Folder to forget it.");
   }
