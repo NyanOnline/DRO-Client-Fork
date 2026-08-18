@@ -316,6 +316,9 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   }
   else if (l_header == "JSN")
   {
+    if (l_content.size() < 1)
+      return;
+
     JsonPacket::ProcessJson(l_content.at(0));
   }
   else if (l_header == "LIST_REASON")
