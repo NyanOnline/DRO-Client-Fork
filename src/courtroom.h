@@ -192,7 +192,7 @@ public:
 
   void SetChatboxFocus();
   QStringList currentIniswapList = {"Default"};
-  void SearchForCharacterListAsync();
+  QStringList SearchForCharacterListAsync();
   void UpdateIniswapList();
 
   QString get_character_ini();
