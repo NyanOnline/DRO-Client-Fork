@@ -70,6 +70,7 @@ void Courtroom::update_iniswap_list()
 
     QFutureWatcher<void> *watcher = new QFutureWatcher<void>(this);
     connect(watcher, &QFutureWatcher<void>::finished, this, &Courtroom::UpdateIniswapList);
+    connect(watcher, &QFutureWatcher<void>::finished, watcher, &QObject::deleteLater);
 
     QFuture<void> future = QtConcurrent::run(&Courtroom::SearchForCharacterListAsync, this);
     watcher->setFuture(future);
