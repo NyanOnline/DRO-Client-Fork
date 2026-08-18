@@ -2487,16 +2487,7 @@ void Courtroom::setup_chat()
   m_chatbox_message_enable_highlighting = (ao_app->current_theme->read_config_bool("enable_highlighting"));
   m_chatbox_message_highlight_colors = ao_app->get_highlight_colors();
 
-  QString f_gender = "male";
-  QString l_jsonPath = AOApplication::getInstance()->get_character_path(m_chatmessage[CMChrName], CHARACTER_CHAR_JSON);
-  if(FS::Checks::FileExists(l_jsonPath))
-  {
-    f_gender = CharacterManager::get().ReadCharacter(m_chatmessage[CMChrName])->GetGender();
-  }
-  else
-  {
-    f_gender = ao_app->get_gender(m_chatmessage[CMChrName]);
-  }
+  QString f_gender = CharacterManager::get().ReadCharacter(m_chatmessage[CMChrName])->GetGender();
 
   audio::blip::SetGender(f_gender.toUtf8());
 

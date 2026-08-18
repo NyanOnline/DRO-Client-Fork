@@ -535,11 +535,6 @@ QString AOApplication::get_showname(QString p_chr)
   return read_char_ini(p_chr, "options", "showname", p_chr).toString();
 }
 
-QString AOApplication::get_gender(QString p_chr)
-{
-  return read_char_ini(p_chr, "options", "gender", "male").toString();
-}
-
 QString AOApplication::get_chat(QString p_chr)
 {
   return read_char_ini(p_chr, "options", "chat").toString().toLower();

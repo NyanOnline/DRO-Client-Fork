@@ -200,7 +200,7 @@ void LegacyActorReader::LoadActor(const QString& folder)
   auto* app = AOApplication::getInstance();
   SetShowname(app->read_char_ini(folder, "options", "showname", folder).toString());
   SetSide(app->read_char_ini(folder, "options", "side", "wit").toString());
-  SetGender("male");
+  SetGender(app->read_char_ini(folder, "options", "gender", "male").toString());
   QString scalingMode = app->read_char_ini(folder, "options", "scaling", "").toString();
   if (scalingMode.startsWith("pixel"))
   {

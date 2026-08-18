@@ -183,9 +183,6 @@ public:
 
   QStringList get_char_include_tree(QString character);
 
-  // Returns p_char's gender
-  QString get_gender(QString p_char);
-
   QVector<DREmote> get_emote_list(QString p_chr);
 
   // Returns x,y offset for effect p_effect
