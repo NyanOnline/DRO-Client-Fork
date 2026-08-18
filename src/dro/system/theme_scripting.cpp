@@ -103,9 +103,9 @@ namespace ThemeScripting
       tabTable.set_function("Change", &LuaFunctions::ChangeTab);
 
       sol::table serverTable = s_themeScript.create_named_table("Server");
-      tabTable.set_function("GetClientId", &metadata::user::getClientId);
-      tabTable.set_function("GetCharacterId", &metadata::user::GetCharacterId);
-      tabTable.set_function("GetCurrentCharacter", &metadata::user::GetCharacterName);
+      serverTable.set_function("GetClientId", &metadata::user::getClientId);
+      serverTable.set_function("GetCharacterId", &metadata::user::GetCharacterId);
+      serverTable.set_function("GetCurrentCharacter", [] { return metadata::user::GetCharacterName().toStdString(); });
 
       {
         sol::table ic = s_themeScript.create_named_table("IC");
