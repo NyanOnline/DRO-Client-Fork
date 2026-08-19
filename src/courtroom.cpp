@@ -2820,6 +2820,7 @@ void Courtroom::set_ban(int p_cid)
 
   call_notice(localization::getText("NOTICE_BANNED"));
 
+  ao_app->leave_server();
   ao_app->construct_lobby();
   ao_app->destruct_courtroom();
 }
