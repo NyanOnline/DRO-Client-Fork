@@ -12,6 +12,8 @@ This project utilizes ai assistance such as LLMS i.e claude code etc for certain
 
 These tools help speed up development and handle the tedious repetitive tasks so me and other people can focus on the higher level logic and fun development stuff. While AI aids in these areas all code is reviewed and tested by human maintainers before being pulled in. This project is not entirely ai generated it is used as a tool nothing more nothing less. More accurate would be to call it tool assisted development where humans have the final say.
 
+No generative AI will be accepted into this project. 
+
 
 Currently fixed, changed or Added since V1.82.0.
 ---------------------
