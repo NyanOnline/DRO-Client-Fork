@@ -295,6 +295,13 @@ widgetFontStruct ThemeReader::GetFontData(RPSceneType sceneType, QString element
   return return_value;
 }
 
+bool ThemeReader::ContainsWidgetTransform(RPSceneType sceneType, QString element)
+{
+  if(m_GameModeCurrent != nullptr && m_GameModeCurrent->containsWidgetPosition(sceneType, element))
+    return true;
+  return m_GameModeCollection.contains("default") && m_GameModeCollection["default"]->containsWidgetPosition(sceneType, element);
+}
+
 pos_size_type ThemeReader::GetWidgetTransform(RPSceneType sceneType, QString element, bool ignore_resize)
 {
   pos_size_type return_value;

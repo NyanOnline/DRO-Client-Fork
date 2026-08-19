@@ -31,6 +31,7 @@ public:
 
   QVector<ThemeTabInfo> getTabs();
 
+  bool ContainsWidgetTransform(RPSceneType sceneType, QString element);
   pos_size_type GetWidgetTransform(RPSceneType sceneType, QString element, bool ignore_resize = false);
   QVector2D GetWidgetSpacing(QString widget_name);
 
