@@ -14,7 +14,7 @@ What was AI used for?
 --------------------
 boilerplate code generation 
 
-creating documentation,
+Technical documentation
 
 bug detection and debugging
 
