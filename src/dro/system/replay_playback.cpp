@@ -308,6 +308,7 @@ namespace dro::system::replays
 
     void setTimestamp(int index)
     {
+      if(!s_replayViewport) return;
       s_playbackTimestamp = index;
 
       int l_position = index;

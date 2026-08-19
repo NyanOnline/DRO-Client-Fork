@@ -112,7 +112,7 @@ Lobby::Lobby(AOApplication *p_ao_app)
 
   ui_cancel = new RPButton(ui_loading_background);
 
-  ui_replay_file_system_model = new QFileSystemModel;
+  ui_replay_file_system_model = new QFileSystemModel(this);
   ui_replay_file_system_model->setFilter(QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot);
   // Both replays and logs are available in the list
   ui_replay_file_system_model->setNameFilters(QStringList() << "*.json" << "*.txt");
@@ -174,6 +174,7 @@ Lobby::Lobby(AOApplication *p_ao_app)
 Lobby::~Lobby()
 {
   save_settings();
+  delete m_replayWindow;
 }
 
 // sets images, position and size

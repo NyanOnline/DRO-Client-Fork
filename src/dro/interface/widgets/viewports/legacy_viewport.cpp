@@ -29,6 +29,11 @@ LegacyViewport::LegacyViewport(QWidget *parent) : RPViewport(parent)
   RuntimeLoop::assignViewport(this);
 }
 
+LegacyViewport::~LegacyViewport()
+{
+  RuntimeLoop::assignViewport(nullptr);
+}
+
 void LegacyViewport::update()
 {
   m_graphicsView->scene()->update();
