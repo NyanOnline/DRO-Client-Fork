@@ -129,6 +129,8 @@ bool NetworkStream::wait_for_header()
 
 ma_result NetworkStream::read(void *p_buffer, size_t p_bytes, size_t *r_read)
 {
+  // on a stall settle for what has arrived instead of retrying forever
+  qint64 l_progress = -1;
   while (true)
   {
     qint64 l_needed = 0;
@@ -142,6 +144,11 @@ ma_result NetworkStream::read(void *p_buffer, size_t p_bytes, size_t *r_read)
       {
         break;
       }
+      if (m_buffer.size() <= l_progress)
+      {
+        break;
+      }
+      l_progress = m_buffer.size();
       l_needed = m_cursor + 1;
     }
 
