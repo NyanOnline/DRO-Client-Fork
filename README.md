@@ -37,7 +37,7 @@ Why use AI?
 
 These tools help speed up development and handle the tedious repetitive tasks so me and other people can focus on the higher level logic and fun development stuff. While AI aids in these areas all code is reviewed and tested by human maintainers before being pulled in. This project is not entirely ai generated it is used as a tool nothing more nothing less. More accurate would be to call it tool assisted development where humans have the final say.
 
-No generative AI will be accepted into this project. No art or music or anything is AI generated. Only parts of the codebase code only art never.
+No generative AI will be accepted into this project. No art or music or anything is AI generated. Only parts of the codebase code are AI generated. Code since it helps in so many ways for other media like art and music, nothing like it will ever be accepted into the codebase.
 
 
 Currently fixed, changed or Added since V1.82.0.
