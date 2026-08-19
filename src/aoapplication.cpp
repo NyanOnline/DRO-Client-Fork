@@ -169,9 +169,11 @@ void AOApplication::destruct_courtroom()
   // destruct courtroom
   if (is_courtroom_constructed)
   {
-    delete m_courtroom;
+    // null first so the guards hold during teardown
+    Courtroom *l_courtroom = m_courtroom;
     m_courtroom = nullptr;
     is_courtroom_constructed = false;
+    delete l_courtroom;
     ao_config->set_gamemode(nullptr);
     ao_config->set_timeofday(nullptr);
   }
