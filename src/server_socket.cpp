@@ -1,6 +1,9 @@
 #include "aoapplication.h"
 
 #include <QDebug>
+#include <QScopedValueRollback>
+#include <QThread>
+#include <QTimer>
 
 #include "aoconfig.h"
 #include "courtroom.h"
@@ -28,6 +31,7 @@ static int s_lastMessageId = -1;
 
 void AOApplication::connect_to_server(DRServerInfo p_server)
 {
+  m_packet_backlog.clear();
   m_server_socket->connect_to_server(p_server);
 }
 
@@ -58,6 +62,7 @@ void AOApplication::_p_handle_server_state_update(DRServerSocket::ConnectionStat
   switch (p_state)
   {
   case DRServerSocket::NotConnected:
+    m_packet_backlog.clear();
     switch (l_previous_status)
     {
     case Connecting:
@@ -97,6 +102,28 @@ void AOApplication::_p_handle_server_state_update(DRServerSocket::ConnectionStat
 }
 
 void AOApplication::_p_handle_server_packet(DRPacket p_packet)
+{
+  m_packet_backlog.enqueue(p_packet);
+  _p_drain_packet_backlog();
+}
+
+void AOApplication::_p_drain_packet_backlog()
+{
+  // mid-drain or a modal is up; retry once back in the base loop
+  if (m_processing_packets || thread()->loopLevel() > 1)
+  {
+    if (!m_packet_drain_timer->isActive())
+      m_packet_drain_timer->start();
+    return;
+  }
+
+  QScopedValueRollback<bool> l_processing(m_processing_packets, true);
+  while (!m_packet_backlog.isEmpty())
+    _p_process_server_packet(m_packet_backlog.dequeue());
+  m_packet_drain_timer->stop();
+}
+
+void AOApplication::_p_process_server_packet(DRPacket p_packet)
 {
   const QString l_header = p_packet.get_header();
   // Encoded packet data is useful for LoadEvidence packet "LE"

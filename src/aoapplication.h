@@ -12,9 +12,11 @@ class DRDiscord;
 class DRTheme;
 class DRMasterClient;
 class Lobby;
+class QTimer;
 
 #include <QApplication>
 #include <QDateTime>
+#include <QQueue>
 #include <QVector>
 
 #include <optional>
@@ -218,6 +220,10 @@ private:
   DRServerSocket *m_server_socket = nullptr;
   ServerStatus m_server_status = NotConnected;
 
+  QQueue<DRPacket> m_packet_backlog;
+  QTimer *m_packet_drain_timer = nullptr;
+  bool m_processing_packets = false;
+
   Lobby *m_lobby = nullptr;
   bool is_lobby_constructed = false;
 
@@ -240,9 +246,12 @@ private:
   bool m_loaded_music_list = false;
   bool m_loaded_area_list = false;
 
+  void _p_process_server_packet(DRPacket);
+
 private slots:
   void _p_handle_server_state_update(DRServerSocket::ConnectionState);
   void _p_handle_server_packet(DRPacket);
+  void _p_drain_packet_backlog();
   void on_courtroom_closing();
   void on_courtroom_destroyed();
   void resolve_current_theme();

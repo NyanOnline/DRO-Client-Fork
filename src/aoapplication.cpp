@@ -19,6 +19,7 @@
 #include <QFileInfo>
 #include <QFontDatabase>
 #include <QRegularExpression>
+#include <QTimer>
 
 #include <modules/managers/character_manager.h>
 #include "dro/system/localization.h"
@@ -77,6 +78,10 @@ AOApplication::AOApplication(int &argc, char **argv)
   connect(m_server_socket, &DRServerSocket::connection_state_changed, this, &AOApplication::_p_handle_server_state_update);
   connect(m_server_socket, &DRServerSocket::packet_received, this, &AOApplication::_p_handle_server_packet);
 
+  m_packet_drain_timer = new QTimer(this);
+  m_packet_drain_timer->setInterval(25);
+  connect(m_packet_drain_timer, &QTimer::timeout, this, &AOApplication::_p_drain_packet_backlog);
+
   CharacterManager::get().LoadFavoritesList();
   reload_packages();
   resolve_current_theme();
@@ -98,6 +103,7 @@ AOApplication::~AOApplication()
 void AOApplication::leave_server()
 {
   m_server_status = NotConnected;
+  m_packet_backlog.clear();
   m_server_socket->disconnect_from_server();
 }
 
