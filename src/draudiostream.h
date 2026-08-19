@@ -79,8 +79,6 @@ public slots:
 signals:
   void file_name_changed(QString file);
 
-  void faded(DRAudioStream::Fade type);
-
   void looped();
 
   void finished();

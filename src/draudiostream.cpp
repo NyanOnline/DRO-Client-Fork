@@ -417,14 +417,11 @@ void DRAudioStream::handle_fade_finished()
   const ptr l_self = sharedFromThis();
 
   m_fade_running = false;
-  const Fade l_fade = m_fade;
 
-  if (l_fade == FadeOut)
+  if (m_fade == FadeOut)
   {
     stop();
   }
-
-  Q_EMIT faded(l_fade);
 }
 
 bool DRAudioStream::ensure_init()
