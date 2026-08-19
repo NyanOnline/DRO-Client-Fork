@@ -49,7 +49,6 @@ Lobby::Lobby(AOApplication *p_ao_app)
   m_master_client = new DRMasterClient(this);
 
   setWindowTitle("Danganronpa Online (" + get_version_string() + ")");
-  Layout::ServerSelect::AssignLobby(this, ao_app);
 
   ui_background = new AOImageDisplay(this, ao_app);
 
@@ -61,11 +60,11 @@ Lobby::Lobby(AOApplication *p_ao_app)
 
   ui_favorite_server_filter = new RPButton(this);
 
-  ui_toggle_favorite = Layout::ServerSelect::CreateButton("add_to_fav", "addtofav", [this]() {this->on_add_to_fav_released();});
-  ui_refresh = Layout::ServerSelect::CreateButton("refresh", "refresh", [this]() {this->on_refresh_released();});
-  ui_connect = Layout::ServerSelect::CreateButton("connect", "connect", [this]() {this->on_connect_released();});
-  ui_gallery_toggle = Layout::ServerSelect::CreateButton("toggle_gallery", "toggle_gallery", [this]() {this->onGalleryToggle();});
-  ui_gallery_play = Layout::ServerSelect::CreateButton("play_replay", "play_replay", [this]() {this->onGalleryPlay();});
+  ui_toggle_favorite = Layout::ServerSelect::CreateButton(this, ao_app, "add_to_fav", "addtofav", [this]() {this->on_add_to_fav_released();});
+  ui_refresh = Layout::ServerSelect::CreateButton(this, ao_app, "refresh", "refresh", [this]() {this->on_refresh_released();});
+  ui_connect = Layout::ServerSelect::CreateButton(this, ao_app, "connect", "connect", [this]() {this->on_connect_released();});
+  ui_gallery_toggle = Layout::ServerSelect::CreateButton(this, ao_app, "toggle_gallery", "toggle_gallery", [this]() {this->onGalleryToggle();});
+  ui_gallery_play = Layout::ServerSelect::CreateButton(this, ao_app, "play_replay", "play_replay", [this]() {this->onGalleryPlay();});
   ui_gallery_play->setParent(ui_gallery_background);
 
   ui_config_panel = new RPButton(this);
