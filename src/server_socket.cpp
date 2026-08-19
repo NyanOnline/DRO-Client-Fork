@@ -231,7 +231,7 @@ void AOApplication::_p_process_server_packet(DRPacket p_packet)
     // Obtain current server info
     DRServerInfo l_current_server = m_lobby->get_selected_server();
     // Set up the logging information before courtroom is constructed
-    static QRegularExpression validateFilename(R"([\\/:*?\"<>|\']")");
+    static QRegularExpression validateFilename(R"([\\/:*?"<>|'])");
     QString log_folder = l_current_server.to_info().remove(validateFilename) + "/";
 
     this->icchatlogsfilename = log_folder + QDateTime::currentDateTimeUtc().toString(this->log_timestamp);
