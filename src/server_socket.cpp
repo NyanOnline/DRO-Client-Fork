@@ -302,9 +302,11 @@ void AOApplication::_p_process_server_packet(DRPacket p_packet)
       int total_loading_size = m_character_count + m_evidence_count + m_music_count;
       int loading_value = (m_loaded_characters / static_cast<double>(total_loading_size)) * 100;
       m_lobby->set_loading_value(loading_value);
-
-      send_server_packet(DRPacket("RM"));
     }
+
+    // the handshake must continue even with the lobby gone
+    if (!joined_server())
+      send_server_packet(DRPacket("RM"));
   }
   else if (l_header == "SM") // TODO remove block for 1.2.0+
   {
@@ -390,10 +392,9 @@ void AOApplication::_p_process_server_packet(DRPacket p_packet)
       return;
     m_courtroom->set_music_list(TracklistMetadata::Parse(l_content));
 
-    if (!m_loaded_area_list && is_lobby_constructed)
+    if (!m_loaded_music_list && is_lobby_constructed)
     {
       m_lobby->set_loading_text("Loading music...");
-      send_server_packet(DRPacket("RD"));
     }
     m_loaded_music_list = true;
   }
