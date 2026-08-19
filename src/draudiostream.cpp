@@ -133,6 +133,9 @@ bool DRAudioStream::is_repeatable() const
 
 void DRAudioStream::play()
 {
+  // handlers may drop our last reference, keep us alive until we return
+  const ptr l_self = sharedFromThis();
+
   if (!ensure_init())
     return;
   const ma_result l_result = ma_sound_start(&d->sound);
@@ -146,6 +149,9 @@ void DRAudioStream::play()
 
 void DRAudioStream::playSynced(const DRAudioStream *reference)
 {
+  // handlers may drop our last reference, keep us alive until we return
+  const ptr l_self = sharedFromThis();
+
   if (!ensure_init() || !reference || !reference->ensure_init())
   {
     play();
@@ -169,6 +175,9 @@ void DRAudioStream::playSynced(const DRAudioStream *reference)
 
 void DRAudioStream::stop()
 {
+  // handlers may drop our last reference, keep us alive until we return
+  const ptr l_self = sharedFromThis();
+
   m_drain_timer->stop();
   if (!ensure_init())
     return;
