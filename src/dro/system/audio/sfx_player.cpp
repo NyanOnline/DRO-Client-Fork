@@ -74,7 +74,6 @@ void AOSfxPlayer::play_ambient(QString p_filename)
       qInfo() << "Playing ambient" << p_filename;
       m_ambient_map.insert(p_filename, l_ambient);
 
-      connect(l_ambient.data(), &DRAudioStream::faded, this, &AOSfxPlayer::handle_ambient_fade);
       connect(l_ambient.data(), &DRAudioStream::finished, this, &AOSfxPlayer::remove_ambient);
 
       l_ambient->set_repeatable(true);
@@ -138,19 +137,5 @@ void AOSfxPlayer::remove_ambient()
   if (m_current_ambient == l_stream)
   {
     m_current_ambient.reset();
-  }
-}
-
-void AOSfxPlayer::handle_ambient_fade(DRAudioStream::Fade p_fade)
-{
-  const auto l_stream = get_stream_by_qobject(sender());
-  if (l_stream.isNull())
-  {
-    return;
-  }
-
-  if (p_fade == DRAudioStream::FadeOut)
-  {
-    l_stream->stop();
   }
 }

@@ -33,5 +33,4 @@ private:
 
 private slots:
   void remove_ambient();
-  void handle_ambient_fade(DRAudioStream::Fade fade);
 };
