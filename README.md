@@ -7,6 +7,9 @@ Main goal get people upgrade from 1.8.0 to 1.8.4 by addressing bugs so crystal w
 
 This project utilizes ai assistance for certain parts of development mainly for speedup including but not limited to; boilerplate code generation, creating documentation, bug detection and debugging, refactoring examples being raw pointers to smart pointers, compiler errors, CMake fixes, code cleanup, syntax error fixes and understanding legacy code artifacts.
 
+# DISCLAIMER
+------------
+
 These tools help speed up development and handle the tedious repetitive tasks so me and other people can focus on the higher level logic and fun development stuff. While AI aids in these areas all code is reviewed and tested by human maintainers before being pulled in. This project is not entirely ai generated it is used as a tool nothing more nothing less. More accurate would be to call it tool assisted development where humans have the final say.
 
 
