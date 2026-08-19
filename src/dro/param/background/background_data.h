@@ -7,6 +7,7 @@ class BackgroundData
 {
 public:
   BackgroundData();
+  virtual ~BackgroundData() = default;
 
   void setPosition(QString t_position, DRBackgroundPosition t_data);
   QString getBackgroundFilename(QString t_position);
